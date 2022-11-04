@@ -1,0 +1,12 @@
+Status	../2_Hisat2_merged/CONT1_ATGTCA_merged.sorted.nodup.bam	../2_Hisat2_merged/CONT2_CGATGT_merged.sorted.nodup.bam	../2_Hisat2_merged/CONT3_TTAGGC_merged.sorted.nodup.bam	../2_Hisat2_merged/CONT4_ACTTGA_merged.sorted.nodup.bam	../2_Hisat2_merged/INT1_GTCCGC_merged.sorted.nodup.bam	../2_Hisat2_merged/INT2_ACAGTG_merged.sorted.nodup.bam	../2_Hisat2_merged/INT3_GATCAG_merged.sorted.nodup.bam	../2_Hisat2_merged/INT4_CTTGTA_merged.sorted.nodup.bam	../2_Hisat2_merged/SVX1_GTTTCG_merged.sorted.nodup.bam	../2_Hisat2_merged/SVX2_TAGCTT_merged.sorted.nodup.bam	../2_Hisat2_merged/SVX3_ATCACG_merged.sorted.nodup.bam	../2_Hisat2_merged/SVX4_GCCAAT_merged.sorted.nodup.bam	../2_Hisat2_merged/SVX_VAS1_AGTCAA_merged.sorted.nodup.bam	../2_Hisat2_merged/SVX_VAS2_AGTTCC_merged.sorted.nodup.bam	../2_Hisat2_merged/SVX_VAS3_TGACCA_merged.sorted.nodup.bam	../2_Hisat2_merged/SVX_VAS4_GGCTAC_merged.sorted.nodup.bam	../2_Hisat2_merged/VAS1_CAGATC_merged.sorted.nodup.bam	../2_Hisat2_merged/VAS2_GTGAAA_merged.sorted.nodup.bam	../2_Hisat2_merged/VAS3_GTGGCC_merged.sorted.nodup.bam	../2_Hisat2_merged/VAS4_CCGTCC_merged.sorted.nodup.bam
+Assigned	19969196	31781270	516418	15487788	14201095	16504444	17420572	14283556	13012388	12661266	13799614	13774209	20525568	18979334	15148504	13789824	18258677	16722426	16104357	14040286
+Unassigned_Ambiguity	347657	531092	61754	288678	259486	369613	282703	312708	293151	250461	334276	282062	380202	377597	330043	247003	329569	202756	199369	287269
+Unassigned_MultiMapping	31453	49956	26737	25333	17833	62832	24626	34801	42538	18183	56403	30584	39824	48179	48876	23593	35348	776808	709023	24311
+Unassigned_NoFeatures	64300054	108927594	1515227	53134674	51771728	60139000	62660903	54844843	47959300	49651477	55624786	54901675	81576620	74413310	58836238	51555907	63565097	42581988	39273140	54768898
+Unassigned_Unmapped	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Nonjunction	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0

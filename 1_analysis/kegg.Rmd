@@ -1,0 +1,859 @@
+---
+title: "KEGG"
+author: "Ha Tran"
+date: "22/08/2021"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  eval = TRUE,
+  fig.align = "center",
+  fig.width = 9
+)
+```
+
+# Data Setup
+
+```{r load libraries}
+# working with data
+library(dplyr)
+library(magrittr)
+library(readr)
+library(tibble)
+library(reshape2)
+library(tidyverse)
+library(KEGGREST)
+
+# Visualisation:
+library(kableExtra)
+library(ggplot2)
+library(grid)
+library(pander)
+library(viridis)
+library(cowplot)
+library(pheatmap)
+
+# Custom ggplot
+library(ggplotify)
+library(ggpubr)
+library(ggbiplot)
+library(ggrepel)
+
+# Bioconductor packages:
+library(edgeR)
+library(limma)
+library(Glimma)
+library(clusterProfiler)
+library(org.Mm.eg.db)
+library(enrichplot)
+library(pathview)
+
+theme_set(theme_minimal())
+pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
+```
+
+### Import DGElist Data
+
+DGElist object containing the raw feature count, sample metadata, and gene metadata, created in the Set Up stage.
+
+```{r importData}
+# load DGElist previously created in the set up
+dge <- readRDS(here::here("0_data/RDS_objects/dge.rds"))
+fc <- readRDS(here::here("0_data/RDS_objects/fc.rds"))
+lfc <- readRDS(here::here("0_data/RDS_objects/lfc.rds"))
+lmTreat <- readRDS(here::here("0_data/RDS_objects/lmTreat.rds"))
+lmTreat_sig <- readRDS(here::here("0_data/RDS_objects/lmTreat_sig.rds"))
+
+```
+
+# KEGG Analysis {.tabset}
+KEGG enrichment analysis is performed with the significant DE genes that have absolute FC > 1.5 (`r nrow(lmTreat_sig)` genes from Limma). Top 30 most significant KEGG are displayed. All enriched KEGG pathways are exported
+
+```{r}
+# chosing the pathways of interest
+kegg_id <- c("mmu04670", "mmu04640", "mmu04270", "mmu04151", "mmu04510", "mmu04060")
+kegg_pathway <- KEGGREST::keggGet(kegg_id)
+```
+
+```{r enrichKEGG}
+enrichKEGG <- list()
+enrichKEGG_all <- list()
+enrichKEGG_sig <- list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  # find enriched KEGG pathways
+  enrichKEGG[[x]] <- clusterProfiler::enrichKEGG(
+    gene = lmTreat_sig[[x]]$entrezid,
+    keyType = "kegg",
+    organism = "mmu",
+    pvalueCutoff = 0.05,
+    pAdjustMethod = "none"
+  )
+  # save to csv
+  enrichKEGG_all[[x]] <- enrichKEGG[[x]]@result
+
+  # filter the significant and print top 30
+  enrichKEGG_sig[[x]] <- enrichKEGG_all[[x]] %>%
+    dplyr::filter(pvalue <= 0.05) %>%
+    separate(col = BgRatio, sep = "/", into = c("Total", "Universe")) %>%
+    dplyr::mutate(
+      logPval = -log(pvalue, 10),
+      GeneRatio = Count / as.numeric(Total)
+    ) %>%
+    dplyr::select(c("Count", "GeneRatio", "pvalue", "logPval", "p.adjust", "qvalue", "Description", "geneID"))
+  
+  # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
+  enrichKEGG_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
+                                       replacement = "\\1\n", 
+                                       x = enrichKEGG_sig[[x]]$Description)
+  
+  # remove the additional newline at the end of the string
+  enrichKEGG_sig[[x]]$Description <- sub(pattern = "\n$", 
+                                       replacement = "", 
+                                       x = enrichKEGG_sig[[x]]$Description)
+}
+```
+
+## FC=`r fc[1]` {.tabset}
+
+```{r}
+p=1
+```
+
+### Top 20
+
+```{r}
+enrichKEGG_sig[[p]][1:20, ] %>%
+  kable(caption = "Top 20 enriched KEGG pathways") %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+### Dot Plot
+
+```{r kegg_dot}
+kegg_dot <- list()
+upset=list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+
+  # dot plot, save
+  kegg_dot[[x]] <- ggplot(enrichKEGG_sig[[x]][1:15, ]) +
+    geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logPval, size = Count)) +
+    scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
+    scale_size(range = c(.3,3)) +
+    ggtitle("KEGG Pathways") +
+    ylab(label = "") +
+    xlab(label = "Gene Ratio") +
+    labs(color = expression("-log"[10] * "Pvalue"), size = "Gene Counts")
+  ggsave(filename = paste0("kegg_dot_", fc[i], ".svg"), plot = kegg_dot[[x]], path = here::here("2_plots/kegg/"), 
+         width = 88, height = 95, units = "mm")
+  
+  upset[[x]] <- upsetplot(x = enrichKEGG[[x]], 10)
+  ggsave(filename = paste0("upset_kegg_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/kegg/"))
+}
+
+kegg_dot[[p]]
+```
+
+### Upset Plot
+
+```{r upset}
+upset[[p]]
+```
+
+### `r kegg_pathway[[1]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=1
+```
+
+#### Heatmap
+
+```{r heatmapSetup}
+# create df with normalised read counts with an additional entrezid column for binding
+logCPM <- cpm(dge, prior.count = 3, log = TRUE)
+logCPM <- logCPM[,1:7]
+logCPM <- cbind(logCPM, dge$genes$entrezid)
+rownames(logCPM) <- dge$genes$gene_name
+colnames(logCPM) <- c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4", "entrezid")
+
+### full pathway method
+# complete_pathway <- kegg_pathway[[1]]$GENE %>% as.data.frame()
+# complete_pathway <- focal_adhesion[seq(1, nrow(focal_adhesion), 2),]
+# match_complete_pathway <- logCPM[,"entrezid"] %in% complete_pathway
+
+# my_palette <- colorRampPalette(c("dodgerblue3", "white", "firebrick3"))(n = 201)
+my_palette <- viridis_pal(option = "viridis")(300)
+
+# df for heatmap annotation of sample group
+anno <- as.factor(dge$samples$group) %>% as.data.frame() 
+anno <- anno[1:7,] %>% as.data.frame()
+colnames(anno) <- "Sample Groups"
+anno$`Sample Groups` <- gsub("CONT", "Control", anno$`Sample Groups`)
+anno$`Sample Groups` <- gsub("INT", "Intact", anno$`Sample Groups`)
+rownames(anno) <- colnames(logCPM[, 1:7])
+
+# setting colour of sample group annotation
+
+# original sample colours
+# anno_colours <- c("#66C2A5", "#FC8D62")
+
+# new sample colours
+anno_colours <- c("#f8766d", "#00bdc4")
+
+names(anno_colours) <- c("Control", "Intact")
+```
+
+```{r heatmap}
+matrix <- list()
+display_matrix <- list()
+kegg_heat=list()
+
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+
+  for (j in 1:length(kegg_id)) {
+    y <- kegg_pathway[[j]]$PATHWAY_MAP
+    
+    partial <- enrichKEGG_all[[x]][, c("ID", "geneID")]
+    partial <- partial[kegg_id[j], "geneID"] %>% as.data.frame()
+    partial <- separate_rows(partial, ., sep = "/")
+    colnames(partial) <- "entrezid"
+
+    # heatmap matrix
+    match <- logCPM[, "entrezid"] %in% partial$entrezid
+    matrix[[x]][[y]] <- logCPM[match, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] %>%
+      as.data.frame()
+    
+    # changing the colname to  numeric for some reason, cant remember
+matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] <- as.numeric(as.character(unlist(matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")])))
+
+    # display matrix
+    match2 <- lmTreat_sig[[x]][, "entrezid"] %in% partial$entrezid
+    display_matrix[[x]][[y]] <- lmTreat_sig[[x]][match2, c("gene_name", "logFC", "P.Value", "adj.P.Val", "description")] %>%
+      as.data.frame()
+    colnames(display_matrix[[x]][[y]]) <- c("Gene Name", "logFC", "P Value", "Adjusted P Value", "Description")
+    
+    ## Heatmap
+    kegg_heat[[x]][[y]] <- pheatmap(
+      mat = matrix[[x]][[y]],
+      ### Publish
+      show_colnames = T,
+      main = paste0(y, "\n"),
+      legend = F,
+      annotation_legend = F,
+      fontsize = 8,
+      fontsize_col = 9,
+      fontsize_number = 7,
+      fontsize_row = 8,
+      treeheight_row = 25,
+      treeheight_col = 10,
+      cluster_cols = T,
+      clustering_distance_rows = "euclidean",
+      legend_breaks = c(seq(-3, 11, by = .5), 1.4),
+      legend_labels = c(seq(-3, 11, by = .5), "Z-Score"),
+      angle_col = 90,
+      cutree_cols = 2,
+      cutree_rows = 2,
+      color = my_palette,
+      scale = "row",
+      border_color = NA,
+      annotation_col = anno,
+      annotation_colors = list("Sample Groups" = anno_colours),
+      annotation_names_col = F,
+      annotation = T,
+      silent = T,
+      
+      labels_row = as.expression(lapply(rownames(matrix[[x]][[y]]), function(a) bquote(italic(.(a)))))
+      
+      ) %>% as.ggplot()
+    
+    # save
+    ggsave(filename = paste0("heat_", x, "_", y, ".svg"), 
+           plot = kegg_heat[[x]][[y]], 
+           path = here::here("2_plots/kegg/"),
+           width = 58,
+           height = 110,
+           units = "mm")}
+}
+```
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Table
+
+```{r displayPathway1}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r pathview1}
+# adjusting the kegg id to suit the parameters of the pathview funtion
+adj.keggID <- gsub("mmu", "", kegg_id)
+
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  
+  # extract the logFC from the DE gene list
+  pathview_table <- dplyr::select(.data = lmTreat_sig[[x]], c("logFC")) %>% as.matrix()
+
+  # run pathview with Ensembl ID instead of entrezID
+  pathview <- pathview(
+    gene.data = pathview_table[, 1],
+    gene.idtype = "ENSEMBL",
+    pathway.id = adj.keggID,
+    species = "mmu",
+    out.suffix = "pv",
+    kegg.dir = here::here("2_plots/kegg/"),
+    kegg.native = T
+  )
+
+  # move the result file to the plot directory
+  file.rename(
+    from = paste0("mmu", adj.keggID, ".pv.png"),
+    to = here::here(paste0("2_plots/kegg/pv_", x, "_", kegg_id, ".png"))
+  )
+}
+
+# display the pathview graph. doesnt work when knitting!!!!
+# knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
+```
+
+### `r kegg_pathway[[2]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[3]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[4]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[5]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[6]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+
+## FC=`r fc[2]` {.tabset}
+
+```{r}
+p=p+1
+```
+
+### Top 20
+
+```{r}
+enrichKEGG_sig[[p]][1:20, ] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+
+```
+
+### Dot plot
+
+```{r}
+kegg_dot[[p]]
+```
+
+### Upset Plot
+
+```{r}
+upset[[p]]
+```
+
+### `r kegg_pathway[[1]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+
+### `r kegg_pathway[[2]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[3]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[4]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[5]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[6]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+
+## FC=`r fc[3]` {.tabset}
+
+```{r}
+p=p+1
+```
+
+### Top 20
+
+```{r}
+enrichKEGG_sig[[p]][1:20, ] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+
+```
+
+### Dot plot
+
+```{r}
+kegg_dot[[p]]
+```
+
+### Upset Plot
+
+```{r}
+upset[[p]]
+```
+
+### `r kegg_pathway[[1]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+
+### `r kegg_pathway[[2]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[3]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[4]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[5]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+### `r kegg_pathway[[6]]$PATHWAY_MAP`{.tabset}
+
+```{r}
+q=q+1
+```
+
+#### Heatmap
+
+```{r, fig.height=8, fig.width=7}
+kegg_heat[[p]][[q]]
+```
+
+#### Tables
+
+```{r}
+display_matrix[[p]][[q]] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+#### Pathview
+
+```{r}
+
+```
+
+# Export Data
+
+```{r exportData}
+# save to csv
+writexl::write_xlsx(x = enrichKEGG_all, here::here("3_output/enrichKEGG_all.xlsx"))
+writexl::write_xlsx(x = enrichKEGG_sig, here::here("3_output/enrichKEGG_sig.xlsx"))
+```

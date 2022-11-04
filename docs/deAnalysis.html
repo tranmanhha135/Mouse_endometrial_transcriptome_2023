@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Ha Tran" />
+
+
+<title>DE Analysis</title>
+
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SRB_2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="setUp.html">Pre-processing</a>
+</li>
+<li>
+  <a href="deAnalysis.html">DGE Analysis</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Functional Enrichment Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="go.html">Gene Ontology</a>
+    </li>
+    <li>
+      <a href="kegg.html">KEGG</a>
+    </li>
+    <li>
+      <a href="reactome.html">Reactome</a>
+    </li>
+    <li>
+      <a href="extraFigures.html">IPA</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">DE Analysis</h1>
+<h4 class="author">Ha Tran</h4>
+<h4 class="date">22/08/2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-05
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SRB_2022/1_analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed12345code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(12345)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed12345code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(12345)</code> was run prior to running the
+code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treecc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3targetblankcc4bf5da">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/cc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3" target="_blank">cc4bf5d</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treecc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3targetblankcc4bf5da"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/cc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3" target="_blank">cc4bf5d</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  .gitignore
+    Untracked:  0_data/
+    Untracked:  1_analysis/
+    Untracked:  3_output/
+    Untracked:  LICENSE.md
+    Untracked:  README.md
+    Untracked:  SRB_2022.Rproj
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="data-setup" class="section level1">
+<h1>Data Setup</h1>
+<pre class="r"><code># working with data
+library(dplyr)
+library(magrittr)
+library(readr)
+library(tibble)
+library(reshape2)
+library(tidyverse)
+
+# Visualisation:
+library(kableExtra)
+library(ggplot2)
+library(grid)
+library(pander)
+library(cowplot)
+library(pheatmap)
+
+# Custom ggplot
+library(ggplotify)
+library(ggpubr)
+library(ggrepel)
+library(viridis)
+
+# Bioconductor packages:
+library(edgeR)
+library(limma)
+library(Glimma)
+
+theme_set(theme_minimal())
+pub &lt;- readRDS(here::here(&quot;0_data/RDS_objects/pub.rds&quot;))</code></pre>
+<div id="import-dgelist-data" class="section level3">
+<h3>Import DGElist Data</h3>
+<p>DGElist object containing the raw feature count, sample metadata, and
+gene metadata, created in the Set Up stage.</p>
+<pre class="r"><code># load DGElist previously created in the set up
+dge &lt;- readRDS(here::here(&quot;0_data/RDS_objects/dge.rds&quot;))</code></pre>
+</div>
+</div>
+<div id="differential-gene-expression-analysis" class="section level1">
+<h1>Differential Gene Expression Analysis</h1>
+<div id="initial-parameterisation" class="section level2">
+<h2>Initial Parameterisation</h2>
+<p>The varying methods used to identify differential expression all rely
+on similar initial parameters. These include:</p>
+<ol style="list-style-type: decimal">
+<li>The Design Matrix,</li>
+<li>Estimation of Dispersion, and</li>
+<li>Contrast Matrix</li>
+</ol>
+<div id="design-matrix" class="section level3">
+<h3>Design Matrix</h3>
+<p>The experimental design can be parameterised in a one-way layout
+where one coefficient is assigned to each group. The design matrix
+formulated below contains the predictors of each sample</p>
+<pre class="r"><code># null design with unit vector for generation of voomWithQualityWeights downstream
+null_design &lt;- matrix(1, ncol = 1, nrow = ncol(dge))
+
+# setup full design matrix with sample_group
+full_design &lt;- model.matrix(~ 0 + group,
+  data = dge$samples)
+
+# remove &quot;sample_group&quot; from each column names
+colnames(full_design) &lt;- gsub(
+  &quot;group&quot;,
+  &quot;&quot;,
+  colnames(full_design))</code></pre>
+</div>
+<div id="contrast-matrix" class="section level3">
+<h3>Contrast Matrix</h3>
+<p>The contrast matrix is required to provide a coefficient to each
+comparison and later used to test for significant differential
+expression with each comparison group</p>
+<pre class="r"><code>contrast &lt;- limma::makeContrasts(
+  INTvsCONT = INT - CONT,
+  levels = full_design)
+
+colnames(contrast) &lt;- c(&quot;INT vs CONT&quot;)</code></pre>
+</div>
+</div>
+<div id="limma-voom" class="section level2">
+<h2>Limma-Voom</h2>
+<div id="apply-voom-transformation" class="section level3 tabset">
+<h3 class="tabset">Apply voom transformation</h3>
+<p>Voom is used to estimate the mean-variance relationship of the data,
+which is then used to calculate and assign a precision weight for each
+of the observation (gene). This observational level weights are then
+used in a linear modelling process to adjust for heteroscedasticity. Log
+count (logCPM) data typically show a decreasing mean-variance trend with
+increasing count size (expression).</p>
+<p>However, for some dataset with potential sample outliers,
+<code>voomWithQualityWeights</code> can be used to calculate
+sample-specific quality weights. The application of observational and
+sample-specific weights can objectively and systematically correct for
+outliers and better than manually removing samples in cases where there
+are no clear-cut reasons for replicate variations</p>
+<div id="voom-with-observational-level-weights" class="section level4">
+<h4>Voom with observational-level weights</h4>
+<pre class="r"><code># voom tranformation without sample weights
+voom &lt;- limma::voom(counts = dge, design = full_design, plot = TRUE,)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/deAnalysis.Rmd/voom-1.png" alt="Voom transformation with observational weights" width="1056" />
+<p class="caption">
+Voom transformation with observational weights
+</p>
+</div>
+</div>
+<div id="voom-with-observational-and-group-level-weights"
+class="section level4">
+<h4>Voom with observational and group level weights</h4>
+<pre class="r"><code># voom transformation with sample weights using full_design matrix for group-specific weights
+voom1 &lt;- limma::voomWithQualityWeights(counts = dge, design = full_design, plot = TRUE)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/deAnalysis.Rmd/voom_groupWeights-1.png" alt="Voom transformation with observational and group-specific weights" width="1056" />
+<p class="caption">
+Voom transformation with observational and group-specific weights
+</p>
+</div>
+</div>
+<div id="voom-with-observational-and-sample-level-weights"
+class="section level4">
+<h4>Voom with observational and sample level weights</h4>
+<pre class="r"><code># voom transformation with sample weights using null design matrix
+voom2 &lt;- limma::voomWithQualityWeights(counts = dge,design = null_design, plot = TRUE)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/deAnalysis.Rmd/voom_sampleWeights-1.png" alt="Voom transformation with observational and sample-specific weights" width="1056" />
+<p class="caption">
+Voom transformation with observational and sample-specific weights
+</p>
+</div>
+</div>
+</div>
+<div id="apply-linear-model" class="section level3 tabset">
+<h3 class="tabset">Apply linear model</h3>
+<pre class="r"><code># specifying FC of interest
+options(digits = 6)
+fc &lt;- c(1.05, 1.1, 1.5)
+lfc &lt;- log(x = fc, 2)</code></pre>
+<div id="without-treat" class="section level4">
+<h4>Without TREAT</h4>
+<pre class="r"><code># function for applying linear model, generate decideTest table, and extract topTable
+limmaFit_ebayes &lt;- function(x, adjMethod, p.val){
+  lm &lt;- limma::lmFit(object = x, design = full_design) %&gt;%
+    contrasts.fit(contrasts = contrast) %&gt;%
+    limma::eBayes()
+  
+  lm_dt &lt;- decideTests(object = lm, adjust.method = adjMethod, p.value = p.val)
+  print(knitr::kable(summary(lm_dt)
+                      , caption = paste0(&quot;Number of significant DE genes from &#39;&quot;, deparse(substitute(x)), &quot;&#39; with &#39;&quot;, adjMethod, &quot;&#39; adjusment method, and at a p-value/adj.p-value of &quot;, p.val)) %&gt;% 
+    kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)))
+
+  lm_all &lt;- lapply(1:ncol(lm), function(y){
+    limma::topTable(lm, coef = y, number = Inf, adjust.method = adjMethod) %&gt;%
+      dplyr::select(c(&quot;gene&quot;, &quot;gene_name&quot;, &quot;gene_biotype&quot;, &quot;logFC&quot;, &quot;AveExpr&quot;, &quot;P.Value&quot;, &quot;adj.P.Val&quot;, &quot;description&quot;, &quot;entrezid&quot;))
+    })
+  names(lm_all) &lt;- as.data.frame(contrast) %&gt;% colnames()
+  return(lm_all)
+}
+
+lm_voom1_pval0.01 &lt;- limmaFit_ebayes(x = voom1, adjMethod = &quot;none&quot;, p.val = 0.01)</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of significant DE genes from ‘voom1’ with ‘none’ adjusment
+method, and at a p-value/adj.p-value of 0.01
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+4583
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+7985
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+4654
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>lm_voom2_pval0.01 &lt;- limmaFit_ebayes(x = voom2, adjMethod = &quot;none&quot;, p.val = 0.01)</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of significant DE genes from ‘voom2’ with ‘none’ adjusment
+method, and at a p-value/adj.p-value of 0.01
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+305
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+14943
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1974
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>lm_voom2_fdr0.7 &lt;- limmaFit_ebayes(x = voom2, adjMethod = &quot;fdr&quot;, p.val = 0.7)</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of significant DE genes from ‘voom2’ with ‘fdr’ adjusment method,
+and at a p-value/adj.p-value of 0.7
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+5931
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+5349
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+5942
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="treat-fc1.05" class="section level4">
+<h4>TREAT FC=1.05</h4>
+<pre class="r"><code>limmaFit_treat &lt;- function(x, fc, adjMethod, p.val){
+  lm_treat &lt;- limma::lmFit(object = x, design = full_design) %&gt;%
+    contrasts.fit(contrasts = contrast) %&gt;%
+    limma::treat(fc = fc)
+  
+  lm_treat_dt &lt;- decideTests(object = lm_treat, adjust.method = adjMethod, p.value = p.val)
+  print(knitr::kable(summary(lm_treat_dt), 
+                     caption = paste0(&quot;Number of DE genes significantly above a FC of &quot;, fc, &quot; from &#39;&quot;, deparse(substitute(x)), &quot;&#39; with &#39;&quot;, adjMethod, &quot;&#39; adjusment method, and at a p-value/adj.p-value of &quot;, p.val)) %&gt;% 
+    kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)))
+  
+  lm_treat_all &lt;- lapply(1:ncol(lm_treat), function(y){
+    limma::topTreat(lm_treat, coef = y, number = Inf, adjust.method = adjMethod) %&gt;%
+      dplyr::select(c(&quot;gene&quot;, &quot;gene_name&quot;, &quot;gene_biotype&quot;, &quot;logFC&quot;, &quot;AveExpr&quot;, &quot;P.Value&quot;, &quot;adj.P.Val&quot;, &quot;description&quot;, &quot;entrezid&quot;))
+    })
+  names(lm_treat_all) &lt;- as.data.frame(contrast) %&gt;% colnames()
+  return(lm_treat_all)
+}
+
+assign(paste0(&quot;lmTreat_fc&quot;, fc[1], &quot;_voom2_fdr0.05&quot;),
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = &quot;fdr&quot;, p.val = 0.05))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.05 from ‘voom2’ with
+‘fdr’ adjusment method, and at a p-value/adj.p-value of 0.05
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+15593
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1534
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>assign(paste0(&quot;lmTreat_fc&quot;, fc[1], &quot;_voom2_pval0.01&quot;),
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = &quot;none&quot;, p.val = 0.01))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.05 from ‘voom2’ with
+‘none’ adjusment method, and at a p-value/adj.p-value of 0.01
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+260
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+15041
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1921
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>assign(paste0(&quot;lmTreat_fc&quot;, fc[1], &quot;_voom2_pval0.05&quot;),
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = &quot;none&quot;, p.val = 0.05))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.05 from ‘voom2’ with
+‘none’ adjusment method, and at a p-value/adj.p-value of 0.05
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+12700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+3079
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>### Old code used to interatively generate lmTreat dataset with different fc cutoff
+## with treat
+lmTreat &lt;- list()
+lmTreat_dt &lt;- list()
+lmTreat_all &lt;- list()
+lmTreat_sig &lt;- list()
+
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+  lmTreat[[x]] &lt;- limma::lmFit(object = voom2, design = full_design) %&gt;%
+    limma::contrasts.fit(contrasts = contrast) %&gt;%
+    limma::treat(lfc = lfc[i])
+
+  # decide test, do before taking topTreat, as input need to be MArraryLM list
+  lmTreat_dt[[x]] &lt;- decideTests(lmTreat[[x]], adjust.methods = &quot;fdr&quot;, p.value = 0.05)
+
+  # extract a table of genes from a linear model fit, export and used for downstream analysis
+  lmTreat_all[[x]] &lt;- topTreat(fit = lmTreat[[x]], coef = 1, number = Inf, adjust.method = &quot;fdr&quot;) %&gt;%
+    dplyr::select(c(&quot;gene_name&quot;, &quot;logFC&quot;, &quot;AveExpr&quot;, &quot;P.Value&quot;, &quot;adj.P.Val&quot;, &quot;description&quot;, &quot;entrezid&quot;))
+
+  # extract a table of significant genes from a linear model fit, export and used for downstream analysis
+  lmTreat_sig[[x]] &lt;- topTreat(fit = lmTreat[[x]], coef = 1, number = Inf, adjust.method = &quot;fdr&quot;, p.value = 0.05) %&gt;%
+    dplyr::select(c(&quot;gene_name&quot;, &quot;logFC&quot;, &quot;AveExpr&quot;, &quot;P.Value&quot;, &quot;adj.P.Val&quot;, &quot;description&quot;, &quot;entrezid&quot;))
+}</code></pre>
+<div id="int-vs-cont-visualisation" class="section level5 tabset">
+<h5 class="tabset">INT vs CONT Visualisation</h5>
+<div id="p-value-histogram" class="section level6">
+<h6>P Value histogram</h6>
+<pre class="r"><code>lmTreat_hist &lt;- list()
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+  lmTreat_hist[[x]] &lt;- hist(x = lmTreat[[x]]$p.value, breaks = 100, plot = F) 
+}
+plot(
+  x = lmTreat_hist[[1]],
+  main = paste0(&quot;P-Values FC = &quot;, fc[[1]]),
+  xlab = &quot;P-Value&quot;,
+  col = &quot;gray60&quot;
+)</code></pre>
+<p><img src="figure/deAnalysis.Rmd/pValueHistogram_limma_treat-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>invisible(dev.print(svg, here::here(paste0(&quot;2_plots/de/pval_&quot;, fc[1], &quot;.svg&quot;))))</code></pre>
+</div>
+<div id="ma-plot" class="section level6">
+<h6>MA Plot</h6>
+<pre class="r"><code>ma &lt;- list()
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+  
+  # add an extra column and determine whether the DE genes are significant
+  lmTreat_all[[x]] &lt;- lmTreat_all[[x]] %&gt;%
+    as.data.frame() %&gt;%
+    dplyr::mutate(Expression = case_when(
+      adj.P.Val &lt;= 0.05 &amp; logFC &gt;= lfc ~ &quot;Up-regulated&quot;,
+      adj.P.Val &lt;= 0.05 &amp; logFC &lt;= -lfc ~ &quot;Down-regulated&quot;,
+      TRUE ~ &quot;Insignificant&quot;
+    ))
+
+  # adding labels to top genes
+  top &lt;- 3
+  top_limma &lt;- bind_rows(
+    lmTreat_all[[x]] %&gt;%
+      dplyr::filter(Expression == &quot;Up-regulated&quot;) %&gt;%
+      arrange(adj.P.Val, desc(abs(logFC))) %&gt;%
+      head(top),
+    lmTreat_all[[x]] %&gt;%
+      dplyr::filter(Expression == &quot;Down-regulated&quot;) %&gt;%
+      arrange(adj.P.Val, desc(abs(logFC))) %&gt;%
+      head(top)
+  )
+  invisible(top_limma %&gt;% as.data.frame())
+
+  ma[[x]] &lt;- lmTreat_all[[x]] %&gt;%
+    ggplot(aes(x = AveExpr, y = logFC)) +
+    geom_point(aes(colour = Expression),
+
+      ### PUBLISH
+      size = 0.3,
+      # alpha = 0.7,
+      show.legend = T
+    ) +
+    # geom_label_repel(
+    #   data = top_limma,
+    #   mapping = aes(x = AveExpr, logFC, label = gene_name),
+    # 
+    #   ### PUBLISH
+    #   size = 1.7,
+    #   label.padding = 0.15,
+    #   # label.r = 0.15,
+    #   box.padding = 0.15
+    #   # point.padding = 0.2
+    # ) +
+    geom_hline(yintercept = c(-fc[i], 0, fc[i]), linetype = c(&quot;dashed&quot;, &quot;solid&quot;, &quot;dashed&quot;)) +
+
+    ### PUBLISH
+    ylim(-8, 8) +
+    theme(legend.position = &quot;bottom&quot;,
+          legend.box.margin = margin(-10,0,0,0),
+          legend.key.size = unit(0, &quot;lines&quot;)
+          )+
+
+    xlab(expression(&quot;log&quot;[2] * &quot;CPM&quot;)) +
+    ylab(expression(&quot;log&quot;[2] * &quot;FC&quot;)) +
+    scale_fill_manual(values = c(&quot;dodgerblue3&quot;, alpha(colour = &quot;gray80&quot;, alpha = 0.9), &quot;firebrick3&quot;)) +
+    scale_color_manual(labels = c(paste0(&quot;Down: &quot;, sum(lmTreat_all[[x]]$Expression == &quot;Down-regulated&quot;), &quot;  &quot;),
+                                  paste0(&quot;NS: &quot;, sum(lmTreat_all[[x]]$Expression == &quot;Insignificant&quot;), &quot;  &quot;),
+                                  paste0(&quot;Up: &quot;, sum(lmTreat_all[[x]]$Expression == &quot;Up-regulated&quot;), &quot; &quot;)), 
+                       values = c(&quot;dodgerblue3&quot;, alpha(colour = &quot;gray80&quot;, alpha = 0.6), &quot;firebrick3&quot;)) +
+    
+    guides(colour = guide_legend(override.aes = list(size = 1.5))) +
+    labs(
+      # title = &quot;MA Plot: LIMMA-VOOM + TREAT&quot;,
+      # subtitle = &quot;Intact vs Control&quot;,
+      colour = &quot;Expression&quot;)
+
+  # save to directory
+  ggsave(paste0(&quot;ma_&quot;, fc[i], &quot;.png&quot;),
+    plot = ma[[x]],
+    path = here::here(&quot;2_plots/de/&quot;),
+
+    ### PUBLISH
+    width = 58,
+    height = 70,
+    units = &quot;mm&quot;
+  )
+}
+
+# display
+ma[[1]]</code></pre>
+<p><img src="figure/deAnalysis.Rmd/ma-1.png" width="1056" style="display: block; margin: auto;" /></p>
+</div>
+<div id="volcano-plot" class="section level6">
+<h6>Volcano Plot</h6>
+<pre class="r"><code>vol &lt;- list()
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+
+  # adding labels to top genes
+  top &lt;- 3
+  top_limma &lt;- bind_rows(
+    lmTreat_all[[x]] %&gt;%
+      dplyr::filter(Expression == &quot;Up-regulated&quot;) %&gt;%
+      arrange(adj.P.Val, desc(abs(logFC))) %&gt;%
+      head(top),
+    lmTreat_all[[x]] %&gt;%
+      dplyr::filter(Expression == &quot;Down-regulated&quot;) %&gt;%
+      arrange(adj.P.Val, desc(abs(logFC))) %&gt;%
+      head(top)
+  )
+  invisible(top_limma %&gt;% as.data.frame())
+
+  # generate vol plot with the allDEgene data.frame
+  vol[[x]] &lt;- lmTreat_all[[x]] %&gt;%
+    ggplot(aes(
+      x = logFC,
+      y = -log(adj.P.Val, 10)
+    )) +
+    geom_point(aes(colour = Expression),
+
+      ### PUBLISH
+      size = 0.3,
+      # alpha = 0.8,
+      show.legend = T
+    ) +
+    # geom_label_repel(
+    #   data = top_limma,
+    #   mapping = aes(logFC, -log(adj.P.Val, 10), label = gene_name),
+    # 
+    #   ### PUBLISH
+    #   size = 1.7,
+    #   label.padding = 0.15,
+    #   # label.r = 0.15,
+    #   box.padding = 0.15
+    #   # point.padding = 0.2
+    # ) +
+
+    ### PUBLISH
+    xlim(-8.15, 8.15)+
+    theme(legend.position = &quot;bottom&quot;,
+          legend.box.margin = margin(-10,0,0,0),
+          legend.key.size = unit(0, &quot;lines&quot;)
+          )+
+
+    xlab(expression(&quot;log&quot;[2] * &quot;FC&quot;)) +
+    ylab(expression(&quot;-log&quot;[10] * &quot;FDR&quot;)) +
+    scale_fill_manual(values = c(&quot;dodgerblue3&quot;, alpha(colour = &quot;gray80&quot;, alpha = 0.9), &quot;firebrick3&quot;)) +
+    scale_color_manual(labels = c(paste0(&quot;Down: &quot;, sum(lmTreat_all[[x]]$Expression == &quot;Down-regulated&quot;), &quot;  &quot;),
+                                  paste0(&quot;NS: &quot;, sum(lmTreat_all[[x]]$Expression == &quot;Insignificant&quot;), &quot;  &quot;),
+                                  paste0(&quot;Up: &quot;, sum(lmTreat_all[[x]]$Expression == &quot;Up-regulated&quot;), &quot; &quot;)), 
+                       values = c(&quot;dodgerblue3&quot;, alpha(colour = &quot;gray80&quot;, alpha = 0.6), &quot;firebrick3&quot;)) +   
+    
+    guides(colour = guide_legend(override.aes = list(size = 1.5))) +
+    labs(
+
+      ### PUBLISH
+      # title = &quot;Volcano Plot: LIMMA-VOOM + TREAT&quot;,
+      # subtitle = &quot;Intact vs Control&quot;,
+      colour = &quot;Expression&quot;
+    )
+
+  # save to directory
+  ggsave(paste0(&quot;vol_&quot;, fc[i], &quot;.png&quot;),
+    plot = vol[[x]],
+    path = here::here(&quot;2_plots/de/&quot;),
+
+    ### PUBLISH
+    width = 58,
+    height = 70,
+    units = &quot;mm&quot;
+  )
+}
+
+# display
+vol[[1]]</code></pre>
+<p><img src="figure/deAnalysis.Rmd/vol-1.png" width="1056" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-upregulated" class="section level6">
+<h6>Top Upregulated</h6>
+<pre class="r"><code># create df with normalised read counts with an additional entrezid column for binding
+logCPM &lt;- cpm(dge, prior.count = 3, log = TRUE) %&gt;% subset(select = 1:7)
+rownames(logCPM) &lt;- dge$genes$gene_name
+# colnames(logCPM) &lt;- c(&quot;Control 1&quot;, &quot;Control 2&quot;, &quot;Control 4&quot;, &quot;Intact 1&quot;, &quot;Intact 2&quot;, &quot;Intact 3&quot;, &quot;Intact 4&quot;)
+
+# colour palette for heatmap
+my_palette &lt;- colorRampPalette(c(&quot;dodgerblue3&quot;, &quot;white&quot;, &quot;firebrick3&quot;))(n = 201)
+
+# df for heatmap annotation of sample group
+anno &lt;- as.factor(dge$samples$group) %&gt;% as.data.frame() %&gt;% dplyr::slice(1:7)
+colnames(anno) &lt;- &quot;Sample Groups&quot;
+anno$`Sample Groups` &lt;- gsub(&quot;CONT&quot;, &quot;Control&quot;, anno$`Sample Groups`)
+anno$`Sample Groups` &lt;- gsub(&quot;INT&quot;, &quot;Intact&quot;, anno$`Sample Groups`)
+rownames(anno) &lt;- colnames(logCPM)
+
+# setting colour of sample group annotation
+anno_colours &lt;- c(&quot;#f8766d&quot;, &quot;#00bdc4&quot;)
+names(anno_colours) &lt;- c(&quot;Control&quot;, &quot;Intact&quot;)
+
+logCPM_up=list()
+logCPM_down=list()
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+  
+  # filtering top upregulated genes then filter the logCPM values of those genes.
+  upReg &lt;- lmTreat_sig[[x]] %&gt;%
+    dplyr::filter(logFC &gt; 0) %&gt;%
+    arrange(sort(adj.P.Val, decreasing = F))
+  upReg &lt;- upReg[1:20,]
+  logCPM_up[[x]] &lt;- logCPM[upReg$gene_name,] %&gt;% as.data.frame()
+  
+
+  # filtering top upregulated genes then filter the logCPM values of those genes.
+  downReg &lt;- lmTreat_sig[[x]] %&gt;%
+    dplyr::filter(logFC &lt; 0) %&gt;%
+    arrange(sort(adj.P.Val, decreasing = F))
+  if (nrow(downReg) &gt;= 20) {max &lt;-  20} else {max &lt;-  nrow(downReg)}
+  downReg &lt;- downReg[1:max,]
+  logCPM_down[[x]] &lt;- logCPM[downReg$gene_name,] %&gt;% as.data.frame()
+}</code></pre>
+<pre class="r"><code>heat_up=list()
+
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+  heat_up[[x]] &lt;-
+    pheatmap(
+      mat = logCPM_up[[x]], 
+  
+      ### Publish
+      show_colnames = F,
+      main = paste0(&quot;Top &quot;, nrow(logCPM_up[[x]]), &quot; significant upregulated genes\n&quot;),
+      legend = F,
+      annotation_legend = T,
+      fontsize = 8,
+      fontsize_col = 9,
+      fontsize_number = 7,
+      fontsize_row = 8,
+      treeheight_row = 25,
+      treeheight_col = 10,
+      clustering_distance_rows = &quot;euclidean&quot;,
+      legend_breaks = c(seq(-3, 11, by = .5), 1.3),
+      legend_labels = c(seq(-3, 11, by = .5), &quot;Z-Score&quot;),
+      angle_col = 90,
+      cutree_cols = 2,
+      cutree_rows = 1,
+      border_color = NA,
+      color = viridis_pal(option = &quot;viridis&quot;)(300),
+      scale = &quot;row&quot;,
+      annotation_col = anno,
+      annotation_colors = list(&quot;Sample Groups&quot; = anno_colours),
+      annotation_names_col = F,
+      annotation = T,
+      silent = T,
+      
+      labels_row = as.expression(lapply(rownames(logCPM_up[[x]]), function(a) bquote(italic(.(a)))))
+      
+  ) %&gt;% as.ggplot()
+  
+# save to directory
+  ggsave(paste0(&quot;heat_up_&quot;, fc[i], &quot;.svg&quot;),
+    plot = heat_up[[x]],
+    path = here::here(&quot;2_plots/de/&quot;),
+
+    ### PUBLISH
+    width = 112,
+    height = 110,
+    units = &quot;mm&quot;
+  )
+}
+
+heat_up[[1]] </code></pre>
+<p><img src="figure/deAnalysis.Rmd/heatUp-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-downregulated" class="section level6">
+<h6>Top Downregulated</h6>
+<pre class="r"><code>heat_down=list()
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+  heat_down[[x]] &lt;-
+    pheatmap(
+      mat = logCPM_down[[x]],
+  
+      ### Publish
+      show_colnames = F,
+      main = paste0(&quot;Top &quot;, nrow(logCPM_down[[x]]), &quot; significant downregulated genes\n&quot;),
+      legend = F,
+      annotation_legend = T,
+      fontsize = 8,
+      fontsize_col = 9,
+      fontsize_number = 7,
+      fontsize_row = 8,
+      treeheight_row = 25,
+      treeheight_col = 10,
+      clustering_distance_rows = &quot;euclidean&quot;,
+      legend_breaks = c(seq(-3, 11, by = .5), 1.3),
+      legend_labels = c(seq(-3, 11, by = .5), &quot;Z-Score&quot;),
+      angle_col = 90,
+      cutree_cols = 2,
+      cutree_rows = 1,
+      border_color = NA,
+      color = viridis_pal(option = &quot;viridis&quot;)(300),
+      scale = &quot;row&quot;,
+      annotation_col = anno,
+      annotation_colors = list(&quot;Sample Groups&quot; = anno_colours),
+      annotation_names_col = F,
+      annotation = T,
+      silent = T,
+      
+      labels_row = as.expression(lapply(rownames(logCPM_down[[x]]), function(a) bquote(italic(.(a)))))
+
+  ) %&gt;% as.ggplot()
+  
+# save to directory
+  ggsave(paste0(&quot;heat_down_&quot;, fc[i], &quot;.svg&quot;),
+    plot = heat_down[[x]],
+    path = here::here(&quot;2_plots/de/&quot;),
+
+    ### PUBLISH
+    width = 112,
+    height = 110,
+    units = &quot;mm&quot;
+  )
+}
+
+heat_down[[1]] </code></pre>
+<p><img src="figure/deAnalysis.Rmd/heatDown-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="treat-fc1.1" class="section level4">
+<h4>TREAT FC=1.1</h4>
+<pre class="r"><code>assign(paste0(&quot;lmTreat_fc&quot;, fc[2], &quot;_voom2_fdr0.05&quot;),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = &quot;fdr&quot;, p.val = 0.05))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.1 from ‘voom2’ with
+‘fdr’ adjusment method, and at a p-value/adj.p-value of 0.05
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+55
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+15775
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1392
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>assign(paste0(&quot;lmTreat_fc&quot;, fc[2], &quot;_voom2_pval0.01&quot;),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = &quot;none&quot;, p.val = 0.01))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.1 from ‘voom2’ with
+‘none’ adjusment method, and at a p-value/adj.p-value of 0.01
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+187
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+15205
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1830
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>assign(paste0(&quot;lmTreat_fc&quot;, fc[2], &quot;_voom2_pval0.05&quot;),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = &quot;none&quot;, p.val = 0.05))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.1 from ‘voom2’ with
+‘none’ adjusment method, and at a p-value/adj.p-value of 0.05
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+13070
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2922
+</td>
+</tr>
+</tbody>
+</table>
+<div id="int-vs-cont-visualisation-1" class="section level5 tabset">
+<h5 class="tabset">INT vs CONT Visualisation</h5>
+<div id="p-value-histogram-1" class="section level6">
+<h6>P Value histogram</h6>
+<pre class="r"><code>plot(x = lmTreat_hist[[2]],
+     main = paste0(&quot;P-Values FC = &quot;, fc[[2]]),
+     xlab = &quot;P-Value&quot;,
+     col = &quot;gray60&quot;)</code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-2-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>invisible(dev.print(svg, here::here(paste0(&quot;2_plots/de/pval_&quot;, fc[2], &quot;.svg&quot;))))</code></pre>
+</div>
+<div id="ma-plot-1" class="section level6">
+<h6>MA Plot</h6>
+<pre class="r"><code>ma[[2]]</code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-3-1.png" width="1056" style="display: block; margin: auto;" /></p>
+</div>
+<div id="volcano-plot-1" class="section level6">
+<h6>Volcano Plot</h6>
+<pre class="r"><code>vol[[2]]</code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-4-1.png" width="1056" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-upregulated-1" class="section level6">
+<h6>Top Upregulated</h6>
+<pre class="r"><code>heat_up[[2]] </code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-downregulated-1" class="section level6">
+<h6>Top Downregulated</h6>
+<pre class="r"><code>heat_down[[2]]</code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="treat-fc1.5" class="section level4">
+<h4>TREAT FC=1.5</h4>
+<pre class="r"><code>assign(paste0(&quot;lmTreat_fc&quot;, fc[3], &quot;_voom2_fdr0.05&quot;),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = &quot;fdr&quot;, p.val = 0.05))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.5 from ‘voom2’ with
+‘fdr’ adjusment method, and at a p-value/adj.p-value of 0.05
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+16834
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+386
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>assign(paste0(&quot;lmTreat_fc&quot;, fc[3], &quot;_voom2_pval0.01&quot;),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = &quot;none&quot;, p.val = 0.01))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.5 from ‘voom2’ with
+‘none’ adjusment method, and at a p-value/adj.p-value of 0.01
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+16238
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+970
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>assign(paste0(&quot;lmTreat_fc&quot;, fc[3], &quot;_voom2_pval0.05&quot;),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = &quot;none&quot;, p.val = 0.05))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Number of DE genes significantly above a FC of 1.5 from ‘voom2’ with
+‘none’ adjusment method, and at a p-value/adj.p-value of 0.05
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+INT vs CONT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+155
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+15317
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1750
+</td>
+</tr>
+</tbody>
+</table>
+<div id="int-vs-cont-visualisation-2" class="section level5 tabset">
+<h5 class="tabset">INT vs CONT Visualisation</h5>
+<div id="p-value-histogram-2" class="section level6">
+<h6>P Value histogram</h6>
+<pre class="r"><code>plot(x = lmTreat_hist[[3]],
+     main = paste0(&quot;P-Values FC = &quot;, fc[[3]]),
+     xlab = &quot;P-Value&quot;,
+     col = &quot;gray60&quot;)</code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-8-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>invisible(dev.print(svg, here::here(paste0(&quot;2_plots/de/pval_&quot;, fc[3], &quot;.svg&quot;))))</code></pre>
+</div>
+<div id="ma-plot-2" class="section level6">
+<h6>MA Plot</h6>
+<pre class="r"><code>ma[[3]]</code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-9-1.png" width="1056" style="display: block; margin: auto;" /></p>
+</div>
+<div id="volcano-plot-2" class="section level6">
+<h6>Volcano Plot</h6>
+<pre class="r"><code>vol[[3]]</code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-10-1.png" width="1056" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-upregulated-2" class="section level6">
+<h6>Top Upregulated</h6>
+<pre class="r"><code>heat_up[[3]] </code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="top-downregulated-2" class="section level6">
+<h6>Top Downregulated</h6>
+<pre class="r"><code>heat_down[[3]]</code></pre>
+<p><img src="figure/deAnalysis.Rmd/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="export-data" class="section level2">
+<h2>Export Data</h2>
+<pre class="r"><code># export toptable for Dexter rewrite
+## First paper (suitable # of DE genes for INT vs CONT)
+writexl::write_xlsx(x = lmTreat_fc1.5_voom2_fdr0.05, here::here(&quot;3_output/lmTreat_fc1.5_voom2_all_fdr.xlsx&quot;))
+## Second paper (suitable # of DE genes for INT vs SVS_VAS, SVX vs SVX_VAS, and VAS vs SVX_VAS)
+writexl::write_xlsx(x = lm_voom2_pval0.01, here::here(&quot;3_output/lm_voom2_all.xlsx&quot;))
+
+# export excel spreadsheet
+writexl::write_xlsx(x = lmTreat_all, here::here(&quot;3_output/lmTreat_all.xlsx&quot;))
+writexl::write_xlsx(x = lmTreat_sig, here::here(&quot;3_output/lmTreat_sig.xlsx&quot;))
+
+# save RDS object for enrichment analysis
+saveRDS(object = fc, file = here::here(&quot;0_data/RDS_objects/fc.rds&quot;))
+saveRDS(object = lfc, file = here::here(&quot;0_data/RDS_objects/lfc.rds&quot;))
+saveRDS(object = full_design, file = here::here(&quot;0_data/RDS_objects/full_design.rds&quot;))
+saveRDS(object = contrast, file = here::here(&quot;0_data/RDS_objects/contrast.rds&quot;))
+saveRDS(object = lmTreat, file = here::here(&quot;0_data/RDS_objects/lmTreat.rds&quot;))
+saveRDS(object = lmTreat_all, file = here::here(&quot;0_data/RDS_objects/lmTreat_all.rds&quot;))
+saveRDS(object = lmTreat_sig, file = here::here(&quot;0_data/RDS_objects/lmTreat_sig.rds&quot;))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.1 (2022-06-23 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8   
+[3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C                      
+[5] LC_TIME=English_Australia.utf8    
+
+attached base packages:
+[1] grid      stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] Glimma_2.6.0      edgeR_3.38.4      limma_3.52.4      viridis_0.6.2    
+ [5] viridisLite_0.4.1 ggrepel_0.9.1     ggpubr_0.4.0      ggplotify_0.1.0  
+ [9] pheatmap_1.0.12   cowplot_1.1.1     pander_0.6.5      kableExtra_1.3.4 
+[13] forcats_0.5.2     stringr_1.4.1     purrr_0.3.5       tidyr_1.2.1      
+[17] ggplot2_3.3.6     tidyverse_1.3.2   reshape2_1.4.4    tibble_3.1.8     
+[21] readr_2.1.3       magrittr_2.0.3    dplyr_1.0.10     
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.4.1                backports_1.4.1            
+  [3] workflowr_1.7.0             systemfonts_1.0.4          
+  [5] plyr_1.8.7                  splines_4.2.1              
+  [7] BiocParallel_1.30.3         GenomeInfoDb_1.32.4        
+  [9] digest_0.6.29               yulab.utils_0.0.5          
+ [11] htmltools_0.5.3             fansi_1.0.3                
+ [13] memoise_2.0.1               googlesheets4_1.0.1        
+ [15] tzdb_0.3.0                  Biostrings_2.64.1          
+ [17] annotate_1.74.0             modelr_0.1.9               
+ [19] matrixStats_0.62.0          svglite_2.1.0              
+ [21] colorspace_2.0-3            blob_1.2.3                 
+ [23] rvest_1.0.3                 textshaping_0.3.6          
+ [25] haven_2.5.1                 xfun_0.33                  
+ [27] crayon_1.5.2                RCurl_1.98-1.9             
+ [29] jsonlite_1.8.2              genefilter_1.78.0          
+ [31] survival_3.3-1              glue_1.6.2                 
+ [33] gtable_0.3.1                gargle_1.2.1               
+ [35] zlibbioc_1.42.0             XVector_0.36.0             
+ [37] webshot_0.5.4               DelayedArray_0.22.0        
+ [39] car_3.1-0                   BiocGenerics_0.42.0        
+ [41] abind_1.4-5                 scales_1.2.1               
+ [43] DBI_1.1.3                   rstatix_0.7.0              
+ [45] Rcpp_1.0.9                  xtable_1.8-4               
+ [47] gridGraphics_0.5-1          bit_4.0.4                  
+ [49] stats4_4.2.1                htmlwidgets_1.5.4          
+ [51] httr_1.4.4                  RColorBrewer_1.1-3         
+ [53] ellipsis_0.3.2              farver_2.1.1               
+ [55] pkgconfig_2.0.3             XML_3.99-0.11              
+ [57] sass_0.4.2                  dbplyr_2.2.1               
+ [59] here_1.0.1                  locfit_1.5-9.6             
+ [61] utf8_1.2.2                  labeling_0.4.2             
+ [63] tidyselect_1.2.0            rlang_1.0.6                
+ [65] later_1.3.0                 AnnotationDbi_1.58.0       
+ [67] munsell_0.5.0               cellranger_1.1.0           
+ [69] tools_4.2.1                 cachem_1.0.6               
+ [71] cli_3.4.1                   generics_0.1.3             
+ [73] RSQLite_2.2.18              broom_1.0.1                
+ [75] evaluate_0.17               fastmap_1.1.0              
+ [77] ragg_1.2.3                  yaml_2.3.5                 
+ [79] knitr_1.40                  bit64_4.0.5                
+ [81] fs_1.5.2                    KEGGREST_1.36.3            
+ [83] xml2_1.3.3                  compiler_4.2.1             
+ [85] rstudioapi_0.14             png_0.1-7                  
+ [87] ggsignif_0.6.3              reprex_2.0.2               
+ [89] geneplotter_1.74.0          bslib_0.4.0                
+ [91] stringi_1.7.8               highr_0.9                  
+ [93] lattice_0.20-45             Matrix_1.5-1               
+ [95] vctrs_0.4.2                 pillar_1.8.1               
+ [97] lifecycle_1.0.3             jquerylib_0.1.4            
+ [99] bitops_1.0-7                httpuv_1.6.6               
+[101] GenomicRanges_1.48.0        R6_2.5.1                   
+[103] promises_1.2.0.1            gridExtra_2.3              
+[105] writexl_1.4.0               IRanges_2.30.1             
+[107] codetools_0.2-18            assertthat_0.2.1           
+[109] SummarizedExperiment_1.26.1 DESeq2_1.36.0              
+[111] rprojroot_2.0.3             withr_2.5.0                
+[113] S4Vectors_0.34.0            GenomeInfoDbData_1.2.8     
+[115] parallel_4.2.1              hms_1.1.2                  
+[117] rmarkdown_2.17              MatrixGenerics_1.8.1       
+[119] carData_3.0-5               googledrive_2.0.0          
+[121] git2r_0.30.1                Biobase_2.56.0             
+[123] lubridate_1.8.0            </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

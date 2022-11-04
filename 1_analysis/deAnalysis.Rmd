@@ -1,0 +1,703 @@
+---
+title: "DE Analysis"
+author: "Ha Tran"
+date: "22/08/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  eval = TRUE,
+  fig.align = "center",
+  fig.width = 11
+)
+```
+
+# Data Setup
+
+```{r load libraries}
+# working with data
+library(dplyr)
+library(magrittr)
+library(readr)
+library(tibble)
+library(reshape2)
+library(tidyverse)
+
+# Visualisation:
+library(kableExtra)
+library(ggplot2)
+library(grid)
+library(pander)
+library(cowplot)
+library(pheatmap)
+
+# Custom ggplot
+library(ggplotify)
+library(ggpubr)
+library(ggrepel)
+library(viridis)
+
+# Bioconductor packages:
+library(edgeR)
+library(limma)
+library(Glimma)
+
+theme_set(theme_minimal())
+pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
+```
+
+### Import DGElist Data
+
+DGElist object containing the raw feature count, sample metadata, and gene metadata, created in the Set Up stage.
+
+```{r importData}
+# load DGElist previously created in the set up
+dge <- readRDS(here::here("0_data/RDS_objects/dge.rds"))
+```
+
+# Differential Gene Expression Analysis
+
+## Initial Parameterisation
+
+The varying methods used to identify differential expression all rely on similar initial parameters. These include:
+
+1.  The Design Matrix,
+2.  Estimation of Dispersion, and
+3.  Contrast Matrix
+
+### Design Matrix
+
+The experimental design can be parameterised in a one-way layout where one coefficient is assigned to each group. The design matrix formulated below contains the predictors of each sample
+
+```{r design}
+# null design with unit vector for generation of voomWithQualityWeights downstream
+null_design <- matrix(1, ncol = 1, nrow = ncol(dge))
+
+# setup full design matrix with sample_group
+full_design <- model.matrix(~ 0 + group,
+  data = dge$samples)
+
+# remove "sample_group" from each column names
+colnames(full_design) <- gsub(
+  "group",
+  "",
+  colnames(full_design))
+
+```
+
+### Contrast Matrix
+
+The contrast matrix is required to provide a coefficient to each comparison and later used to test for significant differential expression with each comparison group
+
+```{r constrastMatrix}
+contrast <- limma::makeContrasts(
+  INTvsCONT = INT - CONT,
+  levels = full_design)
+
+colnames(contrast) <- c("INT vs CONT")
+
+```
+
+## Limma-Voom
+
+### Apply voom transformation {.tabset}
+
+Voom is used to estimate the mean-variance relationship of the data, which is then used to calculate and assign a precision weight for each of the observation (gene). This observational level weights are then used in a linear modelling process to adjust for heteroscedasticity. Log count (logCPM) data typically show a decreasing mean-variance trend with increasing count size (expression).
+
+However, for some dataset with potential sample outliers, `voomWithQualityWeights` can be used to calculate sample-specific quality weights. The application of observational and sample-specific weights can objectively and systematically correct for outliers and better than manually removing samples in cases where there are no clear-cut reasons for replicate variations
+
+#### Voom with observational-level weights
+
+```{r voom, fig.cap = "Voom transformation with observational weights"}
+# voom tranformation without sample weights
+voom <- limma::voom(counts = dge, design = full_design, plot = TRUE,)
+```
+
+#### Voom with observational and group level weights
+
+```{r voom_groupWeights, fig.cap = "Voom transformation with observational and group-specific weights"}
+# voom transformation with sample weights using full_design matrix for group-specific weights
+voom1 <- limma::voomWithQualityWeights(counts = dge, design = full_design, plot = TRUE)
+```
+
+#### Voom with observational and sample level weights
+
+```{r voom_sampleWeights, fig.cap = "Voom transformation with observational and sample-specific weights"}
+# voom transformation with sample weights using null design matrix
+voom2 <- limma::voomWithQualityWeights(counts = dge,design = null_design, plot = TRUE)
+```
+
+
+### Apply linear model {.tabset}
+
+
+```{r fcAndLfc}
+# specifying FC of interest
+options(digits = 6)
+fc <- c(1.05, 1.1, 1.5)
+lfc <- log(x = fc, 2)
+```
+
+#### Without TREAT
+```{r limmaEbayes, results='asis'}
+# function for applying linear model, generate decideTest table, and extract topTable
+limmaFit_ebayes <- function(x, adjMethod, p.val){
+  lm <- limma::lmFit(object = x, design = full_design) %>%
+    contrasts.fit(contrasts = contrast) %>%
+    limma::eBayes()
+  
+  lm_dt <- decideTests(object = lm, adjust.method = adjMethod, p.value = p.val)
+  print(knitr::kable(summary(lm_dt)
+                      , caption = paste0("Number of significant DE genes from '", deparse(substitute(x)), "' with '", adjMethod, "' adjusment method, and at a p-value/adj.p-value of ", p.val)) %>% 
+    kable_styling(bootstrap_options = c("striped", "hover")))
+
+  lm_all <- lapply(1:ncol(lm), function(y){
+    limma::topTable(lm, coef = y, number = Inf, adjust.method = adjMethod) %>%
+      dplyr::select(c("gene", "gene_name", "gene_biotype", "logFC", "AveExpr", "P.Value", "adj.P.Val", "description", "entrezid"))
+    })
+  names(lm_all) <- as.data.frame(contrast) %>% colnames()
+  return(lm_all)
+}
+
+lm_voom1_pval0.01 <- limmaFit_ebayes(x = voom1, adjMethod = "none", p.val = 0.01)
+lm_voom2_pval0.01 <- limmaFit_ebayes(x = voom2, adjMethod = "none", p.val = 0.01)
+lm_voom2_fdr0.7 <- limmaFit_ebayes(x = voom2, adjMethod = "fdr", p.val = 0.7)
+
+```
+
+#### TREAT FC=`r fc[1]`
+
+```{r limmaTREAT, results='asis'}
+
+limmaFit_treat <- function(x, fc, adjMethod, p.val){
+  lm_treat <- limma::lmFit(object = x, design = full_design) %>%
+    contrasts.fit(contrasts = contrast) %>%
+    limma::treat(fc = fc)
+  
+  lm_treat_dt <- decideTests(object = lm_treat, adjust.method = adjMethod, p.value = p.val)
+  print(knitr::kable(summary(lm_treat_dt), 
+                     caption = paste0("Number of DE genes significantly above a FC of ", fc, " from '", deparse(substitute(x)), "' with '", adjMethod, "' adjusment method, and at a p-value/adj.p-value of ", p.val)) %>% 
+    kable_styling(bootstrap_options = c("striped", "hover")))
+  
+  lm_treat_all <- lapply(1:ncol(lm_treat), function(y){
+    limma::topTreat(lm_treat, coef = y, number = Inf, adjust.method = adjMethod) %>%
+      dplyr::select(c("gene", "gene_name", "gene_biotype", "logFC", "AveExpr", "P.Value", "adj.P.Val", "description", "entrezid"))
+    })
+  names(lm_treat_all) <- as.data.frame(contrast) %>% colnames()
+  return(lm_treat_all)
+}
+
+assign(paste0("lmTreat_fc", fc[1], "_voom2_fdr0.05"),
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "fdr", p.val = 0.05))
+assign(paste0("lmTreat_fc", fc[1], "_voom2_pval0.01"),
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "none", p.val = 0.01))
+assign(paste0("lmTreat_fc", fc[1], "_voom2_pval0.05"),
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "none", p.val = 0.05))
+```
+
+
+```{r limmaTreat}
+### Old code used to interatively generate lmTreat dataset with different fc cutoff
+## with treat
+lmTreat <- list()
+lmTreat_dt <- list()
+lmTreat_all <- list()
+lmTreat_sig <- list()
+
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  lmTreat[[x]] <- limma::lmFit(object = voom2, design = full_design) %>%
+    limma::contrasts.fit(contrasts = contrast) %>%
+    limma::treat(lfc = lfc[i])
+
+  # decide test, do before taking topTreat, as input need to be MArraryLM list
+  lmTreat_dt[[x]] <- decideTests(lmTreat[[x]], adjust.methods = "fdr", p.value = 0.05)
+
+  # extract a table of genes from a linear model fit, export and used for downstream analysis
+  lmTreat_all[[x]] <- topTreat(fit = lmTreat[[x]], coef = 1, number = Inf, adjust.method = "fdr") %>%
+    dplyr::select(c("gene_name", "logFC", "AveExpr", "P.Value", "adj.P.Val", "description", "entrezid"))
+
+  # extract a table of significant genes from a linear model fit, export and used for downstream analysis
+  lmTreat_sig[[x]] <- topTreat(fit = lmTreat[[x]], coef = 1, number = Inf, adjust.method = "fdr", p.value = 0.05) %>%
+    dplyr::select(c("gene_name", "logFC", "AveExpr", "P.Value", "adj.P.Val", "description", "entrezid"))
+}
+
+```
+
+##### INT vs CONT Visualisation {.tabset}
+
+###### P Value histogram
+
+```{r pValueHistogram_limma_treat}
+lmTreat_hist <- list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  lmTreat_hist[[x]] <- hist(x = lmTreat[[x]]$p.value, breaks = 100, plot = F) 
+}
+plot(
+  x = lmTreat_hist[[1]],
+  main = paste0("P-Values FC = ", fc[[1]]),
+  xlab = "P-Value",
+  col = "gray60"
+)
+
+invisible(dev.print(svg, here::here(paste0("2_plots/de/pval_", fc[1], ".svg"))))
+```
+
+###### MA Plot
+
+```{r ma}
+ma <- list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  
+  # add an extra column and determine whether the DE genes are significant
+  lmTreat_all[[x]] <- lmTreat_all[[x]] %>%
+    as.data.frame() %>%
+    dplyr::mutate(Expression = case_when(
+      adj.P.Val <= 0.05 & logFC >= lfc ~ "Up-regulated",
+      adj.P.Val <= 0.05 & logFC <= -lfc ~ "Down-regulated",
+      TRUE ~ "Insignificant"
+    ))
+
+  # adding labels to top genes
+  top <- 3
+  top_limma <- bind_rows(
+    lmTreat_all[[x]] %>%
+      dplyr::filter(Expression == "Up-regulated") %>%
+      arrange(adj.P.Val, desc(abs(logFC))) %>%
+      head(top),
+    lmTreat_all[[x]] %>%
+      dplyr::filter(Expression == "Down-regulated") %>%
+      arrange(adj.P.Val, desc(abs(logFC))) %>%
+      head(top)
+  )
+  invisible(top_limma %>% as.data.frame())
+
+  ma[[x]] <- lmTreat_all[[x]] %>%
+    ggplot(aes(x = AveExpr, y = logFC)) +
+    geom_point(aes(colour = Expression),
+
+      ### PUBLISH
+      size = 0.3,
+      # alpha = 0.7,
+      show.legend = T
+    ) +
+    # geom_label_repel(
+    #   data = top_limma,
+    #   mapping = aes(x = AveExpr, logFC, label = gene_name),
+    # 
+    #   ### PUBLISH
+    #   size = 1.7,
+    #   label.padding = 0.15,
+    #   # label.r = 0.15,
+    #   box.padding = 0.15
+    #   # point.padding = 0.2
+    # ) +
+    geom_hline(yintercept = c(-fc[i], 0, fc[i]), linetype = c("dashed", "solid", "dashed")) +
+
+    ### PUBLISH
+    ylim(-8, 8) +
+    theme(legend.position = "bottom",
+          legend.box.margin = margin(-10,0,0,0),
+          legend.key.size = unit(0, "lines")
+          )+
+
+    xlab(expression("log"[2] * "CPM")) +
+    ylab(expression("log"[2] * "FC")) +
+    scale_fill_manual(values = c("dodgerblue3", alpha(colour = "gray80", alpha = 0.9), "firebrick3")) +
+    scale_color_manual(labels = c(paste0("Down: ", sum(lmTreat_all[[x]]$Expression == "Down-regulated"), "  "),
+                                  paste0("NS: ", sum(lmTreat_all[[x]]$Expression == "Insignificant"), "  "),
+                                  paste0("Up: ", sum(lmTreat_all[[x]]$Expression == "Up-regulated"), " ")), 
+                       values = c("dodgerblue3", alpha(colour = "gray80", alpha = 0.6), "firebrick3")) +
+    
+    guides(colour = guide_legend(override.aes = list(size = 1.5))) +
+    labs(
+      # title = "MA Plot: LIMMA-VOOM + TREAT",
+      # subtitle = "Intact vs Control",
+      colour = "Expression")
+
+  # save to directory
+  ggsave(paste0("ma_", fc[i], ".png"),
+    plot = ma[[x]],
+    path = here::here("2_plots/de/"),
+
+    ### PUBLISH
+    width = 58,
+    height = 70,
+    units = "mm"
+  )
+}
+
+# display
+ma[[1]]
+```
+
+###### Volcano Plot
+
+```{r vol}
+vol <- list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+
+  # adding labels to top genes
+  top <- 3
+  top_limma <- bind_rows(
+    lmTreat_all[[x]] %>%
+      dplyr::filter(Expression == "Up-regulated") %>%
+      arrange(adj.P.Val, desc(abs(logFC))) %>%
+      head(top),
+    lmTreat_all[[x]] %>%
+      dplyr::filter(Expression == "Down-regulated") %>%
+      arrange(adj.P.Val, desc(abs(logFC))) %>%
+      head(top)
+  )
+  invisible(top_limma %>% as.data.frame())
+
+  # generate vol plot with the allDEgene data.frame
+  vol[[x]] <- lmTreat_all[[x]] %>%
+    ggplot(aes(
+      x = logFC,
+      y = -log(adj.P.Val, 10)
+    )) +
+    geom_point(aes(colour = Expression),
+
+      ### PUBLISH
+      size = 0.3,
+      # alpha = 0.8,
+      show.legend = T
+    ) +
+    # geom_label_repel(
+    #   data = top_limma,
+    #   mapping = aes(logFC, -log(adj.P.Val, 10), label = gene_name),
+    # 
+    #   ### PUBLISH
+    #   size = 1.7,
+    #   label.padding = 0.15,
+    #   # label.r = 0.15,
+    #   box.padding = 0.15
+    #   # point.padding = 0.2
+    # ) +
+
+    ### PUBLISH
+    xlim(-8.15, 8.15)+
+    theme(legend.position = "bottom",
+          legend.box.margin = margin(-10,0,0,0),
+          legend.key.size = unit(0, "lines")
+          )+
+
+    xlab(expression("log"[2] * "FC")) +
+    ylab(expression("-log"[10] * "FDR")) +
+    scale_fill_manual(values = c("dodgerblue3", alpha(colour = "gray80", alpha = 0.9), "firebrick3")) +
+    scale_color_manual(labels = c(paste0("Down: ", sum(lmTreat_all[[x]]$Expression == "Down-regulated"), "  "),
+                                  paste0("NS: ", sum(lmTreat_all[[x]]$Expression == "Insignificant"), "  "),
+                                  paste0("Up: ", sum(lmTreat_all[[x]]$Expression == "Up-regulated"), " ")), 
+                       values = c("dodgerblue3", alpha(colour = "gray80", alpha = 0.6), "firebrick3")) +   
+    
+    guides(colour = guide_legend(override.aes = list(size = 1.5))) +
+    labs(
+
+      ### PUBLISH
+      # title = "Volcano Plot: LIMMA-VOOM + TREAT",
+      # subtitle = "Intact vs Control",
+      colour = "Expression"
+    )
+
+  # save to directory
+  ggsave(paste0("vol_", fc[i], ".png"),
+    plot = vol[[x]],
+    path = here::here("2_plots/de/"),
+
+    ### PUBLISH
+    width = 58,
+    height = 70,
+    units = "mm"
+  )
+}
+
+# display
+vol[[1]]
+```
+
+###### Top Upregulated
+
+```{r heatmapSetup}
+# create df with normalised read counts with an additional entrezid column for binding
+logCPM <- cpm(dge, prior.count = 3, log = TRUE) %>% subset(select = 1:7)
+rownames(logCPM) <- dge$genes$gene_name
+# colnames(logCPM) <- c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")
+
+# colour palette for heatmap
+my_palette <- colorRampPalette(c("dodgerblue3", "white", "firebrick3"))(n = 201)
+
+# df for heatmap annotation of sample group
+anno <- as.factor(dge$samples$group) %>% as.data.frame() %>% dplyr::slice(1:7)
+colnames(anno) <- "Sample Groups"
+anno$`Sample Groups` <- gsub("CONT", "Control", anno$`Sample Groups`)
+anno$`Sample Groups` <- gsub("INT", "Intact", anno$`Sample Groups`)
+rownames(anno) <- colnames(logCPM)
+
+# setting colour of sample group annotation
+anno_colours <- c("#f8766d", "#00bdc4")
+names(anno_colours) <- c("Control", "Intact")
+
+logCPM_up=list()
+logCPM_down=list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  
+  # filtering top upregulated genes then filter the logCPM values of those genes.
+  upReg <- lmTreat_sig[[x]] %>%
+    dplyr::filter(logFC > 0) %>%
+    arrange(sort(adj.P.Val, decreasing = F))
+  upReg <- upReg[1:20,]
+  logCPM_up[[x]] <- logCPM[upReg$gene_name,] %>% as.data.frame()
+  
+
+  # filtering top upregulated genes then filter the logCPM values of those genes.
+  downReg <- lmTreat_sig[[x]] %>%
+    dplyr::filter(logFC < 0) %>%
+    arrange(sort(adj.P.Val, decreasing = F))
+  if (nrow(downReg) >= 20) {max <-  20} else {max <-  nrow(downReg)}
+  downReg <- downReg[1:max,]
+  logCPM_down[[x]] <- logCPM[downReg$gene_name,] %>% as.data.frame()
+}
+```
+
+```{r heatUp, fig.height=10, fig.width=8}
+heat_up=list()
+
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  heat_up[[x]] <-
+    pheatmap(
+      mat = logCPM_up[[x]], 
+  
+      ### Publish
+      show_colnames = F,
+      main = paste0("Top ", nrow(logCPM_up[[x]]), " significant upregulated genes\n"),
+      legend = F,
+      annotation_legend = T,
+      fontsize = 8,
+      fontsize_col = 9,
+      fontsize_number = 7,
+      fontsize_row = 8,
+      treeheight_row = 25,
+      treeheight_col = 10,
+      clustering_distance_rows = "euclidean",
+      legend_breaks = c(seq(-3, 11, by = .5), 1.3),
+      legend_labels = c(seq(-3, 11, by = .5), "Z-Score"),
+      angle_col = 90,
+      cutree_cols = 2,
+      cutree_rows = 1,
+      border_color = NA,
+      color = viridis_pal(option = "viridis")(300),
+      scale = "row",
+      annotation_col = anno,
+      annotation_colors = list("Sample Groups" = anno_colours),
+      annotation_names_col = F,
+      annotation = T,
+      silent = T,
+      
+      labels_row = as.expression(lapply(rownames(logCPM_up[[x]]), function(a) bquote(italic(.(a)))))
+      
+  ) %>% as.ggplot()
+  
+# save to directory
+  ggsave(paste0("heat_up_", fc[i], ".svg"),
+    plot = heat_up[[x]],
+    path = here::here("2_plots/de/"),
+
+    ### PUBLISH
+    width = 112,
+    height = 110,
+    units = "mm"
+  )
+}
+
+heat_up[[1]] 
+```
+
+###### Top Downregulated
+
+```{r heatDown, fig.height=10, fig.width=8}
+heat_down=list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  heat_down[[x]] <-
+    pheatmap(
+      mat = logCPM_down[[x]],
+  
+      ### Publish
+      show_colnames = F,
+      main = paste0("Top ", nrow(logCPM_down[[x]]), " significant downregulated genes\n"),
+      legend = F,
+      annotation_legend = T,
+      fontsize = 8,
+      fontsize_col = 9,
+      fontsize_number = 7,
+      fontsize_row = 8,
+      treeheight_row = 25,
+      treeheight_col = 10,
+      clustering_distance_rows = "euclidean",
+      legend_breaks = c(seq(-3, 11, by = .5), 1.3),
+      legend_labels = c(seq(-3, 11, by = .5), "Z-Score"),
+      angle_col = 90,
+      cutree_cols = 2,
+      cutree_rows = 1,
+      border_color = NA,
+      color = viridis_pal(option = "viridis")(300),
+      scale = "row",
+      annotation_col = anno,
+      annotation_colors = list("Sample Groups" = anno_colours),
+      annotation_names_col = F,
+      annotation = T,
+      silent = T,
+      
+      labels_row = as.expression(lapply(rownames(logCPM_down[[x]]), function(a) bquote(italic(.(a)))))
+
+  ) %>% as.ggplot()
+  
+# save to directory
+  ggsave(paste0("heat_down_", fc[i], ".svg"),
+    plot = heat_down[[x]],
+    path = here::here("2_plots/de/"),
+
+    ### PUBLISH
+    width = 112,
+    height = 110,
+    units = "mm"
+  )
+}
+
+heat_down[[1]] 
+```
+
+
+#### TREAT FC=`r fc[2]`
+
+```{r, results='asis'}
+assign(paste0("lmTreat_fc", fc[2], "_voom2_fdr0.05"),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "fdr", p.val = 0.05))
+assign(paste0("lmTreat_fc", fc[2], "_voom2_pval0.01"),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "none", p.val = 0.01))
+assign(paste0("lmTreat_fc", fc[2], "_voom2_pval0.05"),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "none", p.val = 0.05))
+```
+
+##### INT vs CONT Visualisation {.tabset}
+
+###### P Value histogram
+
+```{r}
+plot(x = lmTreat_hist[[2]],
+     main = paste0("P-Values FC = ", fc[[2]]),
+     xlab = "P-Value",
+     col = "gray60")
+invisible(dev.print(svg, here::here(paste0("2_plots/de/pval_", fc[2], ".svg"))))
+```
+
+###### MA Plot
+
+```{r}
+ma[[2]]
+```
+
+###### Volcano Plot
+
+```{r}
+vol[[2]]
+```
+
+###### Top Upregulated
+
+```{r, fig.height=10, fig.width=8}
+heat_up[[2]] 
+```
+
+###### Top Downregulated
+
+```{r, fig.height=10, fig.width=8}
+heat_down[[2]]
+```
+
+
+
+#### TREAT FC=`r fc[3]`
+
+```{r, results='asis'}
+assign(paste0("lmTreat_fc", fc[3], "_voom2_fdr0.05"),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "fdr", p.val = 0.05))
+assign(paste0("lmTreat_fc", fc[3], "_voom2_pval0.01"),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "none", p.val = 0.01))
+assign(paste0("lmTreat_fc", fc[3], "_voom2_pval0.05"),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "none", p.val = 0.05))
+```
+
+##### INT vs CONT Visualisation {.tabset}
+
+###### P Value histogram
+
+```{r}
+plot(x = lmTreat_hist[[3]],
+     main = paste0("P-Values FC = ", fc[[3]]),
+     xlab = "P-Value",
+     col = "gray60")
+invisible(dev.print(svg, here::here(paste0("2_plots/de/pval_", fc[3], ".svg"))))
+```
+
+###### MA Plot
+
+```{r}
+ma[[3]]
+```
+
+###### Volcano Plot
+
+```{r}
+vol[[3]]
+```
+
+###### Top Upregulated
+
+```{r, fig.height=10, fig.width=8}
+heat_up[[3]] 
+```
+
+###### Top Downregulated
+
+```{r, fig.height=10, fig.width=8}
+heat_down[[3]]
+```
+
+
+
+
+## Export Data
+
+```{r exportData}
+# export toptable for Dexter rewrite
+## First paper (suitable # of DE genes for INT vs CONT)
+writexl::write_xlsx(x = lmTreat_fc1.5_voom2_fdr0.05, here::here("3_output/lmTreat_fc1.5_voom2_all_fdr.xlsx"))
+## Second paper (suitable # of DE genes for INT vs SVS_VAS, SVX vs SVX_VAS, and VAS vs SVX_VAS)
+writexl::write_xlsx(x = lm_voom2_pval0.01, here::here("3_output/lm_voom2_all.xlsx"))
+
+# export excel spreadsheet
+writexl::write_xlsx(x = lmTreat_all, here::here("3_output/lmTreat_all.xlsx"))
+writexl::write_xlsx(x = lmTreat_sig, here::here("3_output/lmTreat_sig.xlsx"))
+
+# save RDS object for enrichment analysis
+saveRDS(object = fc, file = here::here("0_data/RDS_objects/fc.rds"))
+saveRDS(object = lfc, file = here::here("0_data/RDS_objects/lfc.rds"))
+saveRDS(object = full_design, file = here::here("0_data/RDS_objects/full_design.rds"))
+saveRDS(object = contrast, file = here::here("0_data/RDS_objects/contrast.rds"))
+saveRDS(object = lmTreat, file = here::here("0_data/RDS_objects/lmTreat.rds"))
+saveRDS(object = lmTreat_all, file = here::here("0_data/RDS_objects/lmTreat_all.rds"))
+saveRDS(object = lmTreat_sig, file = here::here("0_data/RDS_objects/lmTreat_sig.rds"))
+```

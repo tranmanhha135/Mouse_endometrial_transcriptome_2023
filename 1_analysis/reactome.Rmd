@@ -1,0 +1,212 @@
+---
+title: "DE Analysis (Robertson Lab)"
+author: "Ha Tran"
+date: "22/08/2021"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  eval = TRUE,
+  fig.align = "center",
+  fig.width = 7
+)
+```
+
+# Data Setup
+
+```{r load libraries}
+# working with data
+library(dplyr)
+library(magrittr)
+library(readr)
+library(tibble)
+library(reshape2)
+library(tidyverse)
+
+# Visualisation:
+library(kableExtra)
+library(ggplot2)
+library(grid)
+library(pander)
+library(cowplot)
+library(pheatmap)
+
+# Custom ggplot
+library(ggbiplot)
+library(ggrepel)
+theme_set(theme_light())
+
+# theme_update(
+#   plot.title = element_text(color = "gray20", size = 7, angle = 0, hjust = 0.5, vjust = .5, face = "bold"),
+#   plot.subtitle = element_text(color = "gray20", size = 6, angle = 0, hjust = 0, vjust = .5, face = "plain"),
+# 
+#   legend.key.size = unit(3, 'mm'),
+#   legend.title = element_text(color = "gray20", size = 5, angle = 0, hjust = 0.5, vjust = .5, face = "plain"),
+#   legend.text = element_text(color = "gray20", size = 5, angle = 0, hjust = 0, vjust = .5, face = "plain"),
+#   legend.box.margin = margin (0, -10, 0, -12),
+# 
+#   axis.text.x = element_text(color = "gray20", size = 5, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+#   axis.title.x = element_text(color = "gray20", size = 6, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+# 
+#   axis.text.y = element_text(color = "gray20", size = 5, angle = 0, hjust = 1, vjust = 0.5, face = "plain"),
+#   axis.title.y = element_text(color = "gray20", size = 6, angle = 90, hjust = .5, vjust = .5, face = "plain"))
+
+# Bioconductor packages:
+library(edgeR)
+library(limma)
+library(Glimma)
+library(clusterProfiler)
+library(org.Mm.eg.db)
+library(enrichplot)
+library(ReactomePA)
+```
+
+### Import DGElist Data
+
+DGElist object containing the raw feature count, sample metadata, and gene metadata, created in the Set Up stage. 
+
+```{r importData}
+# load DGElist previously created in the set up
+dge <- readRDS(here::here("0_data/RDS_objects/dge.rds"))
+fc <- readRDS(here::here("0_data/RDS_objects/fc.rds"))
+lfc <- readRDS(here::here("0_data/RDS_objects/lfc.rds"))
+lmTreat <- readRDS(here::here("0_data/RDS_objects/lmTreat.rds"))
+lmTreat_sig <- readRDS(here::here("0_data/RDS_objects/lmTreat_sig.rds"))
+```
+
+# Reactome {.tabset}
+
+## FC=`r fc[1]` {.tabset}
+```{r}
+p=1
+```
+
+### Enriched pathways
+
+```{r reactome}
+reactome=list()
+reactome_all=list()
+reactome_sig=list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  
+  reactome[[x]] <- enrichPathway(gene = lmTreat_sig[[x]]$entrezid, organism = "mouse", pvalueCutoff = 0.05, pAdjustMethod = "fdr", readable = T)
+
+reactome_all[[x]] <- reactome[[x]]@result
+reactome_sig[[x]] <- reactome_all[[x]] %>% dplyr::filter(p.adjust <= 0.05) %>% 
+  separate(col = BgRatio, sep = "/", into = c("Total", "Universe")) %>%
+  dplyr::mutate(
+    logFDR = -log(p.adjust, 10),
+    GeneRatio = Count / as.numeric(Total))%>%
+    dplyr::select(c("Count", "GeneRatio", "pvalue", "p.adjust", "logFDR", "qvalue", "Description", "geneID"))
+
+ # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
+  reactome_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
+                                       replacement = "\\1\n", 
+                                       x = reactome_sig[[x]]$Description)
+  
+  # remove the additional newline at the end of the string
+  reactome_sig[[x]]$Description <- sub(pattern = "\n$", 
+                                       replacement = "", 
+                                       x = reactome_sig[[x]]$Description)
+}
+ 
+kable(x = reactome_sig[[p]]) %>%
+kable_styling(bootstrap_options = c("striped", "hover")) %>% 
+scroll_box(height = "600px")
+```
+
+### Dot plot
+
+```{r dotplot}
+react_dot=list()
+upset=list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  react_dot[[x]] <- ggplot(reactome_sig[[x]][1:15, ]) +
+  geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
+  scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
+  scale_size(range = c(.3,3)) +
+  ggtitle("Reactome Pathways") +
+  ylab(label = "") +
+  xlab(label = "Gene Ratio") +
+  labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
+  ggsave(filename = paste0("react_dot_", x, ".svg"), plot = react_dot[[x]], path = here::here("2_plots/reactome/"), 
+       width = 88, height = 95, units = "mm")
+  
+  upset[[x]] <- upsetplot(x = reactome[[x]], 10)
+  ggsave(filename = paste0("upset_react_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/reactome/"))
+}
+
+react_dot[[p]]
+```
+
+### Upset
+
+```{r}
+upset[[p]]
+```
+
+## FC=`r fc[2]` {.tabset}
+
+```{r}
+p=p+1
+```
+
+### Enriched pathways
+
+```{r}
+kable(x = reactome_sig[[p]]) %>%
+kable_styling(bootstrap_options = c("striped", "hover")) %>% 
+scroll_box(height = "600px")
+```
+
+### Dot plot
+
+```{r}
+react_dot[[p]]
+```
+
+### Upset
+
+```{r}
+upset[[p]]
+```
+
+
+
+## FC=`r fc[3]` {.tabset}
+
+```{r}
+p=p+1
+```
+
+### Enriched pathways
+
+```{r}
+kable(x = reactome_sig[[p]]) %>%
+kable_styling(bootstrap_options = c("striped", "hover")) %>% 
+scroll_box(height = "600px")
+```
+
+### Dot plot
+
+```{r}
+react_dot[[p]]
+```
+
+### Upset
+
+```{r}
+upset[[p]]
+```
+
+# Export Data
+```{r exportData}
+# save to csv
+writexl::write_xlsx(x = reactome_all, here::here("3_output/reactome_all.xlsx"))
+writexl::write_xlsx(x = reactome_sig, here::here("3_output/reactome_sig.xlsx"))
+```

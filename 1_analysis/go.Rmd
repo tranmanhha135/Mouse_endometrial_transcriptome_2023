@@ -1,0 +1,286 @@
+---
+title: "GO Analysis"
+author: "Ha Tran"
+date: "22/08/2021"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  eval = TRUE,
+  fig.align = "center"
+)
+```
+
+# Data Setup
+
+```{r load libraries}
+# working with data
+library(dplyr)
+library(magrittr)
+library(readr)
+library(tibble)
+library(reshape2)
+library(tidyverse)
+
+# Visualisation:
+library(kableExtra)
+library(ggplot2)
+library(grid)
+
+# Custom ggplot
+library(gridExtra)
+library(ggbiplot)
+library(ggrepel)
+
+
+# Bioconductor packages:
+library(edgeR)
+library(limma)
+library(Glimma)
+library(clusterProfiler)
+library(org.Mm.eg.db)
+library(enrichplot)
+
+theme_set(theme_minimal())
+pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
+```
+
+
+### Import DGElist Data
+
+DGElist object containing the raw feature count, sample metadata, and gene metadata, created in the Set Up stage. 
+
+```{r importData}
+# load DGElist previously created in the set up
+dge <- readRDS(here::here("0_data/RDS_objects/dge.rds"))
+fc <- readRDS(here::here("0_data/RDS_objects/fc.rds"))
+lfc <- readRDS(here::here("0_data/RDS_objects/lfc.rds"))
+lmTreat <- readRDS(here::here("0_data/RDS_objects/lmTreat.rds"))
+lmTreat_sig <- readRDS(here::here("0_data/RDS_objects/lmTreat_sig.rds"))
+```
+
+
+# GO Analysis {.tabset}
+`goSummaries` is a package created by Dr Stephen Pederson for filtering GO terms based on ontology level.
+```{r enrichGO}
+# download go summaries and set the minimum ontology level
+goSummaries <- url("https://uofabioinformaticshub.github.io/summaries2GO/data/goSummaries.RDS") %>%
+  readRDS()
+minPath <- 3
+
+enrichGO=list()
+enrichGO_sig <- list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  # find enriched GO terms
+  enrichGO[[x]] <- clusterProfiler::enrichGO(
+    gene = lmTreat_sig[[x]]$entrezid,
+    OrgDb = org.Mm.eg.db,
+    keyType = "ENTREZID",
+    ont = "ALL",
+    pAdjustMethod = "fdr",
+    pvalueCutoff = 0.05
+  )
+
+  # bind to goSummaries to elminate go terms with ontology levels 1 and 2.
+  enrichGO_sig[[x]] <- enrichGO[[x]] %>%
+    as.data.frame() %>%
+    rownames_to_column("id") %>%
+    left_join(goSummaries) %>%
+    dplyr::filter(shortest_path >= minPath) %>%
+    column_to_rownames("id")
+  
+  # adjust go results, separate compound column, add FDR column, adjust the GeneRatio column
+  enrichGO_sig[[x]] <- enrichGO_sig[[x]] %>%
+    separate(col = BgRatio, sep = "/", into = c("Total", "Universe")) %>%
+    dplyr::mutate(
+      logFDR = -log(p.adjust, 10),
+      GeneRatio = Count / as.numeric(Total)) %>% 
+    dplyr::select(c("Count", "GeneRatio", "ontology", "pvalue", "p.adjust", "logFDR", "qvalue", "Description", "geneID"))
+  
+  # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
+  enrichGO_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
+                                       replacement = "\\1\n", 
+                                       x = enrichGO_sig[[x]]$Description)
+  
+  # remove the additional newline at the end of the string
+  enrichGO_sig[[x]]$Description <- sub(pattern = "\n$", 
+                                       replacement = "", 
+                                       x = enrichGO_sig[[x]]$Description)
+}
+```
+
+
+## FC=`r fc[1]`
+
+```{r}
+# display the top 30 most sig
+enrichGO_sig[[1]][1:30, ] %>%
+  kable(caption = "Top 30 significantly enriched GO terms") %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+### Visualisation {.tabset}
+```{r visualisationSetup}
+bp_dot=list()
+mf_dot=list()
+cc_dot=list()
+upset=list()
+for (i in 1:length(fc)) {
+  x <- fc[i] %>% as.character()
+  
+  # extract the enriched GO terms from each ontology
+  bp <- enrichGO_sig[[x]] %>% dplyr::filter(ontology == "BP") 
+  mf <- enrichGO_sig[[x]] %>% dplyr::filter(ontology == "MF")
+  cc <- enrichGO_sig[[x]] %>% dplyr::filter(ontology == "CC")
+
+  # bp dot plot, save
+  bp_dot[[x]] <- ggplot(bp[1:15, ]) +
+    geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
+    scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
+    scale_size(range = c(.3,3)) +
+    ggtitle("Biological Process") +
+    ylab(label = "") +
+    xlab(label = "Gene Ratio") +
+    labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
+  ggsave(filename = paste0("bp_dot_", fc[i], ".svg"), plot = bp_dot[[x]], path = here::here("2_plots/go/"), 
+         width = 88, height = 95, units = "mm")
+
+  # mf dot plot, save
+  mf_dot[[x]] <- ggplot(mf[1:15, ]) +
+    geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
+    scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
+    scale_size(range = c(.3,3)) +
+    ggtitle("Molecular Function") +
+    ylab(label = "") +
+    xlab(label = "Gene Ratio") +
+    labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
+  ggsave(filename = paste0("mf_dot_", fc[i], ".svg"), plot = mf_dot[[x]], path = here::here("2_plots/go/"), 
+         width = 88, height = 95, units = "mm")
+
+  # cc dot plot, save
+  cc_dot[[x]] <- ggplot(cc[1:15, ]) +
+    geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
+    scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
+    scale_size(range = c(.3,3)) +
+    ggtitle("Cellular Components") +
+    ylab(label = "") +
+    xlab(label = "Gene Ratio") +
+    labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
+  ggsave(filename = paste0("cc_dot_", fc[i], ".svg"), plot = cc_dot[[x]], path = here::here("2_plots/go/"), 
+         width = 88, height = 95, units = "mm")
+  
+  upset[[x]] <- upsetplot(x = enrichGO[[x]], 10)
+  ggsave(filename = paste0("upset_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/go/"))
+}
+```
+
+#### Biological Process
+
+```{r}
+bp_dot[[1]] 
+```
+
+#### Molecular Function
+
+```{r}
+mf_dot[[1]]
+```
+
+#### Cellular Components
+
+```{r}
+cc_dot[[1]]
+```
+
+#### Upset
+
+```{r}
+upset[[1]]
+```
+
+## FC=`r fc[2]`
+
+```{r}
+# display the top 30 most sig
+enrichGO_sig[[2]][1:30, ] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+### Visualisation {.tabset}
+
+#### Biological Process
+
+```{r}
+bp_dot[[2]]
+```
+
+#### Molecular Function
+
+```{r}
+mf_dot[[2]]
+```
+
+#### Cellular Components
+
+```{r}
+cc_dot[[2]]
+```
+
+#### Upset
+
+```{r}
+upset[[2]]
+```
+
+## FC=`r fc[3]`
+
+```{r}
+# display the top 30 most sig
+enrichGO_sig[[3]][1:30, ] %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+### Visualisation {.tabset}
+
+#### Biological Process
+
+```{r}
+bp_dot[[3]]
+```
+
+#### Molecular Function
+
+```{r}
+mf_dot[[3]]
+```
+
+#### Cellular Components
+
+```{r}
+cc_dot[[3]]
+```
+
+#### Upset
+
+```{r}
+upset[[3]]
+```
+
+
+# Export Data
+```{r exportData}
+# save to excel
+writexl::write_xlsx(x = enrichGO_sig, here::here("3_output/enrichGO_sig.xlsx"))
+saveRDS(object = enrichGO_sig,file = here::here("0_data/RDS_objects/enrichGO_sig.rds"))
+saveRDS(object = enrichGO,file = here::here("0_data/RDS_objects/enrichGO.rds"))
+
+```

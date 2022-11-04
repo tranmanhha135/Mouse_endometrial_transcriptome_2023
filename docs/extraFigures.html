@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Ha Tran" />
+
+
+<title>Additional Figures</title>
+
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SRB_2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="setUp.html">Pre-processing</a>
+</li>
+<li>
+  <a href="deAnalysis.html">DGE Analysis</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Functional Enrichment Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="go.html">Gene Ontology</a>
+    </li>
+    <li>
+      <a href="kegg.html">KEGG</a>
+    </li>
+    <li>
+      <a href="reactome.html">Reactome</a>
+    </li>
+    <li>
+      <a href="extraFigures.html">IPA</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Additional Figures</h1>
+<h4 class="author">Ha Tran</h4>
+<h4 class="date">24/12/2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-05
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SRB_2022/1_analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed12345code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(12345)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed12345code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(12345)</code> was run prior to running the
+code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treecc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3targetblankcc4bf5da">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/cc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3" target="_blank">cc4bf5d</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treecc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3targetblankcc4bf5da"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/cc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3" target="_blank">cc4bf5d</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  .gitignore
+    Untracked:  0_data/
+    Untracked:  1_analysis/
+    Untracked:  3_output/
+    Untracked:  LICENSE.md
+    Untracked:  README.md
+    Untracked:  SRB_2022.Rproj
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="data-setup" class="section level1">
+<h1>Data Setup</h1>
+<pre class="r"><code># working with data
+library(dplyr)
+library(magrittr)
+library(readr)
+library(tibble)
+library(reshape2)
+library(tidyverse)
+
+# Visualisation:
+library(kableExtra)
+library(ggplot2)
+library(grid)
+library(pander)
+library(cowplot)
+library(pheatmap)
+library(viridis)
+library(igraph)
+library(ggalluvial)
+
+
+# Custom ggplot
+library(ggplotify)
+library(ggbiplot)
+library(ggrepel)
+theme_set(theme_minimal())
+pub &lt;- readRDS(here::here(&quot;0_data/RDS_objects/pub.rds&quot;))
+palette &lt;- readRDS(here::here(&quot;0_data/RDS_objects/palette.rds&quot;))</code></pre>
+</div>
+<div id="dexters-ipa-analysis" class="section level1 tabset">
+<h1 class="tabset">Dexter’s IPA analysis</h1>
+<div id="regulated-pathways" class="section level2">
+<h2>Regulated Pathways</h2>
+<pre class="r"><code>pathways &lt;- read_csv(file = here::here(&quot;0_data/raw_data/IPA_pathways.csv&quot;), col_names = T) %&gt;% slice(1:14) %&gt;% as.data.frame()
+colnames(pathways) &lt;- c(&quot;name&quot;, &quot;logPval&quot;, &quot;pval&quot;, &quot;ratio&quot;, &quot;zScore&quot;, &quot;molecules&quot;)
+
+# at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot
+pathways$name &lt;- sub(
+  pattern = &quot;(.{1,40})(?:$| )&quot;,
+  replacement = &quot;\\1\n&quot;,
+  x = pathways$name
+)
+
+# remove the additional newline at the end of the string
+pathways$name &lt;- sub(
+  pattern = &quot;\n$&quot;,
+  replacement = &quot;&quot;,
+  x = pathways$name
+)
+
+pathways &lt;- ggplot(data = pathways) +
+  geom_point(aes(
+    x = ratio, 
+    y = reorder(name, logPval), 
+    color = zScore,
+    size = logPval)) + 
+  scale_size(range = c(2, 7)) +
+  scale_color_gradient(low = &quot;dodgerblue3&quot;, high = &quot;firebrick3&quot;, limits=c(0, NA)) +  
+  ggtitle(&quot;Regulated Pathways&quot;) +
+  xlab(label = &quot;Gene Ratio&quot;) +
+  ylab(label = &quot;&quot;) +
+  labs(color = &quot;Z-Score&quot;,
+       size = expression(&quot;-log&quot;[10] * &quot;P-value&quot;)) + 
+  scale_x_continuous(expand = c(0,0.007))
+  # theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  
+ggsave(filename = &quot;pathways.svg&quot;, plot = pathways + pub, path = here::here(&quot;2_plots/ipa&quot;), width = 250, height = 166, units = &quot;mm&quot;)
+pathways</code></pre>
+<p><img src="figure/extraFigures.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="upstream-regulators" class="section level2">
+<h2>Upstream Regulators</h2>
+<pre class="r"><code>upstream &lt;-
+  read_csv(file = here::here(&quot;0_data/raw_data/IPA_upstreamRegulators.csv&quot;),
+    col_names = T,
+    skip = 1) %&gt;% as.data.frame()
+# colnames(upstream) &lt;- c(&quot;regulator&quot;, &quot;logRatio&quot;, &quot;molecule&quot;, &quot;activationState&quot;, &quot;zScore&quot;, &quot;flags&quot;, &quot;pvalOverlap&quot;, &quot;targetMolecule&quot;)
+# upstream &lt;- column_to_rownames(.data = upstream,var = &quot;Upstream Regulator&quot;)
+upstream &lt;-
+  dplyr::filter(
+    .data = upstream,
+      `Molecule Type` == &quot;enzyme&quot; |
+      `Molecule Type` == &quot;growth factor&quot; |
+      `Molecule Type` == &quot;cytokine&quot; |
+      `Molecule Type` == &quot;chemical - endogenous mammalian&quot;
+  )
+heatMatrix &lt;-
+  upstream %&gt;% select(c(&quot;Upstream Regulator&quot;, &quot;Activation z-score&quot;)) %&gt;% column_to_rownames(&quot;Upstream Regulator&quot;)
+# %&gt;% pivot_wider(names_from = `Upstream Regulator`, values_from = `Activation z-score`)
+
+# my_palette &lt;- colorRampPalette(c(&quot;dodgerblue3&quot;, &quot;white&quot;, &quot;firebrick3&quot;))(n = 201)
+# my_palette &lt;- viridis_pal(option = &quot;viridis&quot;)(300)
+
+# df for heatmap annotation of sample group
+anno &lt;-
+  dplyr::select(.data = upstream, c(`Upstream Regulator`, `Molecule Type`))
+# anno %&gt;% column_to_rownames(&quot;Upstream Regulator&quot;)
+anno$`Molecule Type` &lt;- str_to_title(anno$`Molecule Type`)
+anno$`Molecule Type` &lt;- as.factor(anno$`Molecule Type`)
+anno &lt;- column_to_rownames(.data = anno, var = &quot;Upstream Regulator&quot;)
+
+anno_colours &lt;- c(&quot;#d7191c&quot;, &quot;#fdae61&quot;, &quot;#abd9e9&quot;, &quot;#2c7bb6&quot;)
+
+names(anno_colours) &lt;- levels(anno$`Molecule Type`)
+
+upstream &lt;- pheatmap(
+  mat = heatMatrix,
+  cluster_rows = F,
+  cluster_cols = F,
+  show_colnames = F,
+  show_rownames = T,
+  legend = T,
+  annotation_legend = T,
+  annotation_row = anno,
+  annotation_names_row = F,
+  annotation_colors = list(&quot;Molecule Type&quot; = anno_colours),
+  annotation_names_col = F,
+  # annotation = F,
+  color = palette,
+  fontsize = 8,
+  fontsize_col = 6,
+  fontsize_number = 5 ,
+  fontsize_row = 8,
+  legend_breaks = c(seq(-3, 11, by = 1)),
+  legend_labels = c(seq(-3, 11, by = 1)),
+  border_color = &quot;grey85&quot;,
+  angle_col = 90,
+  gaps_row = c(8, 13, 16)
+  ) %&gt;% as.ggplot() </code></pre>
+<p><img src="figure/extraFigures.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># upstream &lt;- upstream + theme(legend.box.margin = margin(0,0,-150,0))
+ggsave(filename = &quot;upstream_2.svg&quot;, plot = upstream, path = here::here(&quot;2_plots/ipa&quot;), width = 200, height = 133, units = &quot;mm&quot;)
+upstream</code></pre>
+<p><img src="figure/extraFigures.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="disease-and-function" class="section level2">
+<h2>Disease and Function</h2>
+<pre class="r"><code>categories &lt;- c(&quot;Cellular Movement&quot;, &quot;Cardiovascular System&quot;, &quot;Cell-To-Cell Signaling&quot;)
+tittle &lt;- c(&quot;Cellular Movement&quot;, &quot;Cardiovascular System Development and Function&quot;, &quot;Cell-to-Cell Signaling and Interaction&quot;)
+
+disease_function &lt;- read_csv(file = here::here(&quot;0_data/raw_data/IPA_diseaseAndFunction.csv&quot;), col_names = T, skip = 1) 
+disease_function &lt;- drop_na(data = disease_function, &quot;Predicted Activation State&quot;)
+# disease_function &lt;- dplyr::filter(disease_function, grepl(c(categories), x = disease_function$Categories))
+
+funct=list()
+funct_bar=list()
+for (i in 1:length(categories)) {
+  x &lt;- categories[i] %&gt;% as.character()
+  funct[[x]] &lt;-  dplyr::filter(.data = disease_function, grepl(categories[i], x = disease_function$Categories))
+  
+  # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot
+  funct[[x]]$`Diseases or Functions Annotation` &lt;- sub(
+    pattern = &quot;(.{1,40})(?:$| )&quot;,
+    replacement = &quot;\\1\n&quot;,
+    x = funct[[x]]$`Diseases or Functions Annotation`
+    )
+
+  # remove the additional newline at the end of the string
+  funct[[x]]$`Diseases or Functions Annotation` &lt;- sub(
+    pattern = &quot;\n$&quot;,
+    replacement = &quot;&quot;,
+    x = funct[[x]]$`Diseases or Functions Annotation`
+    )
+  
+  funct_bar[[x]] &lt;- ggplot(data = funct[[x]]) +
+    geom_point(aes(
+      x = `# Molecules`,
+      y = reorder(`Diseases or Functions Annotation`, desc(`p-value`)),
+      colour = `Activation z-score`,
+      size = -log(`p-value`, 10))) + 
+  scale_size(range = c(2, 7)) +
+  scale_color_gradient(low = &quot;dodgerblue3&quot;, high = &quot;firebrick3&quot;, limits=c(0, NA)) +  
+  ggtitle(tittle[i]) +
+  xlab(label = &quot;Count&quot;) +
+  ylab(label = &quot;&quot;) +
+  labs(colour = &quot;Z-score&quot;,
+       size = expression(&quot;-log&quot;[10] * &quot;P-value&quot;)) +
+  scale_x_continuous(expand = c(0,5)) 
+  
+ggsave(filename = paste0(x, &quot;.svg&quot;), plot = funct_bar[[i]] + pub, path = here::here(&quot;2_plots/ipa&quot;), width = 250, height = 166, units = &quot;mm&quot;)
+  
+}
+
+funct &lt;- do.call(rbind, lapply(funct, as.data.frame)) %&gt;% dplyr::select(-Categories) %&gt;%  rownames_to_column(&quot;Categories&quot;)
+funct$Categories &lt;- gsub(pattern = &quot;\\..*&quot;, &quot;&quot;, funct$Categories) %&gt;% as.factor()
+funct_dot &lt;- ggplot(funct) +
+  geom_point(aes(
+    x = `# Molecules`,
+    y = reorder(`Diseases or Functions Annotation`, desc(`p-value`)),
+    colour = `Activation z-score`,
+    size = -log(`p-value`, 10),
+    shape = `Categories`
+  )) + 
+  facet_grid(vars(`Categories`), scales = &quot;free_y&quot;, shrink = T) + 
+  scale_color_gradient(low = &quot;dodgerblue3&quot;, high = &quot;firebrick3&quot;, limits=c(0,NA)) +
+  xlab(label = &quot;Count&quot;) + ylab(&quot;&quot;) + 
+  labs(colour = &quot;Z-score&quot;,
+       size = expression(&quot;-log&quot;[10] * &quot;p-value&quot;),
+       shape = &quot;Categories&quot;) +
+  scale_x_continuous(expand = c (0,10)) +
+  scale_size(range = c(2,5))
+# funct_dot &lt;- funct_dot +
+#   theme(
+#     panel.background = element_rect(fill=&#39;transparent&#39;), #transparent panel bg
+#     plot.background = element_rect(fill=&#39;transparent&#39;, color=NA), #transparent plot bg
+#     # panel.grid.major = element_blank(), #remove major gridlines
+#     # panel.grid.minor = element_blank(), #remove minor gridlines
+#     legend.background = element_rect(fill=&#39;transparent&#39;), #transparent legend bg
+#     legend.box.background = element_rect(fill=&#39;transparent&#39;, color=NA) #transparent legend panel
+#   )
+funct_dot</code></pre>
+<p><img src="figure/extraFigures.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggsave(filename = &quot;diseaseAndFunction.svg&quot;, plot = funct_dot + theme_bw(), path = here::here(&quot;2_plots/ipa&quot;), width = 200, height = 300, units = &quot;mm&quot;)</code></pre>
+<pre class="r"><code>upstream_filtered &lt;- subset(upstream[c(1,3,19,21,2,18,10,13,11),]) 
+upstream_filtered &lt;- upstream_filtered[order(upstream_filtered$`Molecule Type`),]
+
+
+test &lt;- separate_rows(data = upstream_filtered, `Target Molecules in Dataset`, sep = &quot;,&quot;)
+colnames(test)[c(1,8,3)] &lt;- c(&quot;name&quot;, &quot;molecule&quot;, &quot;type&quot;)
+
+pathways_filtered &lt;- subset(pathways[c(11,4, 6, 10, 7, 8),])
+test1 &lt;- separate_rows(data = pathways_filtered, molecules, sep = &quot;,&quot;)
+test1[,7] &lt;- &quot;enriched pathways&quot;
+colnames(test1)[c(1,6,7)] &lt;- c(&quot;name&quot;, &quot;molecule&quot;, &quot;type&quot; )
+
+funct_filtered &lt;- subset(funct[c(2,3,5,6,7,9,10:21),])
+test2 &lt;- separate_rows(data = funct, Molecules, sep = &quot;,&quot;)
+colnames(test2)[c(2,6,1)] &lt;- c(&quot;name&quot;, &quot;molecule&quot;, &quot;type&quot;)
+
+# test_com &lt;- do.call(rbind, lapply(list(test[, c(1, 8, 3)],
+#                                        test1[, c(1, 6, 7)]), as.data.frame))
+# write.csv(test_com, here::here(&quot;C:\\Users/tranm/Desktop/test_com.csv&quot;))
+# 
+# testGraph &lt;- graph.data.frame(test_com, directed = T)
+# # testReverse &lt;- as_data_frame(testGraph)
+# # E(testGraph)$color &lt;- &#39;grey&#39;
+# # V(testGraph)$color &lt;- &#39;grey&#39;
+# summary(testGraph)
+# write_graph(simplify(testGraph), &quot;C:\\Users/tranm/Desktop/testGraph.gml&quot;, format = &quot;gml&quot;)
+# tkplot(testGraph)
+
+
+
+merged &lt;- list()
+for (i in 1:length(upstream_filtered$`Upstream Regulator`)) {
+  x &lt;- upstream_filtered$`Upstream Regulator`[i]
+  
+  for (j in 1:length(funct_filtered$`Diseases or Functions Annotation`)) {
+    y &lt;- paste0(&quot;funct&quot;,j)
+    
+    merged[[x]][[y]] &lt;- length(intersect(unlist(
+      strsplit(upstream_filtered$`Target Molecules in Dataset`[i], split = &quot;,&quot;)
+    ), unlist(strsplit(funct_filtered$Molecules[j], split = &quot;,&quot;))))
+    
+  }
+  merged[[x]] &lt;- do.call(rbind, lapply(merged[[x]], as.data.frame)) %&gt;% remove_rownames()
+  merged[[x]][, c( &quot;funct&quot;, &quot;funct_cat&quot;)] &lt;-
+    c(funct_filtered$`Diseases or Functions Annotation`,
+      funct_filtered$Categories %&gt;% as.character()
+    )
+  print(i)
+}
+merged &lt;- do.call(rbind, lapply(merged, as.data.frame)) %&gt;% rownames_to_column(&quot;upstream&quot;)
+merged$upstream &lt;- gsub(pattern = &quot;\\..*&quot;, &quot;&quot;,merged$upstream) %&gt;% as.factor()
+merged$funct_cat &lt;- as.factor(merged$funct_cat)
+colnames(merged) &lt;- c(&quot;upstream&quot;,&quot;intersect&quot;,&quot;funct&quot;,&quot;funct_cat&quot;)
+levels(merged$upstream) &lt;- c(&quot;beta-estradiol&quot;,&quot;progesterone&quot;,&quot;prostaglandin E2&quot;,&quot;IL1B&quot;,&quot;IL6&quot;,&quot;TNF&quot;,&quot;EGF&quot;,&quot;VEGFA&quot;,&quot;BMP2&quot;)
+
+####THIS is really weird
+# merged$upstream &lt;- gsub(pattern = &quot;protagladin E2&quot;,replacement = &quot;prostaglandin E2&quot;, merged$upstream)
+
+merged$up_cat &lt;- upstream_filtered$`Molecule Type`[match(merged$upstream, upstream_filtered$`Upstream Regulator`)]
+
+merged$funct &lt;- factor(merged$funct, levels = unique(merged$funct[order(merged$funct_cat)]))
+
+is_alluvia_form(as.data.frame(merged), silent = T)
+
+ggplot(
+  as.data.frame(merged),
+  aes(
+    y = intersect,
+    # axis1 = up_cat,
+    axis2 = upstream,
+    axis3 = funct
+    # axis4 = funct_cat
+  )
+) +
+  geom_alluvium(
+    aes(fill = upstream),
+    alpha = 0.5,
+    width = 1 / 250,
+    curve_type = &quot;quintic&quot;
+  ) +
+  geom_stratum(fill = &quot;#193e3f&quot;,
+               width = 1 / 35,
+               color = &quot;#fffaf2&quot;) +
+  # geom_flow() +
+  geom_text(stat = &quot;stratum&quot;, aes(label = after_stat(stratum))) +
+  scale_x_discrete(
+    limits =
+      c(
+        # &quot;Molecule Type&quot;,
+        &quot;Upstream Regulator&quot;,
+        &quot;Disease and Function&quot;
+        # &quot;Category&quot;
+      ),
+expand = c(.05, .05)
+  ) +
+  scale_fill_brewer(type = &quot;qual&quot;, palette = &quot;Set1&quot;) +
+  theme_void() +
+  theme(legend.position = &quot;none&quot;)
+# ylab(&quot; &quot;)
+ggsave(filename = &quot;upstream_funct_alluvial.svg&quot;,path = here::here(&quot;2_plots/ipa/&quot;), width = 450, height = 800, units = &quot;mm&quot;)
+
+
+
+ggplot(
+  as.data.frame(merged),
+  aes(
+    y = intersect,
+    axis1 = funct,
+    axis2 = funct_cat
+    # axis3 = funct_cat
+  )
+) +
+  geom_alluvium(aes(fill = funct_cat), alpha = 0.5, width = 1 / 250, curve_type = &quot;quintic&quot;) +
+  geom_stratum(fill = &quot;#193e3f&quot;, width = 1 / 35, color = &quot;#fffaf2&quot;) +
+  # geom_flow() +
+  # geom_text(stat = &quot;stratum&quot;, aes(label = after_stat(stratum))) +
+  scale_x_discrete(
+    limits = c(&quot;Upstream Regulator&quot;, &quot;Disease and Function&quot;),
+    expand = c(.05, .05)
+  ) +
+  scale_fill_brewer(type = &quot;qual&quot;, palette = &quot;Set2&quot;) +
+  theme_void() +
+  theme(legend.position = &quot;none&quot;)
+  # ylab(&quot; &quot;)
+ggsave(filename = &quot;funct_cat_alluvial.svg&quot;,path = here::here(&quot;2_plots/ipa/&quot;), width = 450, height = 800, units = &quot;mm&quot;)
+
+
+gephi_colours &lt;- colorRampPalette(c(&quot;#00c7ff&quot;,&quot;#ff7045&quot;,&quot;#8cb900&quot;,&quot;black&quot;))
+
+ggplot(
+  as.data.frame(merged),
+  aes(
+    y = intersect,
+    axis1 = up_cat,
+    axis2 = upstream
+  )
+) +
+  geom_alluvium(aes(fill = up_cat), alpha = 0.5, width = 1 / 250, curve_type = &quot;quintic&quot;) +
+  geom_stratum(fill = &quot;#193e3f&quot;, width = 1 / 35, color = &quot;#fffaf2&quot;) +
+  # geom_flow() +
+  # geom_text(stat = &quot;stratum&quot;, aes(label = after_stat(stratum))) +
+  scale_x_discrete(
+    limits = c(&quot;Upstream Regulator&quot;, &quot;Disease and Function&quot;),
+    expand = c(.05, .05)
+  ) +
+  scale_fill_manual(c(&quot;#c5da79&quot;,&quot;#ffb59c&quot;,&quot;#7fe1f9&quot;)) +
+  theme_void() +
+  theme(legend.position = &quot;none&quot;)
+  # ylab(&quot; &quot;)
+ggsave(filename = &quot;up_cat_alluvial.svg&quot;,path = here::here(&quot;2_plots/ipa/&quot;), width = 450, height = 800, units = &quot;mm&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.1 (2022-06-23 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8   
+[3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C                      
+[5] LC_TIME=English_Australia.utf8    
+
+attached base packages:
+[1] grid      stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] ggrepel_0.9.1     ggbiplot_0.55     scales_1.2.1      plyr_1.8.7       
+ [5] ggplotify_0.1.0   ggalluvial_0.12.3 igraph_1.3.5      viridis_0.6.2    
+ [9] viridisLite_0.4.1 pheatmap_1.0.12   cowplot_1.1.1     pander_0.6.5     
+[13] kableExtra_1.3.4  forcats_0.5.2     stringr_1.4.1     purrr_0.3.5      
+[17] tidyr_1.2.1       ggplot2_3.3.6     tidyverse_1.3.2   reshape2_1.4.4   
+[21] tibble_3.1.8      readr_2.1.3       magrittr_2.0.3    dplyr_1.0.10     
+
+loaded via a namespace (and not attached):
+ [1] fs_1.5.2            bit64_4.0.5         lubridate_1.8.0    
+ [4] webshot_0.5.4       RColorBrewer_1.1-3  httr_1.4.4         
+ [7] rprojroot_2.0.3     tools_4.2.1         backports_1.4.1    
+[10] bslib_0.4.0         utf8_1.2.2          R6_2.5.1           
+[13] DBI_1.1.3           colorspace_2.0-3    withr_2.5.0        
+[16] tidyselect_1.2.0    gridExtra_2.3       bit_4.0.4          
+[19] compiler_4.2.1      git2r_0.30.1        textshaping_0.3.6  
+[22] cli_3.4.1           rvest_1.0.3         xml2_1.3.3         
+[25] labeling_0.4.2      sass_0.4.2          systemfonts_1.0.4  
+[28] digest_0.6.29       yulab.utils_0.0.5   rmarkdown_2.17     
+[31] svglite_2.1.0       pkgconfig_2.0.3     htmltools_0.5.3    
+[34] highr_0.9           dbplyr_2.2.1        fastmap_1.1.0      
+[37] rlang_1.0.6         readxl_1.4.1        rstudioapi_0.14    
+[40] farver_2.1.1        gridGraphics_0.5-1  jquerylib_0.1.4    
+[43] generics_0.1.3      jsonlite_1.8.2      vroom_1.6.0        
+[46] googlesheets4_1.0.1 Rcpp_1.0.9          munsell_0.5.0      
+[49] fansi_1.0.3         lifecycle_1.0.3     stringi_1.7.8      
+[52] yaml_2.3.5          parallel_4.2.1      promises_1.2.0.1   
+[55] crayon_1.5.2        haven_2.5.1         hms_1.1.2          
+[58] knitr_1.40          pillar_1.8.1        reprex_2.0.2       
+[61] glue_1.6.2          evaluate_0.17       modelr_0.1.9       
+[64] vctrs_0.4.2         tzdb_0.3.0          httpuv_1.6.6       
+[67] cellranger_1.1.0    gtable_0.3.1        assertthat_0.2.1   
+[70] cachem_1.0.6        xfun_0.33           broom_1.0.1        
+[73] later_1.3.0         ragg_1.2.3          googledrive_2.0.0  
+[76] gargle_1.2.1        workflowr_1.7.0     ellipsis_0.3.2     
+[79] here_1.0.1         </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

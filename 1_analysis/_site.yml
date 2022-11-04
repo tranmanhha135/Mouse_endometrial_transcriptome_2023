@@ -1,0 +1,30 @@
+name: "SRB_2022"
+output_dir: ../docs
+navbar:
+  title: "SRB_2022"
+  left:
+  - text: "Home"
+    href: index.html
+  - text: "Pre-processing"
+    href: setUp.html
+  - text: "DGE Analysis"
+    href: deAnalysis.html
+  - text: "Functional Enrichment Analysis"
+    menu:
+    - text: "Gene Ontology"
+      href: go.html
+    - text: "KEGG"
+      href: kegg.html
+    - text: "Reactome"
+      href: reactome.html
+    - text: "IPA"
+      href: extraFigures.html
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: yes
+    theme: cosmo
+    highlight: textmate
+    code_folding: hide
+    df_print: paged
+

@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Ha Tran" />
+
+<meta name="date" content="2021-02-09" />
+
+<title>Setting up for DGE analysis (Robertson Lab)</title>
+
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SRB_2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="setUp.html">Pre-processing</a>
+</li>
+<li>
+  <a href="deAnalysis.html">DGE Analysis</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Functional Enrichment Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="go.html">Gene Ontology</a>
+    </li>
+    <li>
+      <a href="kegg.html">KEGG</a>
+    </li>
+    <li>
+      <a href="reactome.html">Reactome</a>
+    </li>
+    <li>
+      <a href="extraFigures.html">IPA</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Setting up for DGE analysis (Robertson
+Lab)</h1>
+<h4 class="author">Ha Tran</h4>
+<h4 class="date">02/09/2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-05
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SRB_2022/1_analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed12345code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(12345)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed12345code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(12345)</code> was run prior to running the
+code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treecc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3targetblankcc4bf5da">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/cc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3" target="_blank">cc4bf5d</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treecc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3targetblankcc4bf5da"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/cc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3" target="_blank">cc4bf5d</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  .gitignore
+    Untracked:  0_data/
+    Untracked:  1_analysis/
+    Untracked:  3_output/
+    Untracked:  LICENSE.md
+    Untracked:  README.md
+    Untracked:  SRB_2022.Rproj
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="data-setup" class="section level1">
+<h1>Data Setup</h1>
+<p>Prior to this analysis, reads were: 1. Trimmed using
+<code>AdapterRemoval</code> 2. Aligned to <strong>GRCm38/mm10</strong>
+using <code>STAR</code> 3. Reads quantification peforemd with
+<code>featureCounts</code></p>
+<p><strong>Transcript QC, alignment, and quantification were performed
+by Dr Jimmy Breen</strong></p>
+<pre class="r"><code># working with data
+library(dplyr)
+library(magrittr)
+library(readr)
+library(tibble)
+library(reshape2)
+library(tidyverse)
+library(bookdown)
+
+# Visualisation:
+library(kableExtra)
+library(ggbiplot)
+library(ggrepel)
+library(grid)
+library(cowplot)
+library(corrplot)
+
+# Set ggplot theme
+theme_set(theme_light())
+
+# theme_update(
+#   plot.title = element_text(color = &quot;gray20&quot;, size = 7, angle = 0, hjust = 0.5, vjust = .5, face = &quot;bold&quot;),
+#   plot.subtitle = element_text(color = &quot;gray20&quot;, size = 6, angle = 0, hjust = 0, vjust = .5, face = &quot;plain&quot;),
+# 
+#   legend.title = element_text(color = &quot;gray20&quot;, size = 5, angle = 0, hjust = 0.5, vjust = .5, face = &quot;plain&quot;),
+#   legend.text = element_text(color = &quot;gray20&quot;, size = 5, angle = 0, hjust = 0, vjust = .5, face = &quot;plain&quot;),
+# 
+#   axis.text.x = element_text(color = &quot;gray20&quot;, size = 5, angle = 0, hjust = .5, vjust = 0, face = &quot;plain&quot;),
+#   axis.title.x = element_text(color = &quot;gray20&quot;, size = 6, angle = 0, hjust = .5, vjust = 0, face = &quot;plain&quot;),
+# 
+#   axis.text.y = element_text(color = &quot;gray20&quot;, size = 5, angle = 0, hjust = 1, vjust = 0.5, face = &quot;plain&quot;),
+#   axis.title.y = element_text(color = &quot;gray20&quot;, size = 6, angle = 90, hjust = .5, vjust = .5, face = &quot;plain&quot;))
+
+# Bioconductor packages:
+library(AnnotationHub)
+library(edgeR)
+library(limma)
+library(Glimma)</code></pre>
+<div id="import-raw-count-data" class="section level2">
+<h2>Import Raw Count Data</h2>
+<p>Due to the unusual library size, control 3 was removed from the
+analysis</p>
+<pre class="r"><code># import the mergedOnly dataset, provided by Dr Jimmy Breen on the 24/09/21
+rawCount &lt;- read_tsv(here::here(&quot;0_data/raw_data/allSamples_mergedOnly.featureCounts.txt&quot;),
+                     col_names = TRUE,
+                     comment = &quot;#&quot;) %&gt;%
+  dplyr::rename(CONT1 = &quot;../2_Hisat2_merged/CONT1_ATGTCA_merged.sorted.nodup.bam&quot;,
+                CONT2 = &quot;../2_Hisat2_merged/CONT2_CGATGT_merged.sorted.nodup.bam&quot;,
+                CONT4 = &quot;../2_Hisat2_merged/CONT4_ACTTGA_merged.sorted.nodup.bam&quot;,
+                INT1 = &quot;../2_Hisat2_merged/INT1_GTCCGC_merged.sorted.nodup.bam&quot;,
+                INT2 = &quot;../2_Hisat2_merged/INT2_ACAGTG_merged.sorted.nodup.bam&quot;,
+                INT3 = &quot;../2_Hisat2_merged/INT3_GATCAG_merged.sorted.nodup.bam&quot;,
+                INT4 = &quot;../2_Hisat2_merged/INT4_CTTGTA_merged.sorted.nodup.bam&quot;,
+                SVX1 = &quot;../2_Hisat2_merged/SVX1_GTTTCG_merged.sorted.nodup.bam&quot;,
+                SVX2 = &quot;../2_Hisat2_merged/SVX2_TAGCTT_merged.sorted.nodup.bam&quot;,
+                SVX3 = &quot;../2_Hisat2_merged/SVX3_ATCACG_merged.sorted.nodup.bam&quot;,
+                SVX4 = &quot;../2_Hisat2_merged/SVX4_GCCAAT_merged.sorted.nodup.bam&quot;,
+                SVX_VAS1 = &quot;../2_Hisat2_merged/SVX_VAS1_AGTCAA_merged.sorted.nodup.bam&quot;,
+                SVX_VAS2 = &quot;../2_Hisat2_merged/SVX_VAS2_AGTTCC_merged.sorted.nodup.bam&quot;,
+                SVX_VAS3 = &quot;../2_Hisat2_merged/SVX_VAS3_TGACCA_merged.sorted.nodup.bam&quot;,
+                SVX_VAS4 = &quot;../2_Hisat2_merged/SVX_VAS4_GGCTAC_merged.sorted.nodup.bam&quot;,
+                VAS1 = &quot;../2_Hisat2_merged/VAS1_CAGATC_merged.sorted.nodup.bam&quot;,
+                VAS2 = &quot;../2_Hisat2_merged/VAS2_GTGAAA_merged.sorted.nodup.bam&quot;,
+                VAS3 = &quot;../2_Hisat2_merged/VAS3_GTGGCC_merged.sorted.nodup.bam&quot;,
+                VAS4 = &quot;../2_Hisat2_merged/VAS4_CCGTCC_merged.sorted.nodup.bam&quot;,) %&gt;% 
+  column_to_rownames(&quot;Geneid&quot;) %&gt;%
+  as.data.frame() 
+  rownames(rawCount) &lt;- gsub(&quot;\\..+$&quot;, &quot;&quot;, rownames(rawCount))
+  
+# Removing the non-numerical metadata column. SVX_VAS1 may also be an outlier, it is number 18 (BTW)
+rawCount&lt;- rawCount[, c(6,7,9:25)]</code></pre>
+</div>
+<div id="import-metadata" class="section level2">
+<h2>Import Metadata</h2>
+<p>There are generally two metadata required for DGE analysis.</p>
+<ol style="list-style-type: decimal">
+<li><p>metadata about <em>each sample</em></p></li>
+<li><p>metadata about <em>each gene</em></p></li>
+</ol>
+<div id="sample-metadata" class="section level3">
+<h3>Sample Metadata</h3>
+<p>The sample metadata can be extracted from the <code>logCPM</code>
+column names. These data include <code>sample_id</code>,
+<code>sample_group</code>, <code>sample_type</code>.</p>
+<p>The sample metadata will be manually generated and stored in the
+<code>/0_data/raw_data/</code> directory</p>
+<pre class="r"><code>samples &lt;- read_tsv(here::here(&quot;0_data/raw_data/samples.tsv&quot;),
+                    col_names = TRUE) %&gt;% 
+  column_to_rownames(&quot;1&quot;)</code></pre>
+</div>
+<div id="gene-metadata" class="section level3">
+<h3>Gene Metadata</h3>
+<p>Gene annotation is useful for the DGE analysis as it will provide
+useful information about the genes. The annotated genes of <em>Mus
+musculus</em> can be pulled down by using Annotation Hub.</p>
+<p>Annotation Hub also has a web service that can be assessed through
+the display function. Pulling down the gene annotation can take a long
+time, so after the initial run, the annotated genes is saved to a
+<code>genes.rds</code> file. To save time, if <code>genes.rds</code> is
+already present, don’t run the code chunk.</p>
+<pre class="r"><code>ah &lt;- AnnotationHub()
+ah %&gt;% 
+  subset(grepl(&quot;musculus&quot;, species)) %&gt;%
+  subset(rdataclass == &quot;EnsDb&quot;)
+
+#viewing web service for annotation hub 
+#d &lt;- display(ah)
+
+# Annotation hub html site was used to identify &#39;code&#39; for the lastest mouse genome from Ensembl
+ensDb &lt;- ah[[&quot;AH95775&quot;]]
+
+genes &lt;- genes(ensDb) %&gt;% 
+  as.data.frame()
+
+#the annotated genes are saved into a RDS object to save computational time in subsequent run of the setUp.Rmd
+genes %&gt;% saveRDS(here::here(&quot;0_data/RDS_objects/gene_metadata.rds&quot;))</code></pre>
+<p>Using the annotated gene list through AnnotationHub(), load into
+object called <code>geneMetadata</code>. Filter out all genes that are
+present in the rawCount and display the number of unique gene_biotypes
+present in the rawCount and geneMetadata</p>
+<pre class="r"><code>geneMetadata &lt;- read_rds(here::here(&quot;0_data/RDS_objects/gene_metadata.rds&quot;))
+
+#prepare the gene data frame to contain the genes listed in the rownames of &#39;rawCount&#39; data
+geneMetadata &lt;- data.frame(gene = rownames(rawCount)) %&gt;% 
+  left_join(geneMetadata %&gt;% as.data.frame, 
+            by = c(&quot;gene&quot;=&quot;gene_id&quot;)) %&gt;% 
+  dplyr::distinct(gene, .keep_all=TRUE)  
+
+rownames(geneMetadata) &lt;- geneMetadata$gene
+
+#Using the table function, the details of the genes present in the rawCount data can be summaried.
+genes &lt;- geneMetadata$gene_biotype %&gt;% table %&gt;% as.data.frame()
+
+colnames(genes) &lt;- c(&quot;Gene Biotype&quot;, &quot;Frequency&quot;)
+  
+kable(genes) %&gt;% kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;% scroll_box(height = &quot;600px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:600px; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Gene Biotype
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Frequency
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+IG_C_gene
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IG_C_pseudogene
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IG_D_gene
+</td>
+<td style="text-align:right;">
+19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IG_D_pseudogene
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IG_J_gene
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IG_LV_gene
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IG_pseudogene
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IG_V_gene
+</td>
+<td style="text-align:right;">
+218
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IG_V_pseudogene
+</td>
+<td style="text-align:right;">
+155
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lncRNA
+</td>
+<td style="text-align:right;">
+7128
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+miRNA
+</td>
+<td style="text-align:right;">
+1124
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+misc_RNA
+</td>
+<td style="text-align:right;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mt_rRNA
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mt_tRNA
+</td>
+<td style="text-align:right;">
+22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+polymorphic_pseudogene
+</td>
+<td style="text-align:right;">
+76
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+processed_pseudogene
+</td>
+<td style="text-align:right;">
+7047
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+protein_coding
+</td>
+<td style="text-align:right;">
+21575
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pseudogene
+</td>
+<td style="text-align:right;">
+59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ribozyme
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+rRNA
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+scaRNA
+</td>
+<td style="text-align:right;">
+34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+scRNA
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+snoRNA
+</td>
+<td style="text-align:right;">
+1065
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+snRNA
+</td>
+<td style="text-align:right;">
+789
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TEC
+</td>
+<td style="text-align:right;">
+2587
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TR_C_gene
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TR_D_gene
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TR_J_gene
+</td>
+<td style="text-align:right;">
+70
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TR_J_pseudogene
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TR_V_gene
+</td>
+<td style="text-align:right;">
+144
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TR_V_pseudogene
+</td>
+<td style="text-align:right;">
+34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+transcribed_processed_pseudogene
+</td>
+<td style="text-align:right;">
+214
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+transcribed_unitary_pseudogene
+</td>
+<td style="text-align:right;">
+21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+transcribed_unprocessed_pseudogene
+</td>
+<td style="text-align:right;">
+223
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+translated_unprocessed_pseudogene
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+unitary_pseudogene
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+unprocessed_pseudogene
+</td>
+<td style="text-align:right;">
+2310
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="create-dgelist-object" class="section level2">
+<h2>Create DGEList object</h2>
+<p>Digital Gene Expression List (DGElist) is a R object class often used
+for differential gene expression analysis as it simplifies plotting, and
+interaction with data and metadata.</p>
+<p>The DGEList object holds the three dataset that have
+imported/created, including <code>rawCount</code> data and
+<code>sampleMetadata</code> and <code>geneMetadata</code> metadata.</p>
+<p>To further save time and memory, genes that were not expressed
+acrossed all samples (i.e., <code>0</code> count across all columns) are
+all removed</p>
+<pre class="r"><code>#Create DGElist with rawCOunt and gene data. Remove all genes with 0 expression in all treatment groups
+dge &lt;- DGEList(counts = rawCount, 
+               samples = samples,
+               genes = geneMetadata,
+               remove.zeros = TRUE
+               ) </code></pre>
+</div>
+</div>
+<div id="pre-processing-and-qc" class="section level1">
+<h1>Pre-processing and QC</h1>
+<p>Pre-processing steps increased the power of the downstream DGE
+analysis by eliminating majority of unwanted variance that could obscure
+the true variance caused by the differences in sample conditions. There
+are several standard steps that are commonly followed to pre-process and
+QC raw read counts, including:</p>
+<ol style="list-style-type: decimal">
+<li><p>Checking Library Size</p></li>
+<li><p>Removal of Undetectable Genes</p></li>
+<li><p>Normalisation</p></li>
+<li><p>QC through MDS/PCA</p></li>
+</ol>
+<div id="checking-library-size" class="section level2">
+<h2>Checking Library Size</h2>
+<p>A simple pre-processing/QC step is checking the quality of library
+size (total number of mapped and quantified reads) for each treatment.
+This enable identification of potentially mis-labeled or outlying
+samples. This is often visualised through <code>ggplot</code>.</p>
+<pre class="r"><code>dge$samples %&gt;% 
+  
+  #plot the sample with the lib.size in x and sample_group in y, colour fill for each sample_group
+  ggplot(aes(
+    x = lib.size, 
+    y = rownames(dge$samples), 
+    fill = dge$samples$group)
+    ) +
+  geom_col() +
+  
+  #draw a vertical line for the mean lib.size
+  geom_vline(
+    aes (xintercept = lib.size), 
+    data = . %&gt;% summarise_at(vars(lib.size), mean),
+    linetype = 2
+  ) +
+  
+  #labelling splot
+  labs(
+    title = &quot;Sample Library Size&quot;,
+    x = &quot;Library Size&quot;,
+    y = &quot;Samples&quot;,
+    fill = &quot;Sample Groups&quot;
+  ) +
+  
+  #PUBLISHING
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/setUp.Rmd/libraryChecks-1.png" alt="Sample library size. Dash line represent average library size" width="1056" />
+<p class="caption">
+Sample library size. Dash line represent average library size
+</p>
+</div>
+<pre class="r"><code>#save the plot to .svg
+ggsave(here::here(&quot;2_plots/qc/library_size.svg&quot;),
+       #PUBLISHING
+       width = 88,
+       height = 70,
+       units = &quot;mm&quot;)</code></pre>
+</div>
+<div id="removal-of-low-expressed-genes" class="section level2">
+<h2>Removal of Low-Expressed Genes</h2>
+<p>Filtering out low-expressed genes is a standard pre-processing step
+in DGE analysis as it can significantly increase the power to
+differentiate differentially expressed genes by eliminating the variance
+caused by genes that are lowly expressed in all samples.</p>
+<p>The threshold of removal is arbitrary and is often determined after
+visualisation of the count distribution. The count distribution can be
+illustrated in a density plot through <code>ggplot</code>. A common
+metric used to display the count distribution is <em>log Counts per
+Million</em> (logCPM)</p>
+<pre class="r"><code>beforeFiltering &lt;- dge %&gt;% 
+  
+  #transform the raw count to logCPM 
+  edgeR::cpm(log = TRUE) %&gt;% 
+
+  #melting (reorganising) the transformed logCPM data with respect to the id variable (i.e., the row and column names). Very similar to pivot_long fucntion
+  melt %&gt;%
+
+  #retain all rows where the logCPM (value) is finite. ALl of them in this case are finite
+  dplyr::filter(is.finite(value)) %&gt;%
+
+  #plot the long formate logCPM counts in a density plot with x the logCPM and colour by the sample_id
+  ggplot(aes(
+    x = value,
+    colour = Var2
+  )) +
+  geom_density() +
+
+  # remove the legend
+  guides(colour = FALSE) +
+
+  #add figure tittle and subtitle and labels
+  ggtitle(&quot;Before Filtering Low-expressed Genes&quot;, subtitle = paste0(nrow(dge), &quot; genes&quot;))+
+  labs(
+    x = &quot;logCPM&quot;,
+    y = &quot;Density&quot;,
+    colour = &quot;Sample Groups&quot;
+  )
+
+#save plot
+ggsave(&quot;counts_before_filtering.svg&quot;,
+       plot = beforeFiltering,
+       path = here::here(&quot;2_plots/qc/&quot;))</code></pre>
+<p>Ideally, the filtering the low-expressed genes should remove the
+large peak with <code>logCPM &lt; 0</code>, i.e., remove any genes which
+have less than one count per million.</p>
+<p>A common guideline is to keep all genes that have &gt; 1-2 cpm in the
+smallest group on a treatment. In this case, the smallest group is 3 as
+each treatment condition had three replicates. However, due to the high
+variance of some groups, the filtering is increased to keep genes that
+are are <strong>more than 3 CPM in atleast 3 samples</strong>.
+Mathematically this would be identifying genes (rows) with CPM
+<code>&gt; 3</code>; and identifying total row sum that is
+<code>&gt;= 3</code>.</p>
+<pre class="r"><code>#the genes kept have &gt;2 CPM for at least 3 samples
+keptGenes &lt;- (rowSums(cpm(dge) &gt; 3) &gt;= 3) 
+afterFiltering &lt;- dge %&gt;% 
+  
+  #transform the raw count to logCPM 
+  edgeR::cpm(log = TRUE) %&gt;% 
+  
+  #for var1 (gene names) extract only the keptGenes and discard all other genes in the logCPM data
+  magrittr::extract(keptGenes,) %&gt;% 
+
+  #melting (reorganising) the transformed logCPM data with respect to the id variable (i.e., the row and column names). Very similar to pivot_long fucntion
+  melt %&gt;% 
+  
+  #retain all rows where the logCPM (value) is finite. ALl of them in this case are finite
+  dplyr::filter(is.finite(value)) %&gt;% 
+
+  #ggplot
+  ggplot(aes(
+    x = value,
+    colour = Var2
+  )) +
+  geom_density() +
+  
+  #remove the legend
+  guides(colour = FALSE) +
+  
+  #add figure tittle and subtitle and labels. since keptGenes is a logic element, the second element represents the number of genes that were kept after the filtering
+  ggtitle(&quot;After Filtering Low-expressed Genes&quot;, subtitle = paste0(table(keptGenes)[[2]], &quot; genes&quot;)) +
+  labs(
+    x = &quot;logCPM&quot;,
+    y = &quot;Density&quot;,
+    colour = &quot;Sample Groups&quot;
+  )
+
+#save plot
+ggsave(&quot;counts_after_filtering_2_3.svg&quot;,
+       plot = afterFiltering,
+       path = here::here(&quot;2_plots/qc/&quot;))
+
+#display plot
+# afterFiltering
+
+#display plot side by side
+cowplot::plot_grid(beforeFiltering, afterFiltering)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/setUp.Rmd/afterFiltering-1.png" alt="Before and after removal of lowly expressed genes" width="1056" />
+<p class="caption">
+Before and after removal of lowly expressed genes
+</p>
+</div>
+<pre class="r"><code>ggsave(filename = &quot;counts_before_after_filtering_2_3.svg&quot;,
+        path = here::here(&quot;2_plots/qc/&quot;),
+
+       #PUBLISHING
+       width = 180,
+       height = 80,
+       units = &quot;mm&quot;)</code></pre>
+<p>Following the filtering of low-expressed genes <strong>&lt; 3 CPM in
+at least 3 samples</strong>, out of the total 36300 genes left after the
+removal of genes with no expression, 19078 genes were removed, leaving
+only 17222 genes remaining for the downstream analysis</p>
+<div id="subset-the-dgelist-object" class="section level3">
+<h3>Subset the DGElist object</h3>
+<p>After filtering the low-expressed genes, the DGElist object is
+updated to eliminate the low-expressed genes from future analysis</p>
+<pre class="r"><code>#extract genes from keptGenes and recalculate the lib size
+dge &lt;- dge[keptGenes,,keep.lib.sizes = FALSE]</code></pre>
+</div>
+</div>
+<div id="normalisation" class="section level2">
+<h2>Normalisation</h2>
+<p>Using the TMM (trimmed mean of M value) method of normalisation
+through the <code>edgeR</code> package. The TMM approach creates a
+scaling factor as an offset to be supplied to Negative Binomial model.
+The <code>ca;cNormFactors</code> function calculate the normalisation
+and return the adjusted <code>norm.factor</code> to the
+<code>dge$samples</code> element.</p>
+<pre class="r"><code>#after normalisation
+dge &lt;- edgeR::calcNormFactors(object = dge, 
+                              method = &quot;TMM&quot;)
+knitr::kable(dge$samples, caption = &quot;Normalised samples&quot;) %&gt;% 
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;% 
+  scroll_box(height = &quot;600px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:600px; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Normalised samples
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+group
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+lib.size
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+norm.factors
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+sample
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Mated
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+rep
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+pretty
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+CONT1
+</td>
+<td style="text-align:left;">
+CONT
+</td>
+<td style="text-align:right;">
+19872706
+</td>
+<td style="text-align:right;">
+0.8464567
+</td>
+<td style="text-align:left;">
+CONT1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Control 1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CONT2
+</td>
+<td style="text-align:left;">
+CONT
+</td>
+<td style="text-align:right;">
+31605394
+</td>
+<td style="text-align:right;">
+0.8813685
+</td>
+<td style="text-align:left;">
+CONT2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Control 2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CONT4
+</td>
+<td style="text-align:left;">
+CONT
+</td>
+<td style="text-align:right;">
+15405575
+</td>
+<td style="text-align:right;">
+0.8561445
+</td>
+<td style="text-align:left;">
+CONT4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Control 4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+INT1
+</td>
+<td style="text-align:left;">
+INT
+</td>
+<td style="text-align:right;">
+14113774
+</td>
+<td style="text-align:right;">
+0.9367904
+</td>
+<td style="text-align:left;">
+INT1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Intact 1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+INT2
+</td>
+<td style="text-align:left;">
+INT
+</td>
+<td style="text-align:right;">
+16402891
+</td>
+<td style="text-align:right;">
+0.9673697
+</td>
+<td style="text-align:left;">
+INT2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Intact 2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+INT3
+</td>
+<td style="text-align:left;">
+INT
+</td>
+<td style="text-align:right;">
+17305033
+</td>
+<td style="text-align:right;">
+1.0131402
+</td>
+<td style="text-align:left;">
+INT3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Intact 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+INT4
+</td>
+<td style="text-align:left;">
+INT
+</td>
+<td style="text-align:right;">
+14186233
+</td>
+<td style="text-align:right;">
+1.0068550
+</td>
+<td style="text-align:left;">
+INT4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Intact 4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SVX1
+</td>
+<td style="text-align:left;">
+SVX
+</td>
+<td style="text-align:right;">
+12929360
+</td>
+<td style="text-align:right;">
+0.9930892
+</td>
+<td style="text-align:left;">
+SVX1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+SVX 1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SVX2
+</td>
+<td style="text-align:left;">
+SVX
+</td>
+<td style="text-align:right;">
+12576540
+</td>
+<td style="text-align:right;">
+1.0110654
+</td>
+<td style="text-align:left;">
+SVX2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+SVX 2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SVX3
+</td>
+<td style="text-align:left;">
+SVX
+</td>
+<td style="text-align:right;">
+13706572
+</td>
+<td style="text-align:right;">
+0.9975451
+</td>
+<td style="text-align:left;">
+SVX3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+SVX 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SVX4
+</td>
+<td style="text-align:left;">
+SVX
+</td>
+<td style="text-align:right;">
+13679685
+</td>
+<td style="text-align:right;">
+1.0203208
+</td>
+<td style="text-align:left;">
+SVX4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+SVX 4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SVX_VAS1
+</td>
+<td style="text-align:left;">
+SVX_VAS
+</td>
+<td style="text-align:right;">
+20391320
+</td>
+<td style="text-align:right;">
+1.0153981
+</td>
+<td style="text-align:left;">
+SVX_VAS1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+SVX-VAS 1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SVX_VAS2
+</td>
+<td style="text-align:left;">
+SVX_VAS
+</td>
+<td style="text-align:right;">
+18854522
+</td>
+<td style="text-align:right;">
+0.9565130
+</td>
+<td style="text-align:left;">
+SVX_VAS2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+SVX-VAS 2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SVX_VAS3
+</td>
+<td style="text-align:left;">
+SVX_VAS
+</td>
+<td style="text-align:right;">
+15046800
+</td>
+<td style="text-align:right;">
+1.0081015
+</td>
+<td style="text-align:left;">
+SVX_VAS3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+SVX-VAS 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SVX_VAS4
+</td>
+<td style="text-align:left;">
+SVX_VAS
+</td>
+<td style="text-align:right;">
+13703601
+</td>
+<td style="text-align:right;">
+0.9920736
+</td>
+<td style="text-align:left;">
+SVX_VAS4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+SVX-VAS 4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VAS1
+</td>
+<td style="text-align:left;">
+VAS
+</td>
+<td style="text-align:right;">
+18149990
+</td>
+<td style="text-align:right;">
+0.9774237
+</td>
+<td style="text-align:left;">
+VAS1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+VAS 1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VAS2
+</td>
+<td style="text-align:left;">
+VAS
+</td>
+<td style="text-align:right;">
+16595337
+</td>
+<td style="text-align:right;">
+1.2915788
+</td>
+<td style="text-align:left;">
+VAS2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+VAS 2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VAS3
+</td>
+<td style="text-align:left;">
+VAS
+</td>
+<td style="text-align:right;">
+15982473
+</td>
+<td style="text-align:right;">
+1.3304675
+</td>
+<td style="text-align:left;">
+VAS3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+VAS 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VAS4
+</td>
+<td style="text-align:left;">
+VAS
+</td>
+<td style="text-align:right;">
+13942997
+</td>
+<td style="text-align:right;">
+1.0157786
+</td>
+<td style="text-align:left;">
+VAS4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+VAS 4
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visualisation-of-tmm-normalisation" class="section level3">
+<h3>Visualisation of TMM Normalisation</h3>
+<p>The following visualisation of the TMM normalisation is plotted using
+the mean-difference (MD) plot. The MD plot visualise the library
+size-adjusted logFC between two samples (the difference) against the
+log-expression across all samples (the mean). In this instance,
+<code>sample 1</code> is used to compare against an artificial library
+construct from the average of all the other samples</p>
+<pre class="r"><code>limma::plotMD(cpm(dge, log = TRUE), column=1)
+abline(h=0, col=&quot;red&quot;, lty=2, lwd=2)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/setUp.Rmd/visualisingNormalisation-1.png" alt="MA plot of TMM normalisation for control 1" width="1056" />
+<p class="caption">
+MA plot of TMM normalisation for control 1
+</p>
+</div>
+<p>Ideally, the bulk of gene expression following the TMM normalisation
+should be centred around <code>expression log-ratio</code> of 0, which
+indicates that library size bias between samples have been successfully
+removed. This should be repeated with all the samples in the dge
+object.</p>
+</div>
+</div>
+<div id="quality-control" class="section level2">
+<h2>Quality Control</h2>
+<div id="pinciple-component-analysis-pca" class="section level3">
+<h3>Pinciple Component Analysis (PCA)</h3>
+<pre class="r"><code>samples &lt;- dge$samples %&gt;% rownames_to_column(&quot;sampleName&quot;)
+samples$rep &lt;- samples$rep %&gt;% as.factor()
+
+
+# Perform PCA analysis:
+pca_analysis &lt;- prcomp(t(cpm(dge, log = TRUE)))
+
+summary(pca_analysis)$importance %&gt;% as.data.frame() </code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["PC1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["PC2"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["PC3"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["PC4"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["PC5"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["PC6"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["PC7"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["PC8"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["PC9"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["PC10"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["PC11"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["PC12"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["PC13"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["PC14"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["PC15"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["PC16"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["PC17"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["PC18"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["PC19"],"name":[19],"type":["dbl"],"align":["right"]}],"data":[{"1":"71.20761","2":"63.37243","3":"19.33538","4":"16.30276","5":"10.97451","6":"8.887239","7":"7.962559","8":"7.473842","9":"6.917992","10":"6.53727","11":"6.400713","12":"6.042155","13":"5.555949","14":"5.215637","15":"4.997776","16":"4.859586","17":"4.847622","18":"4.510893","19":"1.167638e-13","_rn_":"Standard deviation"},{"1":"0.48927","2":"0.38752","3":"0.03607","4":"0.02565","5":"0.01162","6":"0.007620","7":"0.006120","8":"0.005390","9":"0.004620","10":"0.00412","11":"0.003950","12":"0.003520","13":"0.002980","14":"0.002620","15":"0.002410","16":"0.002280","17":"0.002270","18":"0.001960","19":"0.000000e+00","_rn_":"Proportion of Variance"},{"1":"0.48927","2":"0.87679","3":"0.91286","4":"0.93851","5":"0.95013","6":"0.957750","7":"0.963870","8":"0.969260","9":"0.973880","10":"0.97800","11":"0.981950","12":"0.985480","13":"0.988460","14":"0.991080","15":"0.993490","16":"0.995770","17":"0.998040","18":"1.000000","19":"1.000000e+00","_rn_":"Cumulative Proportion"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>group.colours &lt;- c(CONT = &quot;#F8766D&quot;, INT = &quot;#A3A500&quot;)
+
+# Create the plot
+a &lt;- pca_analysis$x %&gt;% 
+  as.data.frame() %&gt;% 
+  rownames_to_column(&quot;sampleName&quot;) %&gt;% 
+  left_join(samples) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = PC1, y = PC2, colour = group, shape = rep)) +
+  geom_point(size=3, alpha=0.5) +
+  scale_shape_manual(values = c(15:18)) +
+  labs(
+    x = paste0(&quot;PC1 (&quot;, percent(summary(pca_analysis)$importance[&quot;Proportion of Variance&quot;,&quot;PC1&quot;]),&quot;)&quot;),
+    y = paste0(&quot;PC2 (&quot;, percent(summary(pca_analysis)$importance[&quot;Proportion of Variance&quot;,&quot;PC2&quot;]),&quot;)&quot;),
+    colour = &quot;Groups&quot;,
+    shape = &quot;Replicates&quot;
+  )
+
+b &lt;- pca_analysis$x %&gt;% 
+  as.data.frame() %&gt;% 
+  rownames_to_column(&quot;sampleName&quot;) %&gt;% 
+  left_join(samples) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = PC2, y = PC3, colour = group, shape = rep)) +
+  geom_point(size=3, alpha=0.5) +
+  scale_shape_manual(values = c(15:18)) +
+  labs(
+    x = paste0(&quot;PC2 (&quot;, percent(summary(pca_analysis)$importance[&quot;Proportion of Variance&quot;,&quot;PC2&quot;]),&quot;)&quot;),
+    y = paste0(&quot;PC3 (&quot;, percent(summary(pca_analysis)$importance[&quot;Proportion of Variance&quot;,&quot;PC3&quot;]),&quot;)&quot;),
+    colour = &quot;Groups&quot;,
+    shape = &quot;Replicates&quot;
+  )
+
+c &lt;- pca_analysis$x %&gt;% 
+  as.data.frame() %&gt;% 
+  rownames_to_column(&quot;sampleName&quot;) %&gt;% 
+  left_join(samples) %&gt;%
+  as_tibble() %&gt;%
+  dplyr::slice(1:7) %&gt;% 
+  ggplot(aes(x = PC1, y = PC2, colour = group, shape = rep)) +
+  geom_point(size=3, alpha=0.8) +
+  scale_color_manual(values = group.colours)+
+  scale_shape_manual(values = c(15:18)) +
+  labs(
+    x = paste0(&quot;PC1 (&quot;, percent(summary(pca_analysis)$importance[&quot;Proportion of Variance&quot;,&quot;PC1&quot;]),&quot;)&quot;),
+    y = paste0(&quot;PC2 (&quot;, percent(summary(pca_analysis)$importance[&quot;Proportion of Variance&quot;,&quot;PC2&quot;]),&quot;)&quot;),
+    colour = &quot;Groups&quot;,
+    shape = &quot;Replicates&quot;
+  )
+
+c</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/setUp.Rmd/pca-1.png" alt="PCA plot of all samples." width="1056" />
+<p class="caption">
+PCA plot of all samples.
+</p>
+</div>
+<pre class="r"><code># pca_plot_2 &lt;- plot_grid(
+#     plot_grid(
+#         a + theme(legend.position = &quot;none&quot;), 
+#         b + theme(legend.position = &quot;none&quot;),
+#         c + theme(legend.position = &quot;none&quot;),
+#         nrow = 1
+#     ),
+#     get_legend(a + theme(legend.position = &quot;bottom&quot;)),
+#     nrow = 2, 
+#     rel_heights = c(4,1)
+# )
+# 
+# 
+# pca_plot_2
+
+
+# ggsave(&quot;PCA_plot.svg&quot;,
+#        plot = pca_plot_2,
+#        path = here::here(&quot;2_plots/qc/&quot;),
+#        width = 188,
+#        height = 100,
+#        units = &quot;mm&quot;
+#        )</code></pre>
+</div>
+<div id="correlation-plot" class="section level3">
+<h3>Correlation plot</h3>
+<pre class="r"><code>corr_plot &lt;- pca_analysis$x %&gt;%
+  as.data.frame() %&gt;% 
+  rownames_to_column(&quot;sampleName&quot;) %&gt;% 
+  left_join(samples) %&gt;% 
+  as_tibble() %&gt;% 
+  dplyr::select(
+    PC1, 
+    PC2, 
+    PC3,
+    Groups=group,
+    Mated,
+    &quot;Library size&quot;=lib.size,
+    &quot;Normalisation Factor&quot;=norm.factors
+  ) %&gt;% 
+  mutate(Groups = as.numeric(as.factor(Groups))) %&gt;% 
+  cor(method = &quot;spearman&quot;) %&gt;% 
+  corrplot(
+    type = &quot;lower&quot;,
+    diag = FALSE,
+    addCoef.col = 1, addCoefasPercent = TRUE
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/setUp.Rmd/corr_plot-1.png" alt="Correlation between first three principle components and measured variables" width="1056" />
+<p class="caption">
+Correlation between first three principle components and measured
+variables
+</p>
+</div>
+</div>
+</div>
+<div id="save-dgelist-object" class="section level2">
+<h2>Save DGElist object</h2>
+<pre class="r"><code># Save DGElist object into the data/R directory 
+saveRDS(object = dge, file = here::here(&quot;0_data/RDS_objects/dge.rds&quot;))
+# saveRDS(object = gg_publish, file = here::here(&quot;0_data/RDS_objects/gg_publish.rds&quot;))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.1 (2022-06-23 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8   
+[3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C                      
+[5] LC_TIME=English_Australia.utf8    
+
+attached base packages:
+[1] grid      stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] Glimma_2.6.0        edgeR_3.38.4        limma_3.52.4       
+ [4] AnnotationHub_3.4.0 BiocFileCache_2.4.0 dbplyr_2.2.1       
+ [7] BiocGenerics_0.42.0 corrplot_0.92       cowplot_1.1.1      
+[10] ggrepel_0.9.1       ggbiplot_0.55       scales_1.2.1       
+[13] plyr_1.8.7          kableExtra_1.3.4    bookdown_0.29      
+[16] forcats_0.5.2       stringr_1.4.1       purrr_0.3.5        
+[19] tidyr_1.2.1         ggplot2_3.3.6       tidyverse_1.3.2    
+[22] reshape2_1.4.4      tibble_3.1.8        readr_2.1.3        
+[25] magrittr_2.0.3      dplyr_1.0.10       
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.4.1                  backports_1.4.1              
+  [3] workflowr_1.7.0               systemfonts_1.0.4            
+  [5] splines_4.2.1                 BiocParallel_1.30.3          
+  [7] GenomeInfoDb_1.32.4           digest_0.6.29                
+  [9] htmltools_0.5.3               fansi_1.0.3                  
+ [11] memoise_2.0.1                 googlesheets4_1.0.1          
+ [13] tzdb_0.3.0                    Biostrings_2.64.1            
+ [15] annotate_1.74.0               modelr_0.1.9                 
+ [17] matrixStats_0.62.0            vroom_1.6.0                  
+ [19] svglite_2.1.0                 colorspace_2.0-3             
+ [21] blob_1.2.3                    rvest_1.0.3                  
+ [23] rappdirs_0.3.3                textshaping_0.3.6            
+ [25] haven_2.5.1                   xfun_0.33                    
+ [27] crayon_1.5.2                  RCurl_1.98-1.9               
+ [29] jsonlite_1.8.2                genefilter_1.78.0            
+ [31] survival_3.3-1                glue_1.6.2                   
+ [33] gtable_0.3.1                  gargle_1.2.1                 
+ [35] zlibbioc_1.42.0               XVector_0.36.0               
+ [37] webshot_0.5.4                 DelayedArray_0.22.0          
+ [39] DBI_1.1.3                     Rcpp_1.0.9                   
+ [41] viridisLite_0.4.1             xtable_1.8-4                 
+ [43] bit_4.0.4                     stats4_4.2.1                 
+ [45] htmlwidgets_1.5.4             httr_1.4.4                   
+ [47] RColorBrewer_1.1-3            ellipsis_0.3.2               
+ [49] farver_2.1.1                  pkgconfig_2.0.3              
+ [51] XML_3.99-0.11                 sass_0.4.2                   
+ [53] here_1.0.1                    locfit_1.5-9.6               
+ [55] utf8_1.2.2                    labeling_0.4.2               
+ [57] tidyselect_1.2.0              rlang_1.0.6                  
+ [59] later_1.3.0                   AnnotationDbi_1.58.0         
+ [61] munsell_0.5.0                 BiocVersion_3.15.2           
+ [63] cellranger_1.1.0              tools_4.2.1                  
+ [65] cachem_1.0.6                  cli_3.4.1                    
+ [67] generics_0.1.3                RSQLite_2.2.18               
+ [69] broom_1.0.1                   evaluate_0.17                
+ [71] fastmap_1.1.0                 ragg_1.2.3                   
+ [73] yaml_2.3.5                    knitr_1.40                   
+ [75] bit64_4.0.5                   fs_1.5.2                     
+ [77] KEGGREST_1.36.3               mime_0.12                    
+ [79] xml2_1.3.3                    compiler_4.2.1               
+ [81] rstudioapi_0.14               filelock_1.0.2               
+ [83] curl_4.3.3                    png_0.1-7                    
+ [85] interactiveDisplayBase_1.34.0 reprex_2.0.2                 
+ [87] geneplotter_1.74.0            bslib_0.4.0                  
+ [89] stringi_1.7.8                 highr_0.9                    
+ [91] lattice_0.20-45               Matrix_1.5-1                 
+ [93] vctrs_0.4.2                   pillar_1.8.1                 
+ [95] lifecycle_1.0.3               BiocManager_1.30.18          
+ [97] jquerylib_0.1.4               bitops_1.0-7                 
+ [99] httpuv_1.6.6                  GenomicRanges_1.48.0         
+[101] R6_2.5.1                      promises_1.2.0.1             
+[103] IRanges_2.30.1                codetools_0.2-18             
+[105] assertthat_0.2.1              SummarizedExperiment_1.26.1  
+[107] DESeq2_1.36.0                 rprojroot_2.0.3              
+[109] withr_2.5.0                   S4Vectors_0.34.0             
+[111] GenomeInfoDbData_1.2.8        parallel_4.2.1               
+[113] hms_1.1.2                     rmarkdown_2.17               
+[115] MatrixGenerics_1.8.1          googledrive_2.0.0            
+[117] git2r_0.30.1                  Biobase_2.56.0               
+[119] shiny_1.7.2                   lubridate_1.8.0              </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

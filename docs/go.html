@@ -1,0 +1,4071 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Ha Tran" />
+
+
+<title>GO Analysis</title>
+
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SRB_2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="setUp.html">Pre-processing</a>
+</li>
+<li>
+  <a href="deAnalysis.html">DGE Analysis</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Functional Enrichment Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="go.html">Gene Ontology</a>
+    </li>
+    <li>
+      <a href="kegg.html">KEGG</a>
+    </li>
+    <li>
+      <a href="reactome.html">Reactome</a>
+    </li>
+    <li>
+      <a href="extraFigures.html">IPA</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">GO Analysis</h1>
+<h4 class="author">Ha Tran</h4>
+<h4 class="date">22/08/2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-05
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SRB_2022/1_analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed12345code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(12345)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed12345code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(12345)</code> was run prior to running the
+code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treecc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3targetblankcc4bf5da">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/cc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3" target="_blank">cc4bf5d</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treecc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3targetblankcc4bf5da"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/cc4bf5d15e2a3b3db72872e8b86f6f0d5a7b93d3" target="_blank">cc4bf5d</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  .gitignore
+    Untracked:  0_data/
+    Untracked:  1_analysis/
+    Untracked:  3_output/
+    Untracked:  LICENSE.md
+    Untracked:  README.md
+    Untracked:  SRB_2022.Rproj
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="data-setup" class="section level1">
+<h1>Data Setup</h1>
+<pre class="r"><code># working with data
+library(dplyr)
+library(magrittr)
+library(readr)
+library(tibble)
+library(reshape2)
+library(tidyverse)
+
+# Visualisation:
+library(kableExtra)
+library(ggplot2)
+library(grid)
+
+# Custom ggplot
+library(gridExtra)
+library(ggbiplot)
+library(ggrepel)
+
+
+# Bioconductor packages:
+library(edgeR)
+library(limma)
+library(Glimma)
+library(clusterProfiler)
+library(org.Mm.eg.db)
+library(enrichplot)
+
+theme_set(theme_minimal())
+pub &lt;- readRDS(here::here(&quot;0_data/RDS_objects/pub.rds&quot;))</code></pre>
+<div id="import-dgelist-data" class="section level3">
+<h3>Import DGElist Data</h3>
+<p>DGElist object containing the raw feature count, sample metadata, and
+gene metadata, created in the Set Up stage.</p>
+<pre class="r"><code># load DGElist previously created in the set up
+dge &lt;- readRDS(here::here(&quot;0_data/RDS_objects/dge.rds&quot;))
+fc &lt;- readRDS(here::here(&quot;0_data/RDS_objects/fc.rds&quot;))
+lfc &lt;- readRDS(here::here(&quot;0_data/RDS_objects/lfc.rds&quot;))
+lmTreat &lt;- readRDS(here::here(&quot;0_data/RDS_objects/lmTreat.rds&quot;))
+lmTreat_sig &lt;- readRDS(here::here(&quot;0_data/RDS_objects/lmTreat_sig.rds&quot;))</code></pre>
+</div>
+</div>
+<div id="go-analysis" class="section level1 tabset">
+<h1 class="tabset">GO Analysis</h1>
+<p><code>goSummaries</code> is a package created by Dr Stephen Pederson
+for filtering GO terms based on ontology level.</p>
+<pre class="r"><code># download go summaries and set the minimum ontology level
+goSummaries &lt;- url(&quot;https://uofabioinformaticshub.github.io/summaries2GO/data/goSummaries.RDS&quot;) %&gt;%
+  readRDS()
+minPath &lt;- 3
+
+enrichGO=list()
+enrichGO_sig &lt;- list()
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+  # find enriched GO terms
+  enrichGO[[x]] &lt;- clusterProfiler::enrichGO(
+    gene = lmTreat_sig[[x]]$entrezid,
+    OrgDb = org.Mm.eg.db,
+    keyType = &quot;ENTREZID&quot;,
+    ont = &quot;ALL&quot;,
+    pAdjustMethod = &quot;fdr&quot;,
+    pvalueCutoff = 0.05
+  )
+
+  # bind to goSummaries to elminate go terms with ontology levels 1 and 2.
+  enrichGO_sig[[x]] &lt;- enrichGO[[x]] %&gt;%
+    as.data.frame() %&gt;%
+    rownames_to_column(&quot;id&quot;) %&gt;%
+    left_join(goSummaries) %&gt;%
+    dplyr::filter(shortest_path &gt;= minPath) %&gt;%
+    column_to_rownames(&quot;id&quot;)
+  
+  # adjust go results, separate compound column, add FDR column, adjust the GeneRatio column
+  enrichGO_sig[[x]] &lt;- enrichGO_sig[[x]] %&gt;%
+    separate(col = BgRatio, sep = &quot;/&quot;, into = c(&quot;Total&quot;, &quot;Universe&quot;)) %&gt;%
+    dplyr::mutate(
+      logFDR = -log(p.adjust, 10),
+      GeneRatio = Count / as.numeric(Total)) %&gt;% 
+    dplyr::select(c(&quot;Count&quot;, &quot;GeneRatio&quot;, &quot;ontology&quot;, &quot;pvalue&quot;, &quot;p.adjust&quot;, &quot;logFDR&quot;, &quot;qvalue&quot;, &quot;Description&quot;, &quot;geneID&quot;))
+  
+  # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
+  enrichGO_sig[[x]]$Description &lt;- sub(pattern = &quot;(.{1,35})(?:$| )&quot;, 
+                                       replacement = &quot;\\1\n&quot;, 
+                                       x = enrichGO_sig[[x]]$Description)
+  
+  # remove the additional newline at the end of the string
+  enrichGO_sig[[x]]$Description &lt;- sub(pattern = &quot;\n$&quot;, 
+                                       replacement = &quot;&quot;, 
+                                       x = enrichGO_sig[[x]]$Description)
+}</code></pre>
+<div id="fc1.05" class="section level2">
+<h2>FC=1.05</h2>
+<pre class="r"><code># display the top 30 most sig
+enrichGO_sig[[1]][1:30, ] %&gt;%
+  kable(caption = &quot;Top 30 significantly enriched GO terms&quot;) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
+  scroll_box(height = &quot;600px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:600px; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Top 30 significantly enriched GO terms
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Count
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+GeneRatio
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ontology
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+p.adjust
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+logFDR
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+qvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Description
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+geneID
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0030198" class="uri">GO:0030198</a>
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+0.2095238
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+20.27079
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+extracellular matrix organization
+</td>
+<td style="text-align:left;">
+12814/16147/13078/17389/545370/20319/74199/20356/219151/12818/18214/223838/94216/70779/208177/114249/94214/23871/107581/21810/271127/240322/14268/17390/15227/14230/18073/320078/15117/268780/11504/12840/12817/50706/16950/224697/64075/100952/18383/21846/12832/68169/108153/16998/58223/12819/77739/56401/246228/320712/56429/14219/58859/56693/241327/12389/80883/237759/12822/241226/233332/17022/67896/23876/12830/13805
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043062" class="uri">GO:0043062</a>
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+0.2088608
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+20.27079
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+extracellular structure organization
+</td>
+<td style="text-align:left;">
+12814/16147/13078/17389/545370/20319/74199/20356/219151/12818/18214/223838/94216/70779/208177/114249/94214/23871/107581/21810/271127/240322/14268/17390/15227/14230/18073/320078/15117/268780/11504/12840/12817/50706/16950/224697/64075/100952/18383/21846/12832/68169/108153/16998/58223/12819/77739/56401/246228/320712/56429/14219/58859/56693/241327/12389/80883/237759/12822/241226/233332/17022/67896/23876/12830/13805
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0045229" class="uri">GO:0045229</a>
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+0.2082019
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+20.27079
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+external encapsulating structure organization
+</td>
+<td style="text-align:left;">
+12814/16147/13078/17389/545370/20319/74199/20356/219151/12818/18214/223838/94216/70779/208177/114249/94214/23871/107581/21810/271127/240322/14268/17390/15227/14230/18073/320078/15117/268780/11504/12840/12817/50706/16950/224697/64075/100952/18383/21846/12832/68169/108153/16998/58223/12819/77739/56401/246228/320712/56429/14219/58859/56693/241327/12389/80883/237759/12822/241226/233332/17022/67896/23876/12830/13805
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0045785" class="uri">GO:0045785</a>
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:right;">
+0.1639004
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+17.94285
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+positive regulation of cell adhesion
+</td>
+<td style="text-align:left;">
+16147/13643/74199/140709/11600/17242/16842/16401/12522/16542/16000/114249/18186/54371/12505/218952/94214/23871/107581/14268/15227/15894/18073/21687/12554/20315/15117/268780/104709/14634/27205/12310/21838/67916/24099/12721/12479/68606/64075/16408/14961/50931/100952/22341/20667/171285/15002/20339/16002/68169/26903/105855/16963/18552/14969/20851/56349/320712/11492/14960/317757/58859/20443/22637/83408/54519/19242/16161/12389/18806/16186/30963/20737/18606/12162/16197/12504/320484/67896
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0006816" class="uri">GO:0006816</a>
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+0.1659091
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+16.78590
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+calcium ion transport
+</td>
+<td style="text-align:left;">
+338370/12288/20190/319984/20730/16000/11549/20541/18127/13491/320508/12293/13618/17918/238384/15894/14812/18760/20855/12766/20315/94249/12290/109676/110893/12310/22068/21838/270028/12721/14612/23796/381812/11607/13617/26903/30948/11517/15558/16963/18763/66109/81904/217154/74777/216869/65973/18764/14360/23832/20192/12523/56437/54598/58226/66972/19218/381290/14219/14697/317757/68312/98660/83408/19164/109552/18596/12389/12286/53376/12298/14062/12504
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0050808" class="uri">GO:0050808</a>
+</td>
+<td style="text-align:right;">
+77
+</td>
+<td style="text-align:right;">
+0.1558704
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+16.25596
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+synapse organization
+</td>
+<td style="text-align:left;">
+23888/14432/237979/241568/235611/19266/20450/192167/18186/19277/242662/55983/231602/12558/245880/66725/272381/17918/17260/18645/18164/14812/210274/93706/98733/330814/327814/110893/386750/67784/210293/14658/329165/16560/68507/72333/13837/245537/217480/73340/11816/442801/269116/50791/260297/13602/232560/219228/73181/13841/70237/238988/70530/14360/13385/13048/18483/71228/240057/53972/236915/67790/19164/19242/80883/12286/93707/59036/243621/228880/12298/14062/228357/52163/216856/216049/12830
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0034329" class="uri">GO:0034329</a>
+</td>
+<td style="text-align:right;">
+71
+</td>
+<td style="text-align:right;">
+0.1609977
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15.65561
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cell junction assembly
+</td>
+<td style="text-align:left;">
+23888/14432/237979/22411/16542/235611/19266/20450/192167/13823/208177/17475/18186/19277/218952/107581/12558/14268/272381/12563/17260/18164/83964/56229/21687/210274/98733/330814/54420/320873/386750/270163/67784/12562/21838/329165/68606/13837/23796/69524/245537/20401/77569/11856/73340/269116/12552/50791/14615/18613/20613/219228/13841/77446/50768/233651/70237/53885/12741/13048/71228/236915/15257/12389/12286/192897/18571/18606/12737/228357/216856
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0031589" class="uri">GO:0031589</a>
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+0.1662198
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+14.12428
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cell-substrate adhesion
+</td>
+<td style="text-align:left;">
+19283/74199/140709/11600/17242/16401/16542/208177/114249/18186/23928/218952/94214/107581/16421/14268/15227/18073/83964/56229/21687/12554/15117/268780/109700/12817/329872/21838/50706/12721/68606/64075/13837/16408/77569/11856/100952/22341/208777/15434/18613/56363/68169/16404/64099/18552/170736/50768/105298/56349/320712/14219/58859/19242/84544/80883/241226/192897/30963/18606/18074/67896
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0048754" class="uri">GO:0048754</a>
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+0.2239583
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13.99703
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+branching morphogenesis of an epithelial tube
+</td>
+<td style="text-align:left;">
+16147/20319/20356/22420/11835/11600/15245/17242/16842/15431/16542/18121/16000/21385/114249/18186/12505/15396/271127/14734/11839/15227/21687/20315/21412/14634/67784/238057/17313/11607/21386/69903/21846/13617/18763/73181/19206/233651/71228/329628/12162/17869/13805
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0007224" class="uri">GO:0007224</a>
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+0.2452830
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13.98732
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+smoothened signaling pathway
+</td>
+<td style="text-align:left;">
+14632/16147/15245/68525/18121/19207/59056/16576/56297/72507/14734/15227/68099/20720/71492/78795/94187/14634/218232/73916/216795/19376/240888/18605/110350/15258/67884/264134/56350/19206/234740/140810/19335/66573/71228/83396/15257/71951/12589
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001655" class="uri">GO:0001655</a>
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+0.1602067
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13.50225
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+urogenital system development
+</td>
+<td style="text-align:left;">
+20897/22420/11835/11600/22411/72135/15431/13123/18121/16000/114249/18186/19277/12505/15396/271127/14734/66725/13618/17390/17260/15227/15903/15904/107587/18073/13809/21687/14561/11504/21412/14634/67784/14725/243931/12142/73692/18605/12577/11607/110350/13617/56198/18763/18552/56350/55994/13841/19206/233651/23967/18764/66333/71228/329628/18596/83396/241226/12162/228357/13003/17869
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001822" class="uri">GO:0001822</a>
+</td>
+<td style="text-align:right;">
+56
+</td>
+<td style="text-align:right;">
+0.1696970
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13.16257
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+kidney development
+</td>
+<td style="text-align:left;">
+20897/22420/11600/22411/72135/15431/18121/114249/18186/19277/12505/15396/271127/14734/66725/13618/17260/15903/107587/18073/13809/21687/14561/11504/21412/14634/67784/14725/243931/12142/73692/18605/12577/11607/110350/13617/56198/18763/18552/56350/55994/13841/19206/233651/23967/18764/66333/71228/329628/18596/83396/241226/12162/228357/13003/17869
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0072001" class="uri">GO:0072001</a>
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+0.1652174
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.95421
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+renal system development
+</td>
+<td style="text-align:left;">
+20897/22420/11600/22411/72135/15431/18121/114249/18186/19277/12505/15396/271127/14734/66725/13618/17260/15227/15903/107587/18073/13809/21687/14561/11504/21412/14634/67784/14725/243931/12142/73692/18605/12577/11607/110350/13617/56198/18763/18552/56350/55994/13841/19206/233651/23967/18764/66333/71228/329628/18596/83396/241226/12162/228357/13003/17869
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0034765" class="uri">GO:0034765</a>
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+0.1405622
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.58819
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+regulation of ion transmembrane transport
+</td>
+<td style="text-align:left;">
+98741/338370/16519/12288/329152/16494/16508/56543/192167/77574/20541/399548/13491/18301/20265/12293/226922/17918/17260/18760/12766/12290/109676/13616/18795/22068/21838/12721/110876/23796/245537/381812/11607/260297/16531/13617/99738/26903/30948/66109/81904/217154/56461/74777/65973/23967/18764/14199/14360/56437/58226/13385/66733/19218/381290/20269/14697/68312/98660/19164/18671/109552/12389/60613/12286/12298/14062/16510/22160/216856
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001667" class="uri">GO:0001667</a>
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+0.1460177
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.58819
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+ameboidal-type cell migration
+</td>
+<td style="text-align:left;">
+13078/20356/11600/22411/16401/16542/16000/14026/24136/18214/20357/20541/18127/18186/20361/23871/12558/16421/14268/13618/17260/18645/19245/18760/20855/21687/12554/20315/15117/83397/238328/13616/19274/12310/67784/12562/71709/67916/68606/16590/240185/20401/22341/72446/11816/13617/218877/76441/18613/16002/17311/79221/23797/381290/14314/11881/78560/20358/212307/114886/192897/18606/12162/15111/22160/269608
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0048736" class="uri">GO:0048736</a>
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+0.2058824
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.55761
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+appendage development
+</td>
+<td style="text-align:left;">
+16147/20319/12288/16842/15430/15431/18121/16764/106522/21385/225743/218952/15396/14734/15438/15395/68099/107587/71492/226844/14634/216795/64075/73692/18605/21386/110350/18552/15405/19206/234740/65973/23967/140810/19335/19164/192897/74239/12162/228357/15111/22160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060173" class="uri">GO:0060173</a>
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+0.2058824
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.55761
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+limb development
+</td>
+<td style="text-align:left;">
+16147/20319/12288/16842/15430/15431/18121/16764/106522/21385/225743/218952/15396/14734/15438/15395/68099/107587/71492/226844/14634/216795/64075/73692/18605/21386/110350/18552/15405/19206/234740/65973/23967/140810/19335/19164/192897/74239/12162/228357/15111/22160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0031345" class="uri">GO:0031345</a>
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+0.2000000
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.44247
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+negative regulation of cell projection organization
+</td>
+<td style="text-align:left;">
+13643/19283/17756/20356/14026/20357/192167/18186/20361/121021/66725/235106/66610/13131/18645/14812/22068/21838/13837/209743/245537/244152/12494/11816/218877/19347/73181/237847/13841/18007/14360/270120/233781/22240/240057/74201/53972/19164/20358/29869/228357/70433/216049
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060562" class="uri">GO:0060562</a>
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+0.1518987
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.15183
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+epithelial tube morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/20356/22420/11835/11600/15245/17242/16842/15431/16542/18121/16000/24136/21385/114249/18186/12505/15396/271127/14734/11839/17260/15227/21687/20315/21412/14634/73916/67784/238057/14725/330409/17313/23796/11607/21386/69903/21846/13617/106042/18763/73181/13841/69718/50768/19206/233651/23967/18764/19335/57265/71228/329628/19164/12162/15111/17869/22160/13805
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0035107" class="uri">GO:0035107</a>
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+0.2183908
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.15183
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+appendage morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/12288/16842/15430/15431/18121/16764/106522/21385/225743/15396/14734/15438/15395/68099/107587/226844/14634/216795/73692/18605/21386/110350/18552/15405/19206/234740/65973/23967/140810/19335/19164/74239/12162/228357/15111/22160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0035108" class="uri">GO:0035108</a>
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+0.2183908
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.15183
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+limb morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/12288/16842/15430/15431/18121/16764/106522/21385/225743/15396/14734/15438/15395/68099/107587/226844/14634/216795/73692/18605/21386/110350/18552/15405/19206/234740/65973/23967/140810/19335/19164/74239/12162/228357/15111/22160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0006874" class="uri">GO:0006874</a>
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:right;">
+0.1380000
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.13111
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cellular calcium ion homeostasis
+</td>
+<td style="text-align:left;">
+16527/12288/16542/20190/11549/20541/231602/19309/51800/12293/13618/17918/238384/234515/78134/14812/18760/20855/12766/94249/12290/19220/109676/13616/110893/12310/22068/12562/21838/19228/270028/12721/14806/23796/72844/12494/11607/11816/13617/12062/11517/15558/16963/18763/74777/65973/18764/14360/23832/20192/66972/13385/57265/19218/381290/317757/68312/98660/83408/19164/109552/12389/12286/12298/14062/12504/16510/23833/19217
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0061138" class="uri">GO:0061138</a>
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+0.1913043
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.12965
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+morphogenesis of a branching epithelium
+</td>
+<td style="text-align:left;">
+16147/15234/20319/20356/22420/11835/11600/15245/17242/16842/15431/16542/18121/16000/21385/114249/18186/12505/15396/271127/14734/11839/15227/21687/20315/21412/14634/67784/238057/17313/11607/21386/69903/21846/13617/18763/73181/19206/233651/71228/329628/12162/17869/13805
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0007409" class="uri">GO:0007409</a>
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+0.1379310
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.95313
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+axonogenesis
+</td>
+<td style="text-align:left;">
+14432/13842/235472/13643/19283/17756/20356/16401/241568/26565/13176/235611/18121/14026/24136/20357/225743/18186/19277/20361/12558/14268/13131/17260/18164/52666/20315/13616/14634/386750/19274/67784/238057/14725/21838/17984/16773/13837/17181/245537/244152/11816/269116/12552/13617/218877/18080/237847/13841/18007/246048/19206/22253/240057/381979/19164/20358/29869/68404/80883/12286/12162/228357/58208/16572/20564/70433/18223
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0051924" class="uri">GO:0051924</a>
+</td>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:right;">
+0.1707317
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.69273
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+regulation of calcium ion transport
+</td>
+<td style="text-align:left;">
+12288/319984/20730/16000/20541/18127/13491/12293/17918/15894/18760/20855/12766/20315/109676/12310/22068/21838/12721/23796/381812/11607/13617/26903/30948/11517/66109/217154/74777/216869/65973/18764/14360/12523/56437/19218/14697/317757/68312/98660/83408/109552/18596/12389/12286/53376/12298/14062/12504
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0098742" class="uri">GO:0098742</a>
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+0.1915888
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.26136
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cell-cell adhesion via plasma-membrane adhesion molecules
+</td>
+<td style="text-align:left;">
+23888/235472/73173/545370/237979/84004/16401/241568/19266/192167/12558/272381/12563/23965/13131/12554/93706/98733/330814/320873/386750/19274/12562/279653/53601/72333/13837/16408/69524/12552/50791/13602/20339/18613/219228/233651/270120/329628/93885/80883/12737
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0050673" class="uri">GO:0050673</a>
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:right;">
+0.1365546
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.18814
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+epithelial cell proliferation
+</td>
+<td style="text-align:left;">
+14632/16147/15234/20319/20356/11835/17242/16401/235505/16542/216439/13123/18121/16000/21385/68888/14313/12444/14734/13618/11839/17260/107587/18760/12766/21687/12554/20315/15117/238328/20913/19274/12310/73916/16590/228852/23796/240185/12577/22341/11607/11816/21846/13617/16002/26903/16601/13345/19206/23967/66333/23797/30878/353156/19164/19242/12389/16010/226841/12737/67866/58208/17869/22160/13805
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060402" class="uri">GO:0060402</a>
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+0.2067039
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.11159
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+calcium ion transport into cytosol
+</td>
+<td style="text-align:left;">
+12288/20190/11549/20541/12293/17918/238384/14812/18760/12766/12290/109676/110893/12310/21838/270028/12721/23796/11607/13617/11517/15558/16963/74777/65973/18764/14360/23832/20192/317757/68312/83408/109552/12389/12286/14062/12504
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0031346" class="uri">GO:0031346</a>
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+0.1399549
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.11159
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+positive regulation of cell projection organization
+</td>
+<td style="text-align:left;">
+19283/15234/20356/216739/235180/17242/13176/235611/19266/24136/192167/108686/242274/18186/20361/14268/23965/18760/20720/20315/224617/98733/11504/64297/67784/20713/329165/16590/13837/72844/19888/67425/11816/50791/230872/232560/68169/18080/56401/246048/70237/140810/14360/66573/13385/13048/18483/22240/58804/11881/23854/19242/71951/12877/234776/228880/18606/26563/12162/269254/52163/18223
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0010977" class="uri">GO:0010977</a>
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+0.2160494
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.05385
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+negative regulation of neuron projection development
+</td>
+<td style="text-align:left;">
+13643/19283/17756/20356/20357/192167/18186/20361/121021/66725/235106/13131/21838/13837/209743/245537/244152/12494/11816/218877/19347/237847/13841/18007/270120/233781/22240/240057/53972/19164/20358/29869/228357/70433/216049
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visualisation" class="section level3 tabset">
+<h3 class="tabset">Visualisation</h3>
+<pre class="r"><code>bp_dot=list()
+mf_dot=list()
+cc_dot=list()
+upset=list()
+for (i in 1:length(fc)) {
+  x &lt;- fc[i] %&gt;% as.character()
+  
+  # extract the enriched GO terms from each ontology
+  bp &lt;- enrichGO_sig[[x]] %&gt;% dplyr::filter(ontology == &quot;BP&quot;) 
+  mf &lt;- enrichGO_sig[[x]] %&gt;% dplyr::filter(ontology == &quot;MF&quot;)
+  cc &lt;- enrichGO_sig[[x]] %&gt;% dplyr::filter(ontology == &quot;CC&quot;)
+
+  # bp dot plot, save
+  bp_dot[[x]] &lt;- ggplot(bp[1:15, ]) +
+    geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
+    scale_color_gradient(low = &quot;dodgerblue3&quot;, high = &quot;firebrick3&quot;, limits = c(0, NA)) +
+    scale_size(range = c(.3,3)) +
+    ggtitle(&quot;Biological Process&quot;) +
+    ylab(label = &quot;&quot;) +
+    xlab(label = &quot;Gene Ratio&quot;) +
+    labs(color = expression(&quot;-log&quot;[10] * &quot;FDR&quot;), size = &quot;Gene Counts&quot;)
+  ggsave(filename = paste0(&quot;bp_dot_&quot;, fc[i], &quot;.svg&quot;), plot = bp_dot[[x]], path = here::here(&quot;2_plots/go/&quot;), 
+         width = 88, height = 95, units = &quot;mm&quot;)
+
+  # mf dot plot, save
+  mf_dot[[x]] &lt;- ggplot(mf[1:15, ]) +
+    geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
+    scale_color_gradient(low = &quot;dodgerblue3&quot;, high = &quot;firebrick3&quot;, limits = c(0, NA)) +
+    scale_size(range = c(.3,3)) +
+    ggtitle(&quot;Molecular Function&quot;) +
+    ylab(label = &quot;&quot;) +
+    xlab(label = &quot;Gene Ratio&quot;) +
+    labs(color = expression(&quot;-log&quot;[10] * &quot;FDR&quot;), size = &quot;Gene Counts&quot;)
+  ggsave(filename = paste0(&quot;mf_dot_&quot;, fc[i], &quot;.svg&quot;), plot = mf_dot[[x]], path = here::here(&quot;2_plots/go/&quot;), 
+         width = 88, height = 95, units = &quot;mm&quot;)
+
+  # cc dot plot, save
+  cc_dot[[x]] &lt;- ggplot(cc[1:15, ]) +
+    geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
+    scale_color_gradient(low = &quot;dodgerblue3&quot;, high = &quot;firebrick3&quot;, limits = c(0, NA)) +
+    scale_size(range = c(.3,3)) +
+    ggtitle(&quot;Cellular Components&quot;) +
+    ylab(label = &quot;&quot;) +
+    xlab(label = &quot;Gene Ratio&quot;) +
+    labs(color = expression(&quot;-log&quot;[10] * &quot;FDR&quot;), size = &quot;Gene Counts&quot;)
+  ggsave(filename = paste0(&quot;cc_dot_&quot;, fc[i], &quot;.svg&quot;), plot = cc_dot[[x]], path = here::here(&quot;2_plots/go/&quot;), 
+         width = 88, height = 95, units = &quot;mm&quot;)
+  
+  upset[[x]] &lt;- upsetplot(x = enrichGO[[x]], 10)
+  ggsave(filename = paste0(&quot;upset_&quot;, fc[i], &quot;.svg&quot;), plot = upset[[x]], path = here::here(&quot;2_plots/go/&quot;))
+}</code></pre>
+<div id="biological-process" class="section level4">
+<h4>Biological Process</h4>
+<pre class="r"><code>bp_dot[[1]] </code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="molecular-function" class="section level4">
+<h4>Molecular Function</h4>
+<pre class="r"><code>mf_dot[[1]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cellular-components" class="section level4">
+<h4>Cellular Components</h4>
+<pre class="r"><code>cc_dot[[1]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="upset" class="section level4">
+<h4>Upset</h4>
+<pre class="r"><code>upset[[1]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="fc1.1" class="section level2">
+<h2>FC=1.1</h2>
+<pre class="r"><code># display the top 30 most sig
+enrichGO_sig[[2]][1:30, ] %&gt;%
+  kable() %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
+  scroll_box(height = &quot;600px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:600px; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Count
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+GeneRatio
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ontology
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+p.adjust
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+logFDR
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+qvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Description
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+geneID
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0030198" class="uri">GO:0030198</a>
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+0.1936508
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+19.430998
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+extracellular matrix organization
+</td>
+<td style="text-align:left;">
+12814/16147/13078/17389/545370/20319/74199/20356/219151/12818/223838/94216/18214/70779/114249/208177/94214/271127/21810/23871/240322/14268/17390/15227/107581/14230/18073/320078/15117/268780/11504/12840/12817/50706/64075/16950/224697/18383/100952/21846/68169/108153/12832/12819/16998/58223/77739/56401/246228/320712/56429/14219/56693/58859/241327/237759/80883/233332/12389/12822/241226
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043062" class="uri">GO:0043062</a>
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+0.1930380
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+19.430998
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+extracellular structure organization
+</td>
+<td style="text-align:left;">
+12814/16147/13078/17389/545370/20319/74199/20356/219151/12818/223838/94216/18214/70779/114249/208177/94214/271127/21810/23871/240322/14268/17390/15227/107581/14230/18073/320078/15117/268780/11504/12840/12817/50706/64075/16950/224697/18383/100952/21846/68169/108153/12832/12819/16998/58223/77739/56401/246228/320712/56429/14219/56693/58859/241327/237759/80883/233332/12389/12822/241226
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0045229" class="uri">GO:0045229</a>
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+0.1924290
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+19.430998
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+external encapsulating structure organization
+</td>
+<td style="text-align:left;">
+12814/16147/13078/17389/545370/20319/74199/20356/219151/12818/223838/94216/18214/70779/114249/208177/94214/271127/21810/23871/240322/14268/17390/15227/107581/14230/18073/320078/15117/268780/11504/12840/12817/50706/64075/16950/224697/18383/100952/21846/68169/108153/12832/12819/16998/58223/77739/56401/246228/320712/56429/14219/56693/58859/241327/237759/80883/233332/12389/12822/241226
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0006816" class="uri">GO:0006816</a>
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+0.1545455
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+16.539232
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+calcium ion transport
+</td>
+<td style="text-align:left;">
+338370/12288/20190/20730/319984/16000/11549/18127/20541/13491/13618/238384/320508/12293/17918/15894/14812/20855/18760/12766/20315/94249/12290/109676/110893/12310/270028/21838/22068/14612/12721/23796/381812/11607/13617/11517/16963/15558/66109/30948/217154/18763/81904/26903/65973/20192/74777/23832/56437/12523/58226/216869/19218/54598/14219/14360/18764/66972/68312/381290/317757/98660/14697/83408/12389/53376/12286/12298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0045785" class="uri">GO:0045785</a>
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+0.1452282
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15.669697
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+positive regulation of cell adhesion
+</td>
+<td style="text-align:left;">
+16147/13643/74199/140709/11600/16842/17242/16401/12522/16542/16000/114249/54371/12505/94214/18186/218952/23871/14268/15227/107581/15894/18073/21687/20315/15117/12554/268780/104709/14634/12310/27205/24099/21838/67916/12479/64075/12721/68606/16408/50931/14961/22341/20339/171285/20667/15002/100952/16002/68169/16963/18552/105855/14969/26903/320712/56349/14960/11492/20851/317757/22637/83408/58859/20443/54519/19242/16161/12389/16186
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0034329" class="uri">GO:0034329</a>
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+0.1496599
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15.400450
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cell junction assembly
+</td>
+<td style="text-align:left;">
+23888/14432/237979/22411/16542/235611/19266/20450/192167/13823/19277/208177/17475/18186/218952/12558/272381/12563/14268/107581/18164/17260/21687/56229/83964/210274/98733/54420/320873/330814/386750/12562/21838/67784/329165/13837/68606/245537/23796/69524/270163/73340/20401/269116/77569/11856/12552/50791/14615/18613/20613/13841/77446/219228/233651/50768/12741/70237/13048/53885/71228/236915/12389/12286/192897/12737
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0031589" class="uri">GO:0031589</a>
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+0.1554960
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+14.093933
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cell-substrate adhesion
+</td>
+<td style="text-align:left;">
+19283/74199/140709/11600/17242/16401/16542/114249/208177/23928/94214/18186/218952/16421/14268/15227/107581/18073/21687/56229/15117/83964/12554/268780/109700/329872/12817/50706/21838/64075/12721/13837/68606/16408/77569/22341/11856/15434/208777/56363/100952/68169/18613/64099/16404/18552/170736/105298/50768/320712/56349/14219/58859/19242/80883/84544/241226/192897
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0050808" class="uri">GO:0050808</a>
+</td>
+<td style="text-align:right;">
+67
+</td>
+<td style="text-align:right;">
+0.1356275
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13.607371
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+synapse organization
+</td>
+<td style="text-align:left;">
+23888/14432/237979/241568/235611/19266/20450/192167/19277/242662/55983/231602/18186/12558/272381/245880/66725/18164/17260/17918/18645/14812/210274/93706/98733/330814/327814/110893/386750/67784/210293/14658/16560/329165/68507/13837/245537/217480/73340/269116/442801/11816/260297/72333/13602/50791/232560/13841/238988/219228/70530/73181/14360/70237/13385/13048/18483/71228/240057/67790/53972/236915/19242/80883/59036/12286/12298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0048754" class="uri">GO:0048754</a>
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+0.2083333
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13.607371
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+branching morphogenesis of an epithelial tube
+</td>
+<td style="text-align:left;">
+16147/20319/20356/22420/11600/15245/11835/16842/17242/15431/16542/18121/16000/21385/114249/12505/15396/18186/271127/14734/11839/15227/21687/20315/14634/21412/238057/67784/17313/11607/69903/21386/21846/13617/18763/19206/233651/73181/329628/71228
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0007224" class="uri">GO:0007224</a>
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+0.2264151
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13.299057
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+smoothened signaling pathway
+</td>
+<td style="text-align:left;">
+14632/16147/15245/68525/18121/19207/59056/16576/72507/14734/56297/15227/20720/68099/71492/94187/78795/14634/73916/218232/19376/216795/240888/18605/110350/15258/56350/67884/19206/234740/264134/140810/66573/19335/71228/71951
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0098742" class="uri">GO:0098742</a>
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+0.1915888
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.724548
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cell-cell adhesion via plasma-membrane adhesion molecules
+</td>
+<td style="text-align:left;">
+23888/235472/545370/73173/237979/84004/16401/241568/19266/192167/12558/272381/12563/23965/13131/12554/93706/98733/320873/330814/386750/12562/279653/19274/53601/13837/69524/16408/72333/20339/13602/12552/50791/18613/219228/233651/270120/329628/80883/93885/12737
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001655" class="uri">GO:0001655</a>
+</td>
+<td style="text-align:right;">
+56
+</td>
+<td style="text-align:right;">
+0.1447028
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.381648
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+urogenital system development
+</td>
+<td style="text-align:left;">
+20897/22420/11600/11835/22411/72135/15431/18121/13123/16000/114249/19277/12505/15396/18186/271127/14734/13618/66725/17390/15227/17260/15903/107587/18073/15904/21687/13809/14561/11504/14634/21412/14725/67784/243931/12142/12577/73692/18605/11607/56198/110350/13617/18552/55994/18763/13841/56350/19206/23967/233651/66333/18764/329628/71228/241226
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001667" class="uri">GO:0001667</a>
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+0.1349558
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.254700
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+ameboidal-type cell migration
+</td>
+<td style="text-align:left;">
+13078/20356/11600/22411/16401/16542/16000/14026/20357/18214/24136/18127/20541/20361/18186/23871/12558/13618/16421/14268/17260/18645/19245/20855/18760/21687/20315/15117/12554/83397/13616/238328/12310/12562/67784/71709/67916/19274/16590/68606/240185/20401/72446/22341/11816/13617/16002/76441/18613/218877/17311/79221/381290/23797/14314/20358/11881/78560/212307/114886/192897
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0034765" class="uri">GO:0034765</a>
+</td>
+<td style="text-align:right;">
+64
+</td>
+<td style="text-align:right;">
+0.1285141
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.981174
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+regulation of ion transmembrane transport
+</td>
+<td style="text-align:left;">
+98741/338370/16519/329152/16494/12288/16508/56543/192167/77574/20541/399548/13491/20265/18301/226922/12293/17260/17918/18760/12766/12290/13616/109676/18795/21838/22068/110876/12721/245537/23796/381812/260297/11607/16531/99738/13617/66109/30948/217154/81904/26903/56461/14199/65973/74777/23967/56437/58226/66733/19218/14360/18764/20269/13385/68312/381290/98660/14697/18671/60613/12389/12286/12298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001822" class="uri">GO:0001822</a>
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+0.1515152
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.769306
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+kidney development
+</td>
+<td style="text-align:left;">
+20897/22420/11600/22411/72135/15431/18121/114249/19277/12505/15396/18186/271127/14734/13618/66725/17260/15903/107587/18073/21687/13809/14561/11504/14634/21412/14725/67784/243931/12142/12577/73692/18605/11607/56198/110350/13617/18552/55994/18763/13841/56350/19206/23967/233651/66333/18764/329628/71228/241226
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0061138" class="uri">GO:0061138</a>
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+0.1782609
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.769306
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+morphogenesis of a branching epithelium
+</td>
+<td style="text-align:left;">
+16147/15234/20319/20356/22420/11600/15245/11835/16842/17242/15431/16542/18121/16000/21385/114249/12505/15396/18186/271127/14734/11839/15227/21687/20315/14634/21412/238057/67784/17313/11607/69903/21386/21846/13617/18763/19206/233651/73181/329628/71228
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0072001" class="uri">GO:0072001</a>
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:right;">
+0.1478261
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.640055
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+renal system development
+</td>
+<td style="text-align:left;">
+20897/22420/11600/22411/72135/15431/18121/114249/19277/12505/15396/18186/271127/14734/13618/66725/15227/17260/15903/107587/18073/21687/13809/14561/11504/14634/21412/14725/67784/243931/12142/12577/73692/18605/11607/56198/110350/13617/18552/55994/18763/13841/56350/19206/23967/233651/66333/18764/329628/71228/241226
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0070588" class="uri">GO:0070588</a>
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+0.1566667
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.571788
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+calcium ion transmembrane transport
+</td>
+<td style="text-align:left;">
+338370/12288/20190/20541/13491/13618/238384/12293/17918/14812/18760/12766/94249/12290/109676/110893/270028/21838/22068/12721/23796/381812/11607/13617/16963/15558/66109/30948/217154/18763/81904/26903/65973/20192/74777/23832/56437/19218/14360/18764/66972/68312/381290/98660/14697/12286/12298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0051924" class="uri">GO:0051924</a>
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+0.1567944
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.049668
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+regulation of calcium ion transport
+</td>
+<td style="text-align:left;">
+12288/20730/319984/16000/18127/20541/13491/12293/17918/15894/20855/18760/12766/20315/109676/12310/21838/22068/12721/23796/381812/11607/13617/11517/66109/30948/217154/26903/65973/74777/56437/12523/216869/19218/14360/18764/68312/317757/98660/14697/83408/12389/53376/12286/12298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060562" class="uri">GO:0060562</a>
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:right;">
+0.1367089
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.049668
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+epithelial tube morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/20356/22420/11600/15245/11835/16842/17242/15431/16542/18121/16000/21385/24136/114249/12505/15396/18186/271127/14734/11839/15227/17260/21687/20315/14634/21412/14725/238057/73916/67784/330409/17313/23796/11607/69903/21386/21846/13617/106042/18763/13841/19206/69718/23967/233651/50768/73181/18764/57265/19335/329628/71228
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0006874" class="uri">GO:0006874</a>
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+0.1240000
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.986671
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cellular calcium ion homeostasis
+</td>
+<td style="text-align:left;">
+16527/12288/20190/16542/11549/20541/231602/19309/51800/13618/238384/12293/17918/234515/14812/78134/20855/18760/12766/94249/12290/19220/13616/109676/110893/12310/12562/19228/270028/21838/22068/12721/23796/72844/14806/11816/12494/11607/13617/11517/12062/16963/15558/18763/65973/20192/74777/23832/19218/14360/18764/66972/57265/13385/68312/381290/317757/98660/83408/12389/12286/12298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0031345" class="uri">GO:0031345</a>
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+0.1767442
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.778939
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+negative regulation of cell projection organization
+</td>
+<td style="text-align:left;">
+19283/13643/17756/20356/14026/20357/192167/20361/18186/121021/235106/13131/66725/66610/18645/14812/21838/22068/13837/209743/245537/244152/11816/12494/218877/19347/237847/13841/73181/18007/14360/270120/233781/22240/240057/20358/53972/74201
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0010959" class="uri">GO:0010959</a>
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+0.1278027
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.548276
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+regulation of metal ion transport
+</td>
+<td style="text-align:left;">
+329152/12288/20730/319984/16000/18127/20541/399548/13491/18301/12293/17918/15894/20855/20720/18760/12766/20315/13616/109676/12310/18795/21838/22068/12721/23796/381812/11607/13617/11517/15558/66109/30948/217154/26903/56461/14199/65973/74777/23967/56437/12523/216869/19218/14360/18764/68312/381290/317757/23797/98660/14697/83408/12389/53376/12286/12298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060402" class="uri">GO:0060402</a>
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+0.1899441
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.437468
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+calcium ion transport into cytosol
+</td>
+<td style="text-align:left;">
+12288/20190/11549/20541/238384/12293/17918/14812/18760/12766/12290/109676/110893/12310/270028/21838/12721/23796/11607/13617/11517/16963/15558/65973/20192/74777/23832/14360/18764/68312/317757/83408/12389/12286
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0050673" class="uri">GO:0050673</a>
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+0.1239496
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.430508
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+epithelial cell proliferation
+</td>
+<td style="text-align:left;">
+14632/16147/15234/20319/20356/11835/17242/16401/235505/16542/216439/18121/13123/16000/21385/68888/14313/14734/13618/11839/12444/17260/107587/18760/21687/12766/20315/15117/12554/238328/12310/73916/20913/19274/16590/228852/23796/12577/240185/22341/11816/11607/21846/13617/16002/16601/13345/26903/19206/23967/66333/30878/23797/353156/19242/12389/226841/16010/12737
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060401" class="uri">GO:0060401</a>
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+0.1791045
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.370789
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cytosolic calcium ion transport
+</td>
+<td style="text-align:left;">
+12288/20190/11549/20541/238384/12293/17918/14812/18760/12766/12290/109676/110893/12310/270028/21838/12721/23796/11607/13617/11517/16963/15558/65973/20192/74777/23832/14219/14360/18764/66972/68312/317757/83408/12389/12286
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0003018" class="uri">GO:0003018</a>
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+0.1659574
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.276817
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+vascular process in circulatory system
+</td>
+<td style="text-align:left;">
+11600/12288/16542/69219/11549/18127/20541/12411/18162/218952/13618/17390/15894/74682/19245/26357/83397/13616/109700/12310/12562/15551/19274/60596/11816/12494/11607/16531/13617/12062/15558/242202/12741/19218/30878/98660/18671/27405/12389
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0048736" class="uri">GO:0048736</a>
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+0.1764706
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.213983
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+appendage development
+</td>
+<td style="text-align:left;">
+16147/20319/16842/12288/15430/15431/18121/16764/106522/21385/225743/15396/218952/14734/15438/15395/107587/68099/71492/226844/14634/216795/64075/73692/18605/21386/110350/18552/15405/19206/234740/65973/23967/140810/19335/192897
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060173" class="uri">GO:0060173</a>
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+0.1764706
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+10.213983
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+limb development
+</td>
+<td style="text-align:left;">
+16147/20319/16842/12288/15430/15431/18121/16764/106522/21385/225743/15396/218952/14734/15438/15395/107587/68099/71492/226844/14634/216795/64075/73692/18605/21386/110350/18552/15405/19206/234740/65973/23967/140810/19335/192897
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0007409" class="uri">GO:0007409</a>
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+0.1196755
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+9.848769
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+axonogenesis
+</td>
+<td style="text-align:left;">
+14432/13842/235472/19283/13643/17756/20356/26565/16401/241568/13176/18121/235611/14026/20357/225743/24136/19277/20361/18186/12558/14268/13131/18164/17260/20315/52666/13616/14634/14725/386750/238057/21838/67784/19274/17984/16773/13837/245537/17181/244152/269116/11816/12552/13617/218877/237847/18080/13841/246048/19206/18007/22253/381979/240057/20358/80883/68404/12286
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visualisation-1" class="section level3 tabset">
+<h3 class="tabset">Visualisation</h3>
+<div id="biological-process-1" class="section level4">
+<h4>Biological Process</h4>
+<pre class="r"><code>bp_dot[[2]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="molecular-function-1" class="section level4">
+<h4>Molecular Function</h4>
+<pre class="r"><code>mf_dot[[2]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cellular-components-1" class="section level4">
+<h4>Cellular Components</h4>
+<pre class="r"><code>cc_dot[[2]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="upset-1" class="section level4">
+<h4>Upset</h4>
+<pre class="r"><code>upset[[2]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="fc1.5" class="section level2">
+<h2>FC=1.5</h2>
+<pre class="r"><code># display the top 30 most sig
+enrichGO_sig[[3]][1:30, ] %&gt;%
+  kable() %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
+  scroll_box(height = &quot;600px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:600px; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Count
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+GeneRatio
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ontology
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+pvalue
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+p.adjust
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+logFDR
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+qvalue
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Description
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+geneID
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0048754" class="uri">GO:0048754</a>
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+0.1145833
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:right;">
+12.242458
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+branching morphogenesis of an epithelial tube
+</td>
+<td style="text-align:left;">
+16147/22420/20319/15245/16842/11600/20356/17242/18121/21385/15431/271127/16000/11839/114249/16542/14734/15396/15227/12505/20315/238057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0061138" class="uri">GO:0061138</a>
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+0.1000000
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:right;">
+11.925505
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+morphogenesis of a branching epithelium
+</td>
+<td style="text-align:left;">
+16147/15234/22420/20319/15245/16842/11600/20356/17242/18121/21385/15431/271127/16000/11839/114249/16542/14734/15396/15227/12505/20315/238057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0030198" class="uri">GO:0030198</a>
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+0.0761905
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:right;">
+10.331034
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+extracellular matrix organization
+</td>
+<td style="text-align:left;">
+13078/16147/12814/545370/74199/17389/20319/20356/223838/12818/94216/271127/219151/114249/94214/70779/21810/15227/15117/12840/320078/240322/17390/18073
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043062" class="uri">GO:0043062</a>
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+0.0759494
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:right;">
+10.331034
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+extracellular structure organization
+</td>
+<td style="text-align:left;">
+13078/16147/12814/545370/74199/17389/20319/20356/223838/12818/94216/271127/219151/114249/94214/70779/21810/15227/15117/12840/320078/240322/17390/18073
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0045229" class="uri">GO:0045229</a>
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+0.0757098
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:right;">
+10.331034
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+external encapsulating structure organization
+</td>
+<td style="text-align:left;">
+13078/16147/12814/545370/74199/17389/20319/20356/223838/12818/94216/271127/219151/114249/94214/70779/21810/15227/15117/12840/320078/240322/17390/18073
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0097485" class="uri">GO:0097485</a>
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+0.0733591
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:right;">
+7.598576
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+neuron projection guidance
+</td>
+<td style="text-align:left;">
+14432/13842/235472/13643/26565/20356/13176/18121/20357/19277/225743/235611/26757/13616/14725/14026/20361/20315/238057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060562" class="uri">GO:0060562</a>
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+0.0582278
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:right;">
+7.598576
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+epithelial tube morphogenesis
+</td>
+<td style="text-align:left;">
+16147/22420/20319/15245/16842/11600/20356/17242/18121/21385/15431/271127/16000/11839/114249/16542/14734/15396/15227/12505/14725/20315/238057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0007409" class="uri">GO:0007409</a>
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+0.0507099
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+1.00e-07
+</td>
+<td style="text-align:right;">
+7.219570
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+axonogenesis
+</td>
+<td style="text-align:left;">
+14432/13842/19283/235472/13643/17756/26565/20356/13176/18121/241568/20357/19277/225743/16401/235611/18164/12558/13131/13616/14725/14026/20361/20315/238057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0007411" class="uri">GO:0007411</a>
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+0.0697674
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+1.00e-07
+</td>
+<td style="text-align:right;">
+6.832217
+</td>
+<td style="text-align:right;">
+1.00e-07
+</td>
+<td style="text-align:left;">
+axon guidance
+</td>
+<td style="text-align:left;">
+14432/13842/235472/13643/26565/20356/13176/18121/20357/19277/225743/235611/13616/14725/14026/20361/20315/238057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0035107" class="uri">GO:0035107</a>
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.0862069
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+2.00e-07
+</td>
+<td style="text-align:right;">
+6.705054
+</td>
+<td style="text-align:right;">
+1.00e-07
+</td>
+<td style="text-align:left;">
+appendage morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/16842/16764/18121/106522/15430/21385/15431/225743/14734/15396/15395/107587/15438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0035108" class="uri">GO:0035108</a>
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.0862069
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+2.00e-07
+</td>
+<td style="text-align:right;">
+6.705054
+</td>
+<td style="text-align:right;">
+1.00e-07
+</td>
+<td style="text-align:left;">
+limb morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/16842/16764/18121/106522/15430/21385/15431/225743/14734/15396/15395/107587/15438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001655" class="uri">GO:0001655</a>
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+0.0542636
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+4.00e-07
+</td>
+<td style="text-align:right;">
+6.434024
+</td>
+<td style="text-align:right;">
+3.00e-07
+</td>
+<td style="text-align:left;">
+urogenital system development
+</td>
+<td style="text-align:left;">
+20897/22420/22411/11600/18121/15431/271127/16000/19277/13123/114249/72135/13618/14734/15396/15227/12505/107587/14725/17390/18073
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0098742" class="uri">GO:0098742</a>
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+0.0747664
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+4.00e-07
+</td>
+<td style="text-align:right;">
+6.434024
+</td>
+<td style="text-align:right;">
+3.00e-07
+</td>
+<td style="text-align:left;">
+cell-cell adhesion via plasma-membrane adhesion molecules
+</td>
+<td style="text-align:left;">
+23888/235472/545370/237979/73173/241568/84004/192167/19266/16401/272381/12563/12558/13131/23965/320873
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0050673" class="uri">GO:0050673</a>
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+0.0483193
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+5.00e-07
+</td>
+<td style="text-align:right;">
+6.295310
+</td>
+<td style="text-align:right;">
+4.00e-07
+</td>
+<td style="text-align:left;">
+epithelial cell proliferation
+</td>
+<td style="text-align:left;">
+14632/16147/15234/20319/20356/235505/17242/18121/21385/68888/16000/14313/11839/16401/13123/16542/13618/14734/12310/107587/15117/20315/216439
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0030326" class="uri">GO:0030326</a>
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+0.0909091
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+1.00e-06
+</td>
+<td style="text-align:right;">
+5.991717
+</td>
+<td style="text-align:right;">
+7.00e-07
+</td>
+<td style="text-align:left;">
+embryonic limb morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/16842/16764/18121/15430/21385/15431/14734/15396/15395/107587/15438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0035113" class="uri">GO:0035113</a>
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+0.0909091
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+1.00e-06
+</td>
+<td style="text-align:right;">
+5.991717
+</td>
+<td style="text-align:right;">
+7.00e-07
+</td>
+<td style="text-align:left;">
+embryonic appendage morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/16842/16764/18121/15430/21385/15431/14734/15396/15395/107587/15438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0048736" class="uri">GO:0048736</a>
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.0735294
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+1.10e-06
+</td>
+<td style="text-align:right;">
+5.952010
+</td>
+<td style="text-align:right;">
+8.00e-07
+</td>
+<td style="text-align:left;">
+appendage development
+</td>
+<td style="text-align:left;">
+16147/20319/16842/16764/18121/106522/15430/21385/15431/225743/14734/15396/15395/107587/15438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060173" class="uri">GO:0060173</a>
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.0735294
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+1.10e-06
+</td>
+<td style="text-align:right;">
+5.952010
+</td>
+<td style="text-align:right;">
+8.00e-07
+</td>
+<td style="text-align:left;">
+limb development
+</td>
+<td style="text-align:left;">
+16147/20319/16842/16764/18121/106522/15430/21385/15431/225743/14734/15396/15395/107587/15438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0042391" class="uri">GO:0042391</a>
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+0.0469083
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+1.50e-06
+</td>
+<td style="text-align:right;">
+5.833219
+</td>
+<td style="text-align:right;">
+1.10e-06
+</td>
+<td style="text-align:left;">
+regulation of membrane potential
+</td>
+<td style="text-align:left;">
+16527/338370/14805/16508/380785/56543/242662/11549/13491/399548/192167/238384/20265/268860/16542/108013/231602/14812/101772/51800/110893/14397
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001569" class="uri">GO:0001569</a>
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0.1777778
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+3.80e-06
+</td>
+<td style="text-align:right;">
+5.418955
+</td>
+<td style="text-align:right;">
+2.70e-06
+</td>
+<td style="text-align:left;">
+branching involved in blood vessel morphogenesis
+</td>
+<td style="text-align:left;">
+16147/20319/16842/11600/20356/17242/16542/20315
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0031644" class="uri">GO:0031644</a>
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+0.0721649
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+3.80e-06
+</td>
+<td style="text-align:right;">
+5.418955
+</td>
+<td style="text-align:right;">
+2.70e-06
+</td>
+<td style="text-align:left;">
+regulation of nervous system process
+</td>
+<td style="text-align:left;">
+15234/380785/13491/16000/192167/18164/268860/13618/108013/12310/18127/14812/245880/110893
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0048705" class="uri">GO:0048705</a>
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+0.0613027
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+3.80e-06
+</td>
+<td style="text-align:right;">
+5.418955
+</td>
+<td style="text-align:right;">
+2.70e-06
+</td>
+<td style="text-align:left;">
+skeletal system morphogenesis
+</td>
+<td style="text-align:left;">
+16147/12814/17389/20319/15245/18121/15430/15431/15396/20855/12411/107587/15117/15438/329872/17390
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0009581" class="uri">GO:0009581</a>
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+0.0875912
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+4.30e-06
+</td>
+<td style="text-align:right;">
+5.365650
+</td>
+<td style="text-align:right;">
+3.10e-06
+</td>
+<td style="text-align:left;">
+detection of external stimulus
+</td>
+<td style="text-align:left;">
+12814/20356/20357/16000/238384/20265/12310/15227/14812/20720/101772/20315
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0072001" class="uri">GO:0072001</a>
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+0.0521739
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+5.40e-06
+</td>
+<td style="text-align:right;">
+5.269144
+</td>
+<td style="text-align:right;">
+3.80e-06
+</td>
+<td style="text-align:left;">
+renal system development
+</td>
+<td style="text-align:left;">
+20897/22420/22411/11600/18121/15431/271127/19277/114249/72135/13618/14734/15396/15227/12505/107587/14725/18073
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0003012" class="uri">GO:0003012</a>
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+0.0465116
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+<td style="text-align:right;">
+6.10e-06
+</td>
+<td style="text-align:right;">
+5.217823
+</td>
+<td style="text-align:right;">
+4.30e-06
+</td>
+<td style="text-align:left;">
+muscle system process
+</td>
+<td style="text-align:left;">
+56543/20190/12818/24052/11549/21385/399548/16000/20265/114249/109272/268860/13618/50876/20855/12310/18127/13616/231602/110893
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0006936" class="uri">GO:0006936</a>
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0.0541401
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+1e-07
+</td>
+<td style="text-align:right;">
+7.00e-06
+</td>
+<td style="text-align:right;">
+5.152796
+</td>
+<td style="text-align:right;">
+5.00e-06
+</td>
+<td style="text-align:left;">
+muscle contraction
+</td>
+<td style="text-align:left;">
+56543/20190/24052/11549/21385/399548/20265/114249/109272/268860/13618/50876/20855/12310/13616/231602/110893
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0001822" class="uri">GO:0001822</a>
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0.0515152
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+1e-07
+</td>
+<td style="text-align:right;">
+1.34e-05
+</td>
+<td style="text-align:right;">
+4.872743
+</td>
+<td style="text-align:right;">
+9.60e-06
+</td>
+<td style="text-align:left;">
+kidney development
+</td>
+<td style="text-align:left;">
+20897/22420/22411/11600/18121/15431/271127/19277/114249/72135/13618/14734/15396/12505/107587/14725/18073
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0072006" class="uri">GO:0072006</a>
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+0.0764331
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+1e-07
+</td>
+<td style="text-align:right;">
+1.50e-05
+</td>
+<td style="text-align:right;">
+4.823193
+</td>
+<td style="text-align:right;">
+1.07e-05
+</td>
+<td style="text-align:left;">
+nephron development
+</td>
+<td style="text-align:left;">
+22420/11600/18121/15431/271127/19277/114249/13618/14734/15396/12505/18073
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060348" class="uri">GO:0060348</a>
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.0581395
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+1e-07
+</td>
+<td style="text-align:right;">
+1.50e-05
+</td>
+<td style="text-align:right;">
+4.823193
+</td>
+<td style="text-align:right;">
+1.07e-05
+</td>
+<td style="text-align:left;">
+bone development
+</td>
+<td style="text-align:left;">
+16147/17389/20319/20190/15431/16000/235611/16542/59056/15396/20855/12411/107587/15117/329872
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0007224" class="uri">GO:0007224</a>
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+0.0754717
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+2e-07
+</td>
+<td style="text-align:right;">
+1.63e-05
+</td>
+<td style="text-align:right;">
+4.787675
+</td>
+<td style="text-align:right;">
+1.17e-05
+</td>
+<td style="text-align:left;">
+smoothened signaling pathway
+</td>
+<td style="text-align:left;">
+14632/16147/15245/19207/18121/68525/59056/14734/15227/20720/72507/16576
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visualisation-2" class="section level3 tabset">
+<h3 class="tabset">Visualisation</h3>
+<div id="biological-process-2" class="section level4">
+<h4>Biological Process</h4>
+<pre class="r"><code>bp_dot[[3]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="molecular-function-2" class="section level4">
+<h4>Molecular Function</h4>
+<pre class="r"><code>mf_dot[[3]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cellular-components-2" class="section level4">
+<h4>Cellular Components</h4>
+<pre class="r"><code>cc_dot[[3]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="upset-2" class="section level4">
+<h4>Upset</h4>
+<pre class="r"><code>upset[[3]]</code></pre>
+<p><img src="figure/go.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="export-data" class="section level1">
+<h1>Export Data</h1>
+<pre class="r"><code># save to excel
+writexl::write_xlsx(x = enrichGO_sig, here::here(&quot;3_output/enrichGO_sig.xlsx&quot;))
+saveRDS(object = enrichGO_sig,file = here::here(&quot;0_data/RDS_objects/enrichGO_sig.rds&quot;))
+saveRDS(object = enrichGO,file = here::here(&quot;0_data/RDS_objects/enrichGO.rds&quot;))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.1 (2022-06-23 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8   
+[3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C                      
+[5] LC_TIME=English_Australia.utf8    
+
+attached base packages:
+[1] stats4    grid      stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] enrichplot_1.16.2     org.Mm.eg.db_3.15.0   AnnotationDbi_1.58.0 
+ [4] IRanges_2.30.1        S4Vectors_0.34.0      Biobase_2.56.0       
+ [7] BiocGenerics_0.42.0   clusterProfiler_4.4.4 Glimma_2.6.0         
+[10] edgeR_3.38.4          limma_3.52.4          ggrepel_0.9.1        
+[13] ggbiplot_0.55         scales_1.2.1          plyr_1.8.7           
+[16] gridExtra_2.3         kableExtra_1.3.4      forcats_0.5.2        
+[19] stringr_1.4.1         purrr_0.3.5           tidyr_1.2.1          
+[22] ggplot2_3.3.6         tidyverse_1.3.2       reshape2_1.4.4       
+[25] tibble_3.1.8          readr_2.1.3           magrittr_2.0.3       
+[28] dplyr_1.0.10         
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2                  tidyselect_1.2.0           
+  [3] RSQLite_2.2.18              htmlwidgets_1.5.4          
+  [5] BiocParallel_1.30.3         scatterpie_0.1.8           
+  [7] munsell_0.5.0               codetools_0.2-18           
+  [9] ragg_1.2.3                  withr_2.5.0                
+ [11] colorspace_2.0-3            GOSemSim_2.22.0            
+ [13] highr_0.9                   knitr_1.40                 
+ [15] rstudioapi_0.14             DOSE_3.22.1                
+ [17] labeling_0.4.2              MatrixGenerics_1.8.1       
+ [19] git2r_0.30.1                GenomeInfoDbData_1.2.8     
+ [21] polyclip_1.10-0             bit64_4.0.5                
+ [23] farver_2.1.1                rprojroot_2.0.3            
+ [25] downloader_0.4              vctrs_0.4.2                
+ [27] treeio_1.20.2               generics_0.1.3             
+ [29] xfun_0.33                   R6_2.5.1                   
+ [31] GenomeInfoDb_1.32.4         graphlayouts_0.8.2         
+ [33] locfit_1.5-9.6              bitops_1.0-7               
+ [35] cachem_1.0.6                fgsea_1.22.0               
+ [37] gridGraphics_0.5-1          DelayedArray_0.22.0        
+ [39] assertthat_0.2.1            promises_1.2.0.1           
+ [41] ggraph_2.1.0                googlesheets4_1.0.1        
+ [43] gtable_0.3.1                tidygraph_1.2.2            
+ [45] workflowr_1.7.0             rlang_1.0.6                
+ [47] genefilter_1.78.0           systemfonts_1.0.4          
+ [49] splines_4.2.1               lazyeval_0.2.2             
+ [51] gargle_1.2.1                broom_1.0.1                
+ [53] yaml_2.3.5                  modelr_0.1.9               
+ [55] backports_1.4.1             httpuv_1.6.6               
+ [57] qvalue_2.28.0               tools_4.2.1                
+ [59] ggplotify_0.1.0             ellipsis_0.3.2             
+ [61] jquerylib_0.1.4             RColorBrewer_1.1-3         
+ [63] Rcpp_1.0.9                  zlibbioc_1.42.0            
+ [65] RCurl_1.98-1.9              viridis_0.6.2              
+ [67] SummarizedExperiment_1.26.1 haven_2.5.1                
+ [69] fs_1.5.2                    here_1.0.1                 
+ [71] data.table_1.14.2           DO.db_2.9                  
+ [73] reprex_2.0.2                googledrive_2.0.0          
+ [75] matrixStats_0.62.0          hms_1.1.2                  
+ [77] patchwork_1.1.2             evaluate_0.17              
+ [79] xtable_1.8-4                XML_3.99-0.11              
+ [81] readxl_1.4.1                ggupset_0.3.0              
+ [83] compiler_4.2.1              writexl_1.4.0              
+ [85] crayon_1.5.2                shadowtext_0.1.2           
+ [87] htmltools_0.5.3             ggfun_0.0.7                
+ [89] later_1.3.0                 tzdb_0.3.0                 
+ [91] geneplotter_1.74.0          aplot_0.1.8                
+ [93] lubridate_1.8.0             DBI_1.1.3                  
+ [95] tweenr_2.0.2                dbplyr_2.2.1               
+ [97] MASS_7.3-57                 Matrix_1.5-1               
+ [99] cli_3.4.1                   parallel_4.2.1             
+[101] igraph_1.3.5                GenomicRanges_1.48.0       
+[103] pkgconfig_2.0.3             xml2_1.3.3                 
+[105] ggtree_3.4.4                svglite_2.1.0              
+[107] annotate_1.74.0             bslib_0.4.0                
+[109] webshot_0.5.4               XVector_0.36.0             
+[111] rvest_1.0.3                 yulab.utils_0.0.5          
+[113] digest_0.6.29               Biostrings_2.64.1          
+[115] rmarkdown_2.17              cellranger_1.1.0           
+[117] fastmatch_1.1-3             tidytree_0.4.1             
+[119] lifecycle_1.0.3             nlme_3.1-157               
+[121] jsonlite_1.8.2              viridisLite_0.4.1          
+[123] fansi_1.0.3                 pillar_1.8.1               
+[125] lattice_0.20-45             KEGGREST_1.36.3            
+[127] fastmap_1.1.0               httr_1.4.4                 
+[129] survival_3.3-1              GO.db_3.15.0               
+[131] glue_1.6.2                  png_0.1-7                  
+[133] bit_4.0.4                   ggforce_0.4.1              
+[135] stringi_1.7.8               sass_0.4.2                 
+[137] blob_1.2.3                  textshaping_0.3.6          
+[139] DESeq2_1.36.0               memoise_2.0.1              
+[141] ape_5.6-2                  </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
