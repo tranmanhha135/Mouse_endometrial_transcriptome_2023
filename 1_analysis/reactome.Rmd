@@ -2,6 +2,8 @@
 title: "DE Analysis (Robertson Lab)"
 author: "Ha Tran"
 date: "22/08/2021"
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -39,7 +41,6 @@ library(ggbiplot)
 library(ggrepel)
 theme_set(theme_light())
 
-theme_set(theme_minimal())
 pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
 
 # Bioconductor packages:
@@ -89,7 +90,7 @@ reactome_sig[[x]] <- reactome_all[[x]] %>% dplyr::filter(p.adjust <= 0.05) %>%
   dplyr::mutate(
     logFDR = -log(p.adjust, 10),
     GeneRatio = Count / as.numeric(Total))%>%
-    dplyr::select(c("Count", "GeneRatio", "pvalue", "p.adjust", "logFDR", "qvalue", "Description", "geneID"))
+    dplyr::select(c("Description", "GeneRatio", "pvalue", "p.adjust", "logFDR", "qvalue", "geneID", "Count"))
 
  # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
   reactome_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
@@ -114,18 +115,18 @@ react_dot=list()
 upset=list()
 for (i in 1:length(fc)) {
   x <- fc[i] %>% as.character()
-  react_dot[[x]] <- ggplot(reactome_sig[[x]][1:15, ]) +
+  react_dot[[x]] <- ggplot(reactome_sig[[x]][1:12, ]) +
   geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
   scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
-  scale_size(range = c(.5,5)) +
-  ggtitle("Reactome Pathways") +
+  scale_size(range = c(1.5,5)) +
+  # ggtitle("Reactome Pathways") +
   ylab(label = "") +
   xlab(label = "Gene Ratio") +
   labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
-  ggsave(filename = paste0("react_dot_", x, ".svg"), plot = react_dot[[x]], path = here::here("2_plots/reactome/"), 
-       width = 250, height = 166, units = "mm")
+  ggsave(filename = paste0("react_dot_", x, ".svg"), plot = react_dot[[x]] + pub, path = here::here("2_plots/reactome/"), 
+       width = 170, height = 130, units = "mm")
   
-  upset[[x]] <- upsetplot(x = reactome[[x]], 10)
+  upset[[x]] <- upsetplot(x = reactome[[x]], 9)
   ggsave(filename = paste0("upset_react_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/reactome/"))
 }
 

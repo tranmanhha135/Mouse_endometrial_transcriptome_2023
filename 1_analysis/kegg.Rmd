@@ -128,7 +128,7 @@ for (i in 1:length(fc)) {
 p=1
 ```
 
-### Top 20
+### Table
 
 ```{r}
 enrichKEGG_sig[[p]] %>%
@@ -150,16 +150,16 @@ for (i in 1:length(fc)) {
     geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logPval, size = Count)) +
     scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
     scale_size(range = c(1.5,5)) +
-    ggtitle("KEGG Pathways") +
+    # ggtitle("KEGG Pathways") +
     ylab(label = "") +
     xlab(label = "Gene Ratio") +
     labs(color = expression("-log"[10] * "Pvalue"), size = "Gene Counts")
   ggsave(filename = paste0("kegg_dot_", fc[i], ".svg"), plot = kegg_dot[[x]] + pub, path = here::here("2_plots/kegg/"), 
-         width = 250, height = 166, units = "mm")
+         width = 170, height = 130, units = "mm")
   
   upset[[x]] <- upsetplot(x = enrichKEGG[[x]], 10)
   ggsave(filename = paste0("upset_kegg_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/kegg/"), 
-         width = 250, height = 166, units = "mm")
+         width = 170, height = 130, units = "mm")
 }
 
 kegg_dot[[p]]
@@ -178,7 +178,7 @@ upset[[p]]
 p=p+1
 ```
 
-### Top 20
+### Table
 
 ```{r}
 enrichKEGG_sig[[p]] %>%
@@ -209,7 +209,7 @@ upset[[p]]
 p=p+1
 ```
 
-### Top 20
+### Table
 
 ```{r}
 enrichKEGG_sig[[p]] %>%
@@ -235,7 +235,7 @@ upset[[p]]
 
 
 
-# Pathway specific heatmaps
+# Pathway specific heatmaps {.tabset}
 
 ## FC=`r fc[1]` {.tabset}
 
@@ -306,17 +306,14 @@ for (i in 1:length(fc)) {
     partial <- partial[kegg_id[j], "geneID"] %>% as.data.frame()
     partial <- separate_rows(partial, ., sep = "/")
     colnames(partial) <- "entrezid"
-    
 
     # heatmap matrix
-    match <- logCPM[, "entrezid"] %in% partial$entrezid
-    matrix[[x]][[y]] <- logCPM[match, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] %>%
-      as.data.frame()
-  }
-}
+    match <- rownames(logCPM) %in% partial$entrezid
+    matrix[[x]][[y]] <- logCPM[match, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] %>% as.data.frame()
     
     # changing the colname to  numeric for some reason, cant remember
-matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] <- as.numeric(as.character(unlist(matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")])))
+    
+    matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] <- as.numeric(as.character(unlist(matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")])))
 
     # display matrix
     match2 <- lmTreat_sig[[x]][, "entrezid"] %in% partial$entrezid
@@ -558,27 +555,6 @@ display_matrix[[p]][[q]] %>%
 p=p+1
 ```
 
-### Top 20
-
-```{r}
-enrichKEGG_sig[[p]][1:20, ] %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
-
-```
-
-### Dot plot
-
-```{r}
-kegg_dot[[p]]
-```
-
-### Upset Plot
-
-```{r}
-upset[[p]]
-```
 
 ### `r kegg_pathway[[1]]$PATHWAY_MAP`{.tabset}
 
@@ -750,27 +726,6 @@ display_matrix[[p]][[q]] %>%
 p=p+1
 ```
 
-### Top 20
-
-```{r}
-enrichKEGG_sig[[p]][1:20, ] %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
-
-```
-
-### Dot plot
-
-```{r}
-kegg_dot[[p]]
-```
-
-### Upset Plot
-
-```{r}
-upset[[p]]
-```
 
 ### `r kegg_pathway[[1]]$PATHWAY_MAP`{.tabset}
 
