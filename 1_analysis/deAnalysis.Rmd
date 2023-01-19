@@ -61,9 +61,7 @@ DGElist object containing the raw feature count, sample metadata, and gene metad
 dge <- readRDS(here::here("0_data/RDS_objects/dge.rds"))
 ```
 
-# Differential Gene Expression Analysis
-
-## Initial Parameterisation
+## Initial Parameterisation {.tabset}
 
 The varying methods used to identify differential expression all rely on similar initial parameters. These include:
 
@@ -89,6 +87,11 @@ colnames(full_design) <- gsub(
   "",
   colnames(full_design))
 
+# display the full_design matrix
+kable(full_design %>% as.data.frame(), caption = "Design matrix") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover")) %>% 
+  scroll_box(height = "600px")
+
 ```
 
 ### Contrast Matrix
@@ -102,31 +105,34 @@ contrast <- limma::makeContrasts(
 
 colnames(contrast) <- c("INT vs CONT")
 
+kable(contrast %>% as.data.frame(), caption = "Contrast matrix") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
 ```
 
-## Limma-Voom
+# Limma-Voom
 
-### Apply voom transformation {.tabset}
+## Apply voom transformation {.tabset}
 
 Voom is used to estimate the mean-variance relationship of the data, which is then used to calculate and assign a precision weight for each of the observation (gene). This observational level weights are then used in a linear modelling process to adjust for heteroscedasticity. Log count (logCPM) data typically show a decreasing mean-variance trend with increasing count size (expression).
 
-However, for some dataset with potential sample outliers, `voomWithQualityWeights` can be used to calculate sample-specific quality weights. The application of observational and sample-specific weights can objectively and systematically correct for outliers and better than manually removing samples in cases where there are no clear-cut reasons for replicate variations
+However, for some dataset with potential sample outliers, `voomWithQualityWeights` can be used to calculate sample-specific quality weights. The application of observational and sample-specific weights can objectively and systematically correct for outliers and better than manually removing samples in cases where there are no clear-cut reasons for replicate variations. Thus, linear model  will be applied to the voom transformation with observational and sample-specific weights.
 
-#### Voom with observational-level weights
+### Observational level weights
 
 ```{r voom, fig.cap = "Voom transformation with observational weights"}
-# voom tranformation without sample weights
+# voom transformation without sample weights
 voom <- limma::voom(counts = dge, design = full_design, plot = TRUE,)
 ```
 
-#### Voom with observational and group level weights
+### Observational & group level weights
 
 ```{r voom_groupWeights, fig.cap = "Voom transformation with observational and group-specific weights"}
 # voom transformation with sample weights using full_design matrix for group-specific weights
 voom1 <- limma::voomWithQualityWeights(counts = dge, design = full_design, plot = TRUE)
 ```
 
-#### Voom with observational and sample level weights
+### Observational & sample level weights
 
 ```{r voom_sampleWeights, fig.cap = "Voom transformation with observational and sample-specific weights"}
 # voom transformation with sample weights using null design matrix
@@ -134,8 +140,13 @@ voom2 <- limma::voomWithQualityWeights(counts = dge,design = null_design, plot =
 ```
 
 
-### Apply linear model {.tabset}
+## Apply linear model {.tabset}
 
+Without FC cutoff and an FDR adj.p.val of 0.05, the `INT vs CONT` comparison still have nearly 2000 DE genes **(TABLE 2)**. Thus, we can afford to be more stringent with our adjustment method and adj.p.val cutoff. Additionally, when the list of DE genes is large, we can apply a fold change cutoff through application of `TREAT` to prioritise the genes with greater fold changes and potentially more biologically relevant. Idealy, we are aiming for \~300 genes \pm 100 genes. Functional enrichment analysis with this number of genes should generate meaningful results.
+
+Importantly, the FC threshold used in `TREAT` should be chosen as a small value below which results should be ignored, instead of a target fold-change. In general, a modest fold-change of 1.1 - 1.5 is recommended. However, it is more important to select a fold-change cutoff that generates a sufficiently small list of DE genes.
+
+A fold-change value of `1.5` and FDR\<0.05, generated a sufficiently small number of DE genes for the INT vs CONT comparison. This should be sufficient for functional enrichment analysis **(TAB: TREAT FC=1.5, first table)**.
 
 ```{r fcAndLfc}
 # specifying FC of interest
@@ -144,17 +155,17 @@ fc <- c(1.05, 1.1, 1.5)
 lfc <- log(x = fc, 2)
 ```
 
-#### Without TREAT
+### Without TREAT
 ```{r limmaEbayes, results='asis'}
 # function for applying linear model, generate decideTest table, and extract topTable
-limmaFit_ebayes <- function(x, adjMethod, p.val){
+limmaFit_ebayes <- function(x, adjMethod, p.val, tableNum){
   lm <- limma::lmFit(object = x, design = full_design) %>%
     contrasts.fit(contrasts = contrast) %>%
     limma::eBayes()
   
   lm_dt <- decideTests(object = lm, adjust.method = adjMethod, p.value = p.val)
   print(knitr::kable(summary(lm_dt)
-                      , caption = paste0("Number of significant DE genes from '", deparse(substitute(x)), "' with '", adjMethod, "' adjusment method, and at a p-value/adj.p-value of ", p.val)) %>% 
+                      , caption = paste0("TABLE ",tableNum, ": Number of significant DE genes with '", adjMethod, "' adjusment method, and at a p-value/adj.p-value of ", p.val)) %>% 
     kable_styling(bootstrap_options = c("striped", "hover")))
 
   lm_all <- lapply(1:ncol(lm), function(y){
@@ -165,24 +176,23 @@ limmaFit_ebayes <- function(x, adjMethod, p.val){
   return(lm_all)
 }
 
-lm_voom1_pval0.01 <- limmaFit_ebayes(x = voom1, adjMethod = "none", p.val = 0.01)
-lm_voom2_pval0.01 <- limmaFit_ebayes(x = voom2, adjMethod = "none", p.val = 0.01)
-lm_voom2_fdr0.7 <- limmaFit_ebayes(x = voom2, adjMethod = "fdr", p.val = 0.7)
+lm_voom2_pval0.01 <- limmaFit_ebayes(x = voom2, adjMethod = "none", p.val = 0.01, 1)
+lm_voom2_fdr0.05 <- limmaFit_ebayes(x = voom2, adjMethod = "fdr", p.val = 0.05, 2)
 
 ```
 
-#### TREAT FC=`r fc[1]`
+### TREAT FC=`r fc[1]`
 
 ```{r limmaTREAT, results='asis'}
 
-limmaFit_treat <- function(x, fc, adjMethod, p.val){
+limmaFit_treat <- function(x, fc, adjMethod, p.val, tableNum){
   lm_treat <- limma::lmFit(object = x, design = full_design) %>%
     contrasts.fit(contrasts = contrast) %>%
     limma::treat(fc = fc)
   
   lm_treat_dt <- decideTests(object = lm_treat, adjust.method = adjMethod, p.value = p.val)
   print(knitr::kable(summary(lm_treat_dt), 
-                     caption = paste0("Number of DE genes significantly above a FC of ", fc, " from '", deparse(substitute(x)), "' with '", adjMethod, "' adjusment method, and at a p-value/adj.p-value of ", p.val)) %>% 
+                     caption = paste0("TABLE ", tableNum,": Number of DE genes significantly above a FC of ", fc, " with '", adjMethod, "' adjusment method, and at a p-value/adj.p-value of ", p.val)) %>% 
     kable_styling(bootstrap_options = c("striped", "hover")))
   
   lm_treat_all <- lapply(1:ncol(lm_treat), function(y){
@@ -193,17 +203,46 @@ limmaFit_treat <- function(x, fc, adjMethod, p.val){
   return(lm_treat_all)
 }
 
-assign(paste0("lmTreat_fc", fc[1], "_voom2_fdr0.05"),
-       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "fdr", p.val = 0.05))
-assign(paste0("lmTreat_fc", fc[1], "_voom2_pval0.01"),
-       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "none", p.val = 0.01))
 assign(paste0("lmTreat_fc", fc[1], "_voom2_pval0.05"),
-       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "none", p.val = 0.05))
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "none", p.val = 0.05, 3))
+
+assign(paste0("lmTreat_fc", fc[1], "_voom2_pval0.01"),
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "none", p.val = 0.01, 4))
+
+assign(paste0("lmTreat_fc", fc[1], "_voom2_fdr0.05"),
+       limmaFit_treat(x = voom2, fc = fc[1], adjMethod = "fdr", p.val = 0.05, 5))
 ```
 
+### TREAT FC=`r fc[2]`
+
+```{r, results='asis'}
+assign(paste0("lmTreat_fc", fc[2], "_voom2_pval0.05"),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "none", p.val = 0.05, 6))
+assign(paste0("lmTreat_fc", fc[2], "_voom2_pval0.01"),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "none", p.val = 0.01, 7))
+assign(paste0("lmTreat_fc", fc[2], "_voom2_fdr0.05"),
+       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "fdr", p.val = 0.05, 8))
+```
+
+### TREAT FC=`r fc[3]`
+
+```{r, results='asis'}
+assign(paste0("lmTreat_fc", fc[3], "_voom2_pval0.05"),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "none", p.val = 0.05, 9))
+assign(paste0("lmTreat_fc", fc[3], "_voom2_pval0.01"),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "none", p.val = 0.01, 10))
+assign(paste0("lmTreat_fc", fc[3], "_voom2_fdr0.05"),
+       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "fdr", p.val = 0.05, 11))
+```
+
+# Differential Gene Expression analysis {.tabset}
+
+For the `Intact vs Control` comparison, a rigorous statistical test was used to reduce the list of DE genes down to a more biologically relevant number. This included testing significance relative to a fold change threshold (TREAT). For this comparison, genes significantly above of FC of **1.01, 1.1, and 1.5** and **FDR < 0.05** are visualised.
+
+Although only DE genes significantly above a fold-change value of `1.5` and FDR\<0.05 will be used for functional enrichment analysis, visualisations for other cut-off are retained for data exploratory purposes.
 
 ```{r limmaTreat}
-### Old code used to interatively generate lmTreat dataset with different fc cutoff
+### Old code used to iteratively generate lmTreat dataset with different fc cutoff
 ## with treat
 lmTreat <- list()
 lmTreat_dt <- list()
@@ -230,9 +269,9 @@ for (i in 1:length(fc)) {
 
 ```
 
-##### INT vs CONT Visualisation {.tabset}
+## TREAT FC= `r fc[1]` {.tabset}
 
-###### P Value histogram
+### P Value histogram
 
 ```{r pValueHistogram_limma_treat}
 lmTreat_hist <- list()
@@ -250,7 +289,7 @@ plot(
 invisible(dev.print(svg, here::here(paste0("2_plots/de/pval_", fc[1], ".svg"))))
 ```
 
-###### MA Plot
+### MA Plot
 
 ```{r ma}
 ma <- list()
@@ -325,13 +364,16 @@ for (i in 1:length(fc)) {
 
   # save to directory
   ggsave(paste0("ma_", fc[i], ".png"),
-    plot = ma[[x]],
-    path = here::here("2_plots/de/"),
-
-    ### PUBLISH
-    width = 58,
-    height = 70,
-    units = "mm"
+         plot = ma[[x]] + pub + theme(
+           legend.position = "bottom",
+           legend.box.margin = margin(-10, 0, 0, 0),
+           legend.key.size = unit(0, "lines")
+         ),
+         path = here::here("2_plots/de/"),
+         width = 250,
+         height = 166,
+         units = "mm",
+         dpi = 800
   )
 }
 
@@ -339,7 +381,7 @@ for (i in 1:length(fc)) {
 ma[[1]]
 ```
 
-###### Volcano Plot
+### Volcano Plot
 
 ```{r vol}
 vol <- list()
@@ -411,13 +453,16 @@ for (i in 1:length(fc)) {
 
   # save to directory
   ggsave(paste0("vol_", fc[i], ".png"),
-    plot = vol[[x]],
-    path = here::here("2_plots/de/"),
-
-    ### PUBLISH
-    width = 58,
-    height = 70,
-    units = "mm"
+         plot = vol[[x]] + pub + theme(
+           legend.position = "bottom",
+           legend.box.margin = margin(-10, 0, 0, 0),
+           legend.key.size = unit(0, "lines")
+         ),
+         path = here::here("2_plots/de/"),
+         width = 250,
+         height = 166,
+         units = "mm",
+         dpi = 800
   )
 }
 
@@ -425,7 +470,7 @@ for (i in 1:length(fc)) {
 vol[[1]]
 ```
 
-###### Top Upregulated
+### Top Upregulated
 
 ```{r heatmapSetup}
 # create df with normalised read counts with an additional entrezid column for binding
@@ -444,7 +489,7 @@ anno$`Sample Groups` <- gsub("INT", "Intact", anno$`Sample Groups`)
 rownames(anno) <- colnames(logCPM)
 
 # setting colour of sample group annotation
-anno_colours <- c("#f8766d", "#00bdc4")
+anno_colours <- c("#f8766d", "#a3a500")
 names(anno_colours) <- c("Control", "Intact")
 
 logCPM_up=list()
@@ -452,7 +497,7 @@ logCPM_down=list()
 for (i in 1:length(fc)) {
   x <- fc[i] %>% as.character()
   
-  # filtering top upregulated genes then filter the logCPM values of those genes.
+  # filtering top unregulated genes then filter the logCPM values of those genes.
   upReg <- lmTreat_sig[[x]] %>%
     dplyr::filter(logFC > 0) %>%
     arrange(sort(adj.P.Val, decreasing = F))
@@ -460,7 +505,7 @@ for (i in 1:length(fc)) {
   logCPM_up[[x]] <- logCPM[upReg$gene_name,] %>% as.data.frame()
   
 
-  # filtering top upregulated genes then filter the logCPM values of those genes.
+  # filtering top unregulated genes then filter the logCPM values of those genes.
   downReg <- lmTreat_sig[[x]] %>%
     dplyr::filter(logFC < 0) %>%
     arrange(sort(adj.P.Val, decreasing = F))
@@ -472,6 +517,13 @@ for (i in 1:length(fc)) {
 
 ```{r heatUp, fig.height=10, fig.width=8}
 heat_up=list()
+
+my_palette <- colorRampPalette(c(
+  rgb(32,121,226, maxColorValue = 255),
+  # rgb(144,203,180, maxColorValue = 255), 
+  rgb(254,248,239, maxColorValue = 255), 
+  # rgb(251,192,52, maxColorValue = 255), 
+  rgb(226,46,45, maxColorValue = 255)))(n = 201)
 
 for (i in 1:length(fc)) {
   x <- fc[i] %>% as.character()
@@ -497,7 +549,7 @@ for (i in 1:length(fc)) {
       cutree_cols = 2,
       cutree_rows = 1,
       border_color = NA,
-      color = viridis_pal(option = "viridis")(300),
+      color = my_palette,
       scale = "row",
       annotation_col = anno,
       annotation_colors = list("Sample Groups" = anno_colours),
@@ -511,20 +563,18 @@ for (i in 1:length(fc)) {
   
 # save to directory
   ggsave(paste0("heat_up_", fc[i], ".svg"),
-    plot = heat_up[[x]],
-    path = here::here("2_plots/de/"),
-
-    ### PUBLISH
-    width = 112,
-    height = 110,
-    units = "mm"
+         plot = heat_up[[x]],
+         path = here::here("2_plots/de/"),
+         width = 166,
+         height = 200,
+         units = "mm"
   )
 }
 
 heat_up[[1]] 
 ```
 
-###### Top Downregulated
+### Top Downregulated
 
 ```{r heatDown, fig.height=10, fig.width=8}
 heat_down=list()
@@ -552,7 +602,7 @@ for (i in 1:length(fc)) {
       cutree_cols = 2,
       cutree_rows = 1,
       border_color = NA,
-      color = viridis_pal(option = "viridis")(300),
+      color = my_palette,
       scale = "row",
       annotation_col = anno,
       annotation_colors = list("Sample Groups" = anno_colours),
@@ -565,14 +615,12 @@ for (i in 1:length(fc)) {
   ) %>% as.ggplot()
   
 # save to directory
-  ggsave(paste0("heat_down_", fc[i], ".svg"),
-    plot = heat_down[[x]],
-    path = here::here("2_plots/de/"),
-
-    ### PUBLISH
-    width = 112,
-    height = 110,
-    units = "mm"
+   ggsave(paste0("heat_down_", fc[i], ".svg"),
+         plot = heat_down[[x]],
+         path = here::here("2_plots/de/"),
+         width = 166,
+         height = 200,
+         units = "mm"
   )
 }
 
@@ -580,20 +628,11 @@ heat_down[[1]]
 ```
 
 
-#### TREAT FC=`r fc[2]`
 
-```{r, results='asis'}
-assign(paste0("lmTreat_fc", fc[2], "_voom2_fdr0.05"),
-       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "fdr", p.val = 0.05))
-assign(paste0("lmTreat_fc", fc[2], "_voom2_pval0.01"),
-       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "none", p.val = 0.01))
-assign(paste0("lmTreat_fc", fc[2], "_voom2_pval0.05"),
-       limmaFit_treat(x = voom2, fc = fc[2], adjMethod = "none", p.val = 0.05))
-```
 
-##### INT vs CONT Visualisation {.tabset}
+## TREAT FC= `r fc[2]` {.tabset}
 
-###### P Value histogram
+### P Value histogram
 
 ```{r}
 plot(x = lmTreat_hist[[2]],
@@ -603,25 +642,25 @@ plot(x = lmTreat_hist[[2]],
 invisible(dev.print(svg, here::here(paste0("2_plots/de/pval_", fc[2], ".svg"))))
 ```
 
-###### MA Plot
+### MA Plot
 
 ```{r}
 ma[[2]]
 ```
 
-###### Volcano Plot
+### Volcano Plot
 
 ```{r}
 vol[[2]]
 ```
 
-###### Top Upregulated
+### Top Upregulated
 
 ```{r, fig.height=10, fig.width=8}
 heat_up[[2]] 
 ```
 
-###### Top Downregulated
+### Top Downregulated
 
 ```{r, fig.height=10, fig.width=8}
 heat_down[[2]]
@@ -629,20 +668,11 @@ heat_down[[2]]
 
 
 
-#### TREAT FC=`r fc[3]`
 
-```{r, results='asis'}
-assign(paste0("lmTreat_fc", fc[3], "_voom2_fdr0.05"),
-       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "fdr", p.val = 0.05))
-assign(paste0("lmTreat_fc", fc[3], "_voom2_pval0.01"),
-       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "none", p.val = 0.01))
-assign(paste0("lmTreat_fc", fc[3], "_voom2_pval0.05"),
-       limmaFit_treat(x = voom2, fc = fc[3], adjMethod = "none", p.val = 0.05))
-```
 
-##### INT vs CONT Visualisation {.tabset}
+## TREAT FC= `r fc[3]` {.tabset}
 
-###### P Value histogram
+### P Value histogram
 
 ```{r}
 plot(x = lmTreat_hist[[3]],
@@ -652,25 +682,25 @@ plot(x = lmTreat_hist[[3]],
 invisible(dev.print(svg, here::here(paste0("2_plots/de/pval_", fc[3], ".svg"))))
 ```
 
-###### MA Plot
+### MA Plot
 
 ```{r}
 ma[[3]]
 ```
 
-###### Volcano Plot
+### Volcano Plot
 
 ```{r}
 vol[[3]]
 ```
 
-###### Top Upregulated
+### Top Upregulated
 
 ```{r, fig.height=10, fig.width=8}
 heat_up[[3]] 
 ```
 
-###### Top Downregulated
+### Top Downregulated
 
 ```{r, fig.height=10, fig.width=8}
 heat_down[[3]]
@@ -679,14 +709,17 @@ heat_down[[3]]
 
 
 
-## Export Data
+
+
+# Export
 
 ```{r exportData}
 # export toptable for Dexter rewrite
+
 ## First paper (suitable # of DE genes for INT vs CONT)
 writexl::write_xlsx(x = lmTreat_fc1.5_voom2_fdr0.05, here::here("3_output/lmTreat_fc1.5_voom2_all_fdr.xlsx"))
 ## Second paper (suitable # of DE genes for INT vs SVS_VAS, SVX vs SVX_VAS, and VAS vs SVX_VAS)
-writexl::write_xlsx(x = lm_voom2_pval0.01, here::here("3_output/lm_voom2_all.xlsx"))
+# writexl::write_xlsx(x = lm_voom2_pval0.01, here::here("3_output/lm_voom2_all.xlsx"))
 
 # export excel spreadsheet
 writexl::write_xlsx(x = lmTreat_all, here::here("3_output/lmTreat_all.xlsx"))
@@ -695,8 +728,6 @@ writexl::write_xlsx(x = lmTreat_sig, here::here("3_output/lmTreat_sig.xlsx"))
 # save RDS object for enrichment analysis
 saveRDS(object = fc, file = here::here("0_data/RDS_objects/fc.rds"))
 saveRDS(object = lfc, file = here::here("0_data/RDS_objects/lfc.rds"))
-saveRDS(object = full_design, file = here::here("0_data/RDS_objects/full_design.rds"))
-saveRDS(object = contrast, file = here::here("0_data/RDS_objects/contrast.rds"))
 saveRDS(object = lmTreat, file = here::here("0_data/RDS_objects/lmTreat.rds"))
 saveRDS(object = lmTreat_all, file = here::here("0_data/RDS_objects/lmTreat_all.rds"))
 saveRDS(object = lmTreat_sig, file = here::here("0_data/RDS_objects/lmTreat_sig.rds"))

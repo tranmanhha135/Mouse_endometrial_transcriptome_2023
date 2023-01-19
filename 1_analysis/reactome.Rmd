@@ -39,20 +39,8 @@ library(ggbiplot)
 library(ggrepel)
 theme_set(theme_light())
 
-# theme_update(
-#   plot.title = element_text(color = "gray20", size = 7, angle = 0, hjust = 0.5, vjust = .5, face = "bold"),
-#   plot.subtitle = element_text(color = "gray20", size = 6, angle = 0, hjust = 0, vjust = .5, face = "plain"),
-# 
-#   legend.key.size = unit(3, 'mm'),
-#   legend.title = element_text(color = "gray20", size = 5, angle = 0, hjust = 0.5, vjust = .5, face = "plain"),
-#   legend.text = element_text(color = "gray20", size = 5, angle = 0, hjust = 0, vjust = .5, face = "plain"),
-#   legend.box.margin = margin (0, -10, 0, -12),
-# 
-#   axis.text.x = element_text(color = "gray20", size = 5, angle = 0, hjust = .5, vjust = 0, face = "plain"),
-#   axis.title.x = element_text(color = "gray20", size = 6, angle = 0, hjust = .5, vjust = 0, face = "plain"),
-# 
-#   axis.text.y = element_text(color = "gray20", size = 5, angle = 0, hjust = 1, vjust = 0.5, face = "plain"),
-#   axis.title.y = element_text(color = "gray20", size = 6, angle = 90, hjust = .5, vjust = .5, face = "plain"))
+theme_set(theme_minimal())
+pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
 
 # Bioconductor packages:
 library(edgeR)
@@ -129,13 +117,13 @@ for (i in 1:length(fc)) {
   react_dot[[x]] <- ggplot(reactome_sig[[x]][1:15, ]) +
   geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
   scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
-  scale_size(range = c(.3,3)) +
+  scale_size(range = c(.5,5)) +
   ggtitle("Reactome Pathways") +
   ylab(label = "") +
   xlab(label = "Gene Ratio") +
   labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
   ggsave(filename = paste0("react_dot_", x, ".svg"), plot = react_dot[[x]], path = here::here("2_plots/reactome/"), 
-       width = 88, height = 95, units = "mm")
+       width = 250, height = 166, units = "mm")
   
   upset[[x]] <- upsetplot(x = reactome[[x]], 10)
   ggsave(filename = paste0("upset_react_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/reactome/"))

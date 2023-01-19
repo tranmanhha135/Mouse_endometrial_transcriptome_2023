@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 Prior to this analysis, reads were:
 1. Trimmed using `AdapterRemoval`
 2. Aligned to **GRCm38/mm10** using `STAR`
-3. Reads quantification peforemd with `featureCounts`
+3. Reads quantification performed with `featureCounts`
 
 **Transcript QC, alignment, and quantification were performed by Dr Jimmy Breen**
 
@@ -41,20 +41,17 @@ library(cowplot)
 library(corrplot)
 
 # Set ggplot theme
-theme_set(theme_light())
+theme_set(theme_minimal())
 
-# theme_update(
-#   plot.title = element_text(color = "gray20", size = 7, angle = 0, hjust = 0.5, vjust = .5, face = "bold"),
-#   plot.subtitle = element_text(color = "gray20", size = 6, angle = 0, hjust = 0, vjust = .5, face = "plain"),
-# 
-#   legend.title = element_text(color = "gray20", size = 5, angle = 0, hjust = 0.5, vjust = .5, face = "plain"),
-#   legend.text = element_text(color = "gray20", size = 5, angle = 0, hjust = 0, vjust = .5, face = "plain"),
-# 
-#   axis.text.x = element_text(color = "gray20", size = 5, angle = 0, hjust = .5, vjust = 0, face = "plain"),
-#   axis.title.x = element_text(color = "gray20", size = 6, angle = 0, hjust = .5, vjust = 0, face = "plain"),
-# 
-#   axis.text.y = element_text(color = "gray20", size = 5, angle = 0, hjust = 1, vjust = 0.5, face = "plain"),
-#   axis.title.y = element_text(color = "gray20", size = 6, angle = 90, hjust = .5, vjust = .5, face = "plain"))
+pub <- theme_update(
+  plot.title = element_text(color = "gray20", size = 7, angle = 0, hjust = 0.5, vjust = .5, face = "bold"),
+  plot.subtitle = element_text(color = "gray20", size = 6, angle = 0, hjust = 0, vjust = .5, face = "plain"),
+  legend.title = element_text(color = "gray20", size = 5, angle = 0, hjust = 0.5, vjust = .5, face = "plain"),
+  legend.text = element_text(color = "gray20", size = 5, angle = 0, hjust = 0, vjust = .5, face = "plain"),
+  axis.text.x = element_text(color = "gray20", size = 5, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+  axis.title.x = element_text(color = "gray20", size = 6, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+  axis.text.y = element_text(color = "gray20", size = 5, angle = 0, hjust = 1, vjust = 0.5, face = "plain"),
+  axis.title.y = element_text(color = "gray20", size = 6, angle = 90, hjust = .5, vjust = .5, face = "plain"))
 
 # Bioconductor packages:
 library(AnnotationHub)
@@ -134,7 +131,7 @@ ah %>%
 #viewing web service for annotation hub 
 #d <- display(ah)
 
-# Annotation hub html site was used to identify 'code' for the lastest mouse genome from Ensembl
+# Annotation hub html site was used to identify 'code' for the latest mouse genome from Ensembl
 ensDb <- ah[["AH95775"]]
 
 genes <- genes(ensDb) %>% 
@@ -171,7 +168,7 @@ Digital Gene Expression List (DGElist) is a R object class often used for differ
 
 The DGEList object holds the three dataset that have imported/created, including `rawCount` data and `sampleMetadata` and `geneMetadata` metadata.
 
-To further save time and memory, genes that were not expressed acrossed all samples (i.e., `0` count across all columns) are all removed
+To further save time and memory, genes that were not expressed across all samples (i.e., `0` count across all columns) are all removed
 
 ```{r createDGElist}
 #Create DGElist with rawCOunt and gene data. Remove all genes with 0 expression in all treatment groups
@@ -196,10 +193,10 @@ Pre-processing steps increased the power of the downstream DGE analysis by elimi
 
 ## Checking Library Size
 
-A simple pre-processing/QC step is checking the quality of library size (total number of mapped and quantified reads) for each treatment. This enable identification of potentially mis-labeled or outlying samples. This is often visualised through `ggplot`.
+A simple pre-processing/QC step is checking the quality of library size (total number of mapped and quantified reads) for each treatment. This enable identification of potentially mis-labelled or outlying samples. This is often visualised through `ggplot`.
 
 ```{r libraryChecks, fig.cap = "Sample library size. Dash line represent average library size"}
-dge$samples %>% 
+libSize <- dge$samples %>% 
   
   #plot the sample with the lib.size in x and sample_group in y, colour fill for each sample_group
   ggplot(aes(
@@ -227,11 +224,14 @@ dge$samples %>%
   #PUBLISHING
   theme(legend.position = "none")
 
+libSize
+
 #save the plot to .svg
 ggsave(here::here("2_plots/qc/library_size.svg"),
+       plot = libSize + pub,
        #PUBLISHING
-       width = 88,
-       height = 70,
+       width = 250,
+       height = 166,
        units = "mm")
 ```
 
@@ -248,10 +248,10 @@ beforeFiltering <- dge %>%
   #transform the raw count to logCPM 
   edgeR::cpm(log = TRUE) %>% 
 
-  #melting (reorganising) the transformed logCPM data with respect to the id variable (i.e., the row and column names). Very similar to pivot_long fucntion
+  #melting (reorganising) the transformed logCPM data with respect to the id variable (i.e., the row and column names). Very similar to pivot_long function
   melt %>%
 
-  #retain all rows where the logCPM (value) is finite. ALl of them in this case are finite
+  #retain all rows where the logCPM (value) is finite. All of them in this case are finite
   dplyr::filter(is.finite(value)) %>%
 
   #plot the long formate logCPM counts in a density plot with x the logCPM and colour by the sample_id
@@ -274,14 +274,17 @@ beforeFiltering <- dge %>%
 
 #save plot
 ggsave("counts_before_filtering.svg",
-       plot = beforeFiltering,
+       plot = beforeFiltering + pub,
+       width = 250,
+       height = 166,
+       units = "mm",
        path = here::here("2_plots/qc/"))
 
 ```
 
 Ideally, the filtering the low-expressed genes should remove the large peak with `logCPM < 0`, i.e., remove any genes which have less than one count per million.
 
-A common guideline is to keep all genes that have > 1-2 cpm in the smallest group on a treatment. In this case, the smallest group is 3 as each treatment condition had three replicates. However, due to the high variance of some groups, the filtering is increased to keep genes that are are **more than 3 CPM in atleast 3 samples**. Mathematically this would be identifying genes (rows) with CPM `> 3`; and identifying total row sum that is `>= 3`.
+A common guideline is to keep all genes that have > 1-2 cpm in the smallest group on a treatment. In this case, the smallest group is 3 as each treatment condition had three replicates. However, due to the high variance of some groups, the filtering is increased to keep genes that are are **more than 3 CPM in at least 3 samples**. Mathematically this would be identifying genes (rows) with CPM `> 3`; and identifying total row sum that is `>= 3`.
 
 ```{r afterFiltering, fig.cap="Before and after removal of lowly expressed genes"}
 #the genes kept have >2 CPM for at least 3 samples
@@ -294,10 +297,10 @@ afterFiltering <- dge %>%
   #for var1 (gene names) extract only the keptGenes and discard all other genes in the logCPM data
   magrittr::extract(keptGenes,) %>% 
 
-  #melting (reorganising) the transformed logCPM data with respect to the id variable (i.e., the row and column names). Very similar to pivot_long fucntion
+  #melting (reorganising) the transformed logCPM data with respect to the id variable (i.e., the row and column names). Very similar to pivot_long function
   melt %>% 
   
-  #retain all rows where the logCPM (value) is finite. ALl of them in this case are finite
+  #retain all rows where the logCPM (value) is finite. All of them in this case are finite
   dplyr::filter(is.finite(value)) %>% 
 
   #ggplot
@@ -319,21 +322,24 @@ afterFiltering <- dge %>%
   )
 
 #save plot
-ggsave("counts_after_filtering_2_3.svg",
-       plot = afterFiltering,
+ggsave("counts_after_filtering_3_3.svg",
+       plot = afterFiltering + pub,
+       width = 250,
+       height = 166,
+       units = "mm",
        path = here::here("2_plots/qc/"))
 
 #display plot
 # afterFiltering
 
 #display plot side by side
-cowplot::plot_grid(beforeFiltering, afterFiltering)
-ggsave(filename = "counts_before_after_filtering_2_3.svg",
+cowplot::plot_grid(beforeFiltering + pub, afterFiltering + pub)
+ggsave(filename = "counts_before_after_filtering_3_3.svg",
         path = here::here("2_plots/qc/"),
 
-       #PUBLISHING
-       width = 180,
-       height = 80,
+       # PUBLISHING
+       width = 320,
+       height = 180,
        units = "mm")
 ```
 
@@ -439,6 +445,13 @@ c <- pca_analysis$x %>%
 
 c
 
+ggsave("PCA_IntvsCont.svg",
+       plot = c + pub,
+       path = here::here("2_plots/qc/"),
+       width = 150,
+       height = 100,
+       units = "mm")
+
 # pca_plot_2 <- plot_grid(
 #     plot_grid(
 #         a + theme(legend.position = "none"), 
@@ -495,5 +508,7 @@ corr_plot <- pca_analysis$x %>%
 ```{r savingDGElist}
 # Save DGElist object into the data/R directory 
 saveRDS(object = dge, file = here::here("0_data/RDS_objects/dge.rds"))
+saveRDS(object = pub, file = here::here("0_data/RDS_objects/pub.rds"))
+
 # saveRDS(object = gg_publish, file = here::here("0_data/RDS_objects/gg_publish.rds"))
 ```

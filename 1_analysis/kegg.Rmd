@@ -94,7 +94,10 @@ for (i in 1:length(fc)) {
     pvalueCutoff = 0.05,
     pAdjustMethod = "none"
   )
-  # save to csv
+
+  enrichKEGG[[x]] <- enrichKEGG[[x]] %>% 
+    clusterProfiler::setReadable(OrgDb = org.Mm.eg.db, keyType = "ENTREZID")
+   
   enrichKEGG_all[[x]] <- enrichKEGG[[x]]@result
 
   # filter the significant and print top 30
@@ -105,7 +108,7 @@ for (i in 1:length(fc)) {
       logPval = -log(pvalue, 10),
       GeneRatio = Count / as.numeric(Total)
     ) %>%
-    dplyr::select(c("Count", "GeneRatio", "pvalue", "logPval", "p.adjust", "qvalue", "Description", "geneID"))
+    dplyr::select(c("Description", "GeneRatio", "pvalue", "logPval", "p.adjust", "qvalue", "geneID", "Count"))
   
   # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
   enrichKEGG_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
@@ -128,8 +131,8 @@ p=1
 ### Top 20
 
 ```{r}
-enrichKEGG_sig[[p]][1:20, ] %>%
-  kable(caption = "Top 20 enriched KEGG pathways") %>%
+enrichKEGG_sig[[p]] %>%
+  kable(caption = "Significantly enriched KEGG pathways") %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
 ```
@@ -146,16 +149,17 @@ for (i in 1:length(fc)) {
   kegg_dot[[x]] <- ggplot(enrichKEGG_sig[[x]][1:15, ]) +
     geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logPval, size = Count)) +
     scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
-    scale_size(range = c(.3,3)) +
+    scale_size(range = c(1.5,5)) +
     ggtitle("KEGG Pathways") +
     ylab(label = "") +
     xlab(label = "Gene Ratio") +
     labs(color = expression("-log"[10] * "Pvalue"), size = "Gene Counts")
-  ggsave(filename = paste0("kegg_dot_", fc[i], ".svg"), plot = kegg_dot[[x]], path = here::here("2_plots/kegg/"), 
-         width = 88, height = 95, units = "mm")
+  ggsave(filename = paste0("kegg_dot_", fc[i], ".svg"), plot = kegg_dot[[x]] + pub, path = here::here("2_plots/kegg/"), 
+         width = 250, height = 166, units = "mm")
   
   upset[[x]] <- upsetplot(x = enrichKEGG[[x]], 10)
-  ggsave(filename = paste0("upset_kegg_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/kegg/"))
+  ggsave(filename = paste0("upset_kegg_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/kegg/"), 
+         width = 250, height = 166, units = "mm")
 }
 
 kegg_dot[[p]]
@@ -165,6 +169,78 @@ kegg_dot[[p]]
 
 ```{r upset}
 upset[[p]]
+```
+
+
+## FC=`r fc[2]` {.tabset}
+
+```{r}
+p=p+1
+```
+
+### Top 20
+
+```{r}
+enrichKEGG_sig[[p]] %>%
+  kable(caption = "Significantly enriched KEGG pathways") %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+### Dot plot
+
+```{r}
+kegg_dot[[p]]
+```
+
+### Upset Plot
+
+```{r}
+upset[[p]]
+```
+
+
+
+
+
+## FC=`r fc[3]` {.tabset}
+
+```{r}
+p=p+1
+```
+
+### Top 20
+
+```{r}
+enrichKEGG_sig[[p]] %>%
+  kable(caption = "Significantly enriched KEGG pathways") %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
+```
+
+### Dot plot
+
+```{r}
+kegg_dot[[p]]
+```
+
+### Upset Plot
+
+```{r}
+upset[[p]]
+```
+
+
+
+
+
+
+# Pathway specific heatmaps
+
+## FC=`r fc[1]` {.tabset}
+
+```{r}
+p=1
 ```
 
 ### `r kegg_pathway[[1]]$PATHWAY_MAP`{.tabset}
@@ -188,8 +264,6 @@ colnames(logCPM) <- c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact
 # complete_pathway <- focal_adhesion[seq(1, nrow(focal_adhesion), 2),]
 # match_complete_pathway <- logCPM[,"entrezid"] %in% complete_pathway
 
-# my_palette <- colorRampPalette(c("dodgerblue3", "white", "firebrick3"))(n = 201)
-my_palette <- viridis_pal(option = "viridis")(300)
 
 # df for heatmap annotation of sample group
 anno <- as.factor(dge$samples$group) %>% as.data.frame() 
@@ -205,7 +279,7 @@ rownames(anno) <- colnames(logCPM[, 1:7])
 # anno_colours <- c("#66C2A5", "#FC8D62")
 
 # new sample colours
-anno_colours <- c("#f8766d", "#00bdc4")
+anno_colours <- c("#f8766d", "#a3a500")
 
 names(anno_colours) <- c("Control", "Intact")
 ```
@@ -215,9 +289,16 @@ matrix <- list()
 display_matrix <- list()
 kegg_heat=list()
 
+my_palette <- colorRampPalette(c(
+  rgb(32,121,226, maxColorValue = 255),
+  # rgb(144,203,180, maxColorValue = 255), 
+  rgb(254,248,239, maxColorValue = 255), 
+  # rgb(251,192,52, maxColorValue = 255), 
+  rgb(226,46,45, maxColorValue = 255)))(n = 201)
+
 for (i in 1:length(fc)) {
   x <- fc[i] %>% as.character()
-
+  
   for (j in 1:length(kegg_id)) {
     y <- kegg_pathway[[j]]$PATHWAY_MAP
     
@@ -225,11 +306,14 @@ for (i in 1:length(fc)) {
     partial <- partial[kegg_id[j], "geneID"] %>% as.data.frame()
     partial <- separate_rows(partial, ., sep = "/")
     colnames(partial) <- "entrezid"
+    
 
     # heatmap matrix
     match <- logCPM[, "entrezid"] %in% partial$entrezid
     matrix[[x]][[y]] <- logCPM[match, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] %>%
       as.data.frame()
+  }
+}
     
     # changing the colname to  numeric for some reason, cant remember
 matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] <- as.numeric(as.character(unlist(matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")])))
@@ -278,8 +362,8 @@ matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 
     ggsave(filename = paste0("heat_", x, "_", y, ".svg"), 
            plot = kegg_heat[[x]][[y]], 
            path = here::here("2_plots/kegg/"),
-           width = 58,
-           height = 110,
+           width = 166,
+           height = 250,
            units = "mm")}
 }
 ```
@@ -465,6 +549,7 @@ display_matrix[[p]][[q]] %>%
 ```{r}
 
 ```
+
 
 
 ## FC=`r fc[2]` {.tabset}
@@ -849,6 +934,8 @@ display_matrix[[p]][[q]] %>%
 ```{r}
 
 ```
+
+
 
 # Export Data
 
