@@ -110,15 +110,15 @@ for (i in 1:length(fc)) {
     ) %>%
     dplyr::select(c("Description", "GeneRatio", "pvalue", "logPval", "p.adjust", "qvalue", "geneID", "Count"))
   
-  # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
-  enrichKEGG_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
-                                       replacement = "\\1\n", 
-                                       x = enrichKEGG_sig[[x]]$Description)
-  
-  # remove the additional newline at the end of the string
-  enrichKEGG_sig[[x]]$Description <- sub(pattern = "\n$", 
-                                       replacement = "", 
-                                       x = enrichKEGG_sig[[x]]$Description)
+  # # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
+  # enrichKEGG_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
+  #                                      replacement = "\\1\n", 
+  #                                      x = enrichKEGG_sig[[x]]$Description)
+  # 
+  # # remove the additional newline at the end of the string
+  # enrichKEGG_sig[[x]]$Description <- sub(pattern = "\n$", 
+  #                                      replacement = "", 
+  #                                      x = enrichKEGG_sig[[x]]$Description)
 }
 ```
 
@@ -150,12 +150,12 @@ for (i in 1:length(fc)) {
     geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logPval, size = Count)) +
     scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
     scale_size(range = c(1.5,5)) +
-    # ggtitle("KEGG Pathways") +
+    ggtitle("KEGG Pathways") +
     ylab(label = "") +
     xlab(label = "Gene Ratio") +
     labs(color = expression("-log"[10] * "Pvalue"), size = "Gene Counts")
   ggsave(filename = paste0("kegg_dot_", fc[i], ".svg"), plot = kegg_dot[[x]] + pub, path = here::here("2_plots/kegg/"), 
-         width = 170, height = 130, units = "mm")
+         width = 250, height = 130, units = "mm")
   
   upset[[x]] <- upsetplot(x = enrichKEGG[[x]], 10)
   ggsave(filename = paste0("upset_kegg_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/kegg/"), 
@@ -409,8 +409,9 @@ for (i in 1:length(fc)) {
 }
 
 # display the pathview graph. doesnt work when knitting!!!!
-# knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
+knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
+![please work](C:\Users\tranm\Documents\SRB_2022\2_plots\kegg\pv_1.5_mmu04060.png)
 
 ### `r kegg_pathway[[2]]$PATHWAY_MAP`{.tabset}
 
@@ -436,7 +437,8 @@ display_matrix[[p]][[q]] %>%
 #### Pathview
 
 ```{r}
-
+# display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
 
 ### `r kegg_pathway[[3]]$PATHWAY_MAP`{.tabset}
@@ -463,7 +465,8 @@ display_matrix[[p]][[q]] %>%
 #### Pathview
 
 ```{r}
-
+# display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
 
 ### `r kegg_pathway[[4]]$PATHWAY_MAP`{.tabset}
@@ -490,7 +493,8 @@ display_matrix[[p]][[q]] %>%
 #### Pathview
 
 ```{r}
-
+# display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
 
 ### `r kegg_pathway[[5]]$PATHWAY_MAP`{.tabset}
@@ -517,7 +521,8 @@ display_matrix[[p]][[q]] %>%
 #### Pathview
 
 ```{r}
-
+# display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
 
 ### `r kegg_pathway[[6]]$PATHWAY_MAP`{.tabset}
@@ -544,7 +549,8 @@ display_matrix[[p]][[q]] %>%
 #### Pathview
 
 ```{r}
-
+# display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
 
 
@@ -580,7 +586,8 @@ display_matrix[[p]][[q]] %>%
 #### Pathview
 
 ```{r}
-
+# display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
 
 
@@ -608,7 +615,8 @@ display_matrix[[p]][[q]] %>%
 #### Pathview
 
 ```{r}
-
+# display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
 
 ### `r kegg_pathway[[3]]$PATHWAY_MAP`{.tabset}

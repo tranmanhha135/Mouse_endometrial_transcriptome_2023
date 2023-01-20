@@ -397,7 +397,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -408,8 +408,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -422,9 +422,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>SRB_2022/1_analysis/</code> <span
@@ -447,18 +447,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -549,15 +552,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree7f6bab239f8f9682dab208d1c314dd72dbbd21bctargetblank7f6bab2a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree6e0f643b841eefbc817c4063fa0a5d4a16982782targetblank6e0f643a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tranmanhha135/SRB_2022/tree/7f6bab239f8f9682dab208d1c314dd72dbbd21bc" target="_blank">7f6bab2</a>
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/6e0f643b841eefbc817c4063fa0a5d4a16982782" target="_blank">6e0f643</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree7f6bab239f8f9682dab208d1c314dd72dbbd21bctargetblank7f6bab2a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree6e0f643b841eefbc817c4063fa0a5d4a16982782targetblank6e0f643a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -567,7 +570,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tranmanhha135/SRB_2022/tree/7f6bab239f8f9682dab208d1c314dd72dbbd21bc" target="_blank">7f6bab2</a>.
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/6e0f643b841eefbc817c4063fa0a5d4a16982782" target="_blank">6e0f643</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -587,23 +590,21 @@ Ignored files:
 
 Untracked files:
     Untracked:  .gitignore
+    Untracked:  test plz delete me.Rmd
+    Untracked:  test-plz-delete-me.html
 
 Unstaged changes:
     Modified:   0_data/RDS_objects/enrichGO_sig.rds
-    Modified:   0_data/RDS_objects/pub.rds
-    Deleted:    1_analysis/figure/kegg.Rmd/kegg_dot-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/unnamed-chunk-10-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/unnamed-chunk-11-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/unnamed-chunk-6-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/unnamed-chunk-7-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/upset-1.png
+    Modified:   1_analysis/_site.yml
+    Modified:   1_analysis/deAnalysis.Rmd
+    Modified:   1_analysis/go.Rmd
+    Modified:   1_analysis/index.Rmd
+    Modified:   1_analysis/kegg.Rmd
+    Modified:   1_analysis/reactome.Rmd
+    Modified:   1_analysis/setUp.Rmd
     Modified:   2_plots/de/ma_1.05.png
     Modified:   2_plots/de/ma_1.1.png
     Modified:   2_plots/de/ma_1.5.png
-    Modified:   2_plots/de/pval_1.05.svg
-    Modified:   2_plots/de/vol_1.05.png
-    Modified:   2_plots/de/vol_1.1.png
-    Modified:   2_plots/de/vol_1.5.png
     Modified:   2_plots/go/bp_dot_1.05.svg
     Modified:   2_plots/go/bp_dot_1.1.svg
     Modified:   2_plots/go/bp_dot_1.5.svg
@@ -613,49 +614,33 @@ Unstaged changes:
     Modified:   2_plots/go/mf_dot_1.05.svg
     Modified:   2_plots/go/mf_dot_1.1.svg
     Modified:   2_plots/go/mf_dot_1.5.svg
-    Modified:   2_plots/ipa/Cardiovascular System.svg
-    Modified:   2_plots/ipa/Cell-To-Cell Signaling.svg
-    Modified:   2_plots/ipa/Cellular Movement.svg
-    Modified:   2_plots/ipa/pathways.svg
-    Modified:   2_plots/kegg/heat_1.05_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.05_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.05_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.05_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.05_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.05_Vascular smooth muscle contraction.svg
-    Modified:   2_plots/kegg/heat_1.1_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.1_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.1_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.1_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.1_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.1_Vascular smooth muscle contraction.svg
-    Modified:   2_plots/kegg/heat_1.5_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.5_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.5_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.5_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.5_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.5_Vascular smooth muscle contraction.svg
+    Deleted:    2_plots/ipa/funct_cat_alluvial.svg
+    Deleted:    2_plots/ipa/up_cat_alluvial.svg
+    Deleted:    2_plots/ipa/upstream_funct_alluvial.svg
     Modified:   2_plots/kegg/kegg_dot_1.05.svg
     Modified:   2_plots/kegg/kegg_dot_1.1.svg
     Modified:   2_plots/kegg/kegg_dot_1.5.svg
-    Modified:   2_plots/kegg/upset_kegg_1.05.svg
-    Modified:   2_plots/kegg/upset_kegg_1.1.svg
-    Modified:   2_plots/kegg/upset_kegg_1.5.svg
-    Modified:   2_plots/qc/PCA_IntvsCont.svg
+    Deleted:    2_plots/reactome/combine_GO.svg
     Modified:   2_plots/reactome/react_dot_1.05.svg
     Modified:   2_plots/reactome/react_dot_1.1.svg
     Modified:   2_plots/reactome/react_dot_1.5.svg
+    Deleted:    2_plots/reactome/react_dot_INT vs CONT.svg
+    Deleted:    2_plots/reactome/react_dot_INT vs SVX_VAS.svg
+    Deleted:    2_plots/reactome/react_dot_SVX vs SVX_VAS.svg
+    Deleted:    2_plots/reactome/react_dot_VAS vs SVX_VAS.svg
     Modified:   2_plots/reactome/upset_react_1.05.svg
     Modified:   2_plots/reactome/upset_react_1.1.svg
     Modified:   2_plots/reactome/upset_react_1.5.svg
+    Deleted:    2_plots/reactome/upset_react_INT vs CONT.svg
+    Deleted:    2_plots/reactome/upset_react_INT vs SVX_VAS.svg
+    Deleted:    2_plots/reactome/upset_react_SVX vs SVX_VAS.svg
+    Deleted:    2_plots/reactome/upset_react_VAS vs SVX_VAS.svg
     Modified:   3_output/enrichGO_sig.xlsx
     Modified:   3_output/enrichKEGG_all.xlsx
     Modified:   3_output/enrichKEGG_sig.xlsx
     Modified:   3_output/lmTreat_all.xlsx
     Modified:   3_output/lmTreat_fc1.5_voom2_all_fdr.xlsx
     Modified:   3_output/lmTreat_sig.xlsx
-    Modified:   3_output/reactome_all.xlsx
-    Modified:   3_output/reactome_sig.xlsx
 
 </code></pre>
 <p>
@@ -700,6 +685,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/691cf3499cc98849bde703fde17b25047c072b71/docs/kegg.html" target="_blank">691cf34</a>
+</td>
+<td>
+Ha Manh Tran
+</td>
+<td>
+2023-01-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -862,15 +864,15 @@ for (i in 1:length(fc)) {
     ) %&gt;%
     dplyr::select(c(&quot;Description&quot;, &quot;GeneRatio&quot;, &quot;pvalue&quot;, &quot;logPval&quot;, &quot;p.adjust&quot;, &quot;qvalue&quot;, &quot;geneID&quot;, &quot;Count&quot;))
   
-  # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
-  enrichKEGG_sig[[x]]$Description &lt;- sub(pattern = &quot;(.{1,35})(?:$| )&quot;, 
-                                       replacement = &quot;\\1\n&quot;, 
-                                       x = enrichKEGG_sig[[x]]$Description)
-  
-  # remove the additional newline at the end of the string
-  enrichKEGG_sig[[x]]$Description &lt;- sub(pattern = &quot;\n$&quot;, 
-                                       replacement = &quot;&quot;, 
-                                       x = enrichKEGG_sig[[x]]$Description)
+  # # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
+  # enrichKEGG_sig[[x]]$Description &lt;- sub(pattern = &quot;(.{1,35})(?:$| )&quot;, 
+  #                                      replacement = &quot;\\1\n&quot;, 
+  #                                      x = enrichKEGG_sig[[x]]$Description)
+  # 
+  # # remove the additional newline at the end of the string
+  # enrichKEGG_sig[[x]]$Description &lt;- sub(pattern = &quot;\n$&quot;, 
+  #                                      replacement = &quot;&quot;, 
+  #                                      x = enrichKEGG_sig[[x]]$Description)
 }</code></pre>
 <div id="fc1.05" class="section level2 tabset">
 <h2 class="tabset">FC=1.05</h2>
@@ -2993,12 +2995,12 @@ for (i in 1:length(fc)) {
     geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logPval, size = Count)) +
     scale_color_gradient(low = &quot;dodgerblue3&quot;, high = &quot;firebrick3&quot;, limits = c(0, NA)) +
     scale_size(range = c(1.5,5)) +
-    # ggtitle(&quot;KEGG Pathways&quot;) +
+    ggtitle(&quot;KEGG Pathways&quot;) +
     ylab(label = &quot;&quot;) +
     xlab(label = &quot;Gene Ratio&quot;) +
     labs(color = expression(&quot;-log&quot;[10] * &quot;Pvalue&quot;), size = &quot;Gene Counts&quot;)
   ggsave(filename = paste0(&quot;kegg_dot_&quot;, fc[i], &quot;.svg&quot;), plot = kegg_dot[[x]] + pub, path = here::here(&quot;2_plots/kegg/&quot;), 
-         width = 170, height = 130, units = &quot;mm&quot;)
+         width = 250, height = 130, units = &quot;mm&quot;)
   
   upset[[x]] &lt;- upsetplot(x = enrichKEGG[[x]], 10)
   ggsave(filename = paste0(&quot;upset_kegg_&quot;, fc[i], &quot;.svg&quot;), plot = upset[[x]], path = here::here(&quot;2_plots/kegg/&quot;), 
@@ -5994,7 +5996,11 @@ for (i in 1:length(fc)) {
 <pre><code>[1] &quot;Note: 151 of 1447 unique input IDs unmapped.&quot;</code></pre>
 <pre><code>[1] &quot;Note: 63 of 388 unique input IDs unmapped.&quot;</code></pre>
 <pre class="r"><code># display the pathview graph. doesnt work when knitting!!!!
-# knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+<p><img src="../2_plots/kegg/pv_1.05_mmu04670.png" width="552" style="display: block; margin: auto;" />
+<img
+src="C:/Users/tranm/Documents/SRB_2022/2_plots/kegg/pv_1.5_mmu04060.png"
+alt="please work" /></p>
 </div>
 </div>
 <div id="hematopoietic-cell-lineage" class="section level3 tabset">
@@ -6042,6 +6048,9 @@ Description
 </div>
 <div id="pathview-1" class="section level4">
 <h4>Pathview</h4>
+<pre class="r"><code># display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+<p><img src="../2_plots/kegg/pv_1.05_mmu04640.png" width="650" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="vascular-smooth-muscle-contraction"
@@ -6090,6 +6099,9 @@ Description
 </div>
 <div id="pathview-2" class="section level4">
 <h4>Pathview</h4>
+<pre class="r"><code># display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+<p><img src="../2_plots/kegg/pv_1.05_mmu04270.png" width="455" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="pi3k-akt-signaling-pathway" class="section level3 tabset">
@@ -6137,6 +6149,9 @@ Description
 </div>
 <div id="pathview-3" class="section level4">
 <h4>Pathview</h4>
+<pre class="r"><code># display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+<p><img src="../2_plots/kegg/pv_1.05_mmu04151.png" width="633" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="focal-adhesion" class="section level3 tabset">
@@ -6184,6 +6199,9 @@ Description
 </div>
 <div id="pathview-4" class="section level4">
 <h4>Pathview</h4>
+<pre class="r"><code># display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+<p><img src="../2_plots/kegg/pv_1.05_mmu04510.png" width="606" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="cytokine-cytokine-receptor-interaction"
@@ -6232,6 +6250,9 @@ Description
 </div>
 <div id="pathview-5" class="section level4">
 <h4>Pathview</h4>
+<pre class="r"><code># display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+<p><img src="../2_plots/kegg/pv_1.05_mmu04060.png" width="898" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -6284,6 +6305,9 @@ Description
 </div>
 <div id="pathview-6" class="section level4">
 <h4>Pathview</h4>
+<pre class="r"><code># display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+<p><img src="../2_plots/kegg/pv_1.1_mmu04670.png" width="552" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="hematopoietic-cell-lineage-1" class="section level3 tabset">
@@ -6331,6 +6355,9 @@ Description
 </div>
 <div id="pathview-7" class="section level4">
 <h4>Pathview</h4>
+<pre class="r"><code># display the pathview graph. doesnt work when knitting!!!!
+knitr::include_graphics(here::here(paste0(&quot;2_plots/kegg/pv_&quot;, fc[p], &quot;_&quot;, kegg_id[q], &quot;.png&quot;)))</code></pre>
+<p><img src="../2_plots/kegg/pv_1.1_mmu04640.png" width="650" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="vascular-smooth-muscle-contraction-1"

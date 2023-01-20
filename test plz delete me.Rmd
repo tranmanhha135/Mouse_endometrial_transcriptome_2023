@@ -1,0 +1,13 @@
+---
+title: "test"
+author: "Ha Tran"
+date: "2023-01-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# tabbing {.tabset}
+## tab
+![please work](C:\Users\tranm\Documents\SRB_2022\2_plots\kegg\pv_1.5_mmu04060.png)

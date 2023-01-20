@@ -1,5 +1,5 @@
 ---
-title: "Setting up for DGE analysis (Robertson Lab)"
+title: "Setting up for DGE analysis"
 author: "Ha Tran"
 date: "02/09/2021"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "DE Analysis"
+title: "DGE Analysis"
 author: "Ha Tran"
 date: "22/08/2021"
 output: html_document
@@ -146,7 +146,7 @@ Without FC cutoff and an FDR adj.p.val of 0.05, the `INT vs CONT` comparison sti
 
 Importantly, the FC threshold used in `TREAT` should be chosen as a small value below which results should be ignored, instead of a target fold-change. In general, a modest fold-change of 1.1 - 1.5 is recommended. However, it is more important to select a fold-change cutoff that generates a sufficiently small list of DE genes.
 
-A fold-change value of `1.5` and FDR\<0.05, generated a sufficiently small number of DE genes for the INT vs CONT comparison. This should be sufficient for functional enrichment analysis **(TAB: TREAT FC=1.5, first table)**.
+A fold-change value of `1.5` and FDR\<0.05, generated a sufficiently small number of DE genes for the INT vs CONT comparison. This should be sufficient for functional enrichment analysis **(TABLE 11)**.
 
 ```{r fcAndLfc}
 # specifying FC of interest
@@ -324,7 +324,7 @@ for (i in 1:length(fc)) {
     geom_point(aes(colour = Expression),
 
       ### PUBLISH
-      size = 0.3,
+      size = .8,
       # alpha = 0.7,
       show.legend = T
     ) +

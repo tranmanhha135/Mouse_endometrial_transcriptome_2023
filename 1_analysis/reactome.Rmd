@@ -93,7 +93,7 @@ reactome_sig[[x]] <- reactome_all[[x]] %>% dplyr::filter(p.adjust <= 0.05) %>%
     dplyr::select(c("Description", "GeneRatio", "pvalue", "p.adjust", "logFDR", "qvalue", "geneID", "Count"))
 
  # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
-  reactome_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
+  reactome_sig[[x]]$Description <- sub(pattern = "(.{1,55})(?:$| )", 
                                        replacement = "\\1\n", 
                                        x = reactome_sig[[x]]$Description)
   
@@ -119,12 +119,12 @@ for (i in 1:length(fc)) {
   geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
   scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
   scale_size(range = c(1.5,5)) +
-  # ggtitle("Reactome Pathways") +
+  ggtitle("Reactome Pathways") +
   ylab(label = "") +
   xlab(label = "Gene Ratio") +
   labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
   ggsave(filename = paste0("react_dot_", x, ".svg"), plot = react_dot[[x]] + pub, path = here::here("2_plots/reactome/"), 
-       width = 170, height = 130, units = "mm")
+       width = 250, height = 130, units = "mm")
   
   upset[[x]] <- upsetplot(x = reactome[[x]], 9)
   ggsave(filename = paste0("upset_react_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/reactome/"))

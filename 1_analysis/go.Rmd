@@ -114,14 +114,14 @@ for (i in 1:length(fc)) {
     dplyr::select(c("Description", "ontology", "GeneRatio", "pvalue", "p.adjust", "logFDR", "qvalue", "geneID", "Count"))
   
   # at the beginnning of a word (after 35 characters), add a newline. shorten the y axis for dot plot 
-  enrichGO_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
-                                       replacement = "\\1\n", 
-                                       x = enrichGO_sig[[x]]$Description)
+  # enrichGO_sig[[x]]$Description <- sub(pattern = "(.{1,35})(?:$| )", 
+  #                                      replacement = "\\1\n", 
+  #                                      x = enrichGO_sig[[x]]$Description)
   
-  # remove the additional newline at the end of the string
-  enrichGO_sig[[x]]$Description <- sub(pattern = "\n$", 
-                                       replacement = "", 
-                                       x = enrichGO_sig[[x]]$Description)
+  # # remove the additional newline at the end of the string
+  # enrichGO_sig[[x]]$Description <- sub(pattern = "\n$", 
+  #                                      replacement = "", 
+  #                                      x = enrichGO_sig[[x]]$Description)
 }
 ```
 
@@ -152,40 +152,40 @@ for (i in 1:length(fc)) {
   cc <- enrichGO_sig[[x]] %>% dplyr::filter(ontology == "CC")
 
   # bp dot plot, save
-  bp_dot[[x]] <- ggplot(bp[1:10, ]) +
+  bp_dot[[x]] <- ggplot(bp[1:15, ]) +
     geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
     scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
     scale_size(range = c(.5,3)) +
-    # ggtitle("Biological Process") +
+    ggtitle("Biological Process") +
     ylab(label = "") +
     xlab(label = "Gene Ratio") +
     labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
   ggsave(filename = paste0("bp_dot_", fc[i], ".svg"), plot = bp_dot[[x]] + pub, path = here::here("2_plots/go/"), 
-         width = 170, height = 130, units = "mm")
+         width = 200, height = 120, units = "mm")
 
   # mf dot plot, save
-  mf_dot[[x]] <- ggplot(mf[1:10, ]) +
+  mf_dot[[x]] <- ggplot(mf[1:15, ]) +
     geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
     scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
     scale_size(range = c(.5,3)) +
-    # ggtitle("Molecular Function") +
+    ggtitle("Molecular Function") +
     ylab(label = "") +
     xlab(label = "Gene Ratio") +
     labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
   ggsave(filename = paste0("mf_dot_", fc[i], ".svg"), plot = mf_dot[[x]] + pub, path = here::here("2_plots/go/"), 
-         width = 170, height = 130, units = "mm")
+         width = 200, height = 120, units = "mm")
 
   # cc dot plot, save
-  cc_dot[[x]] <- ggplot(cc[1:10, ]) +
+  cc_dot[[x]] <- ggplot(cc[1:15, ]) +
     geom_point(aes(x = GeneRatio, y = reorder(Description, GeneRatio), colour = logFDR, size = Count)) +
     scale_color_gradient(low = "dodgerblue3", high = "firebrick3", limits = c(0, NA)) +
     scale_size(range = c(.5,3)) +
-    # ggtitle("Cellular Components") +
+    ggtitle("Cellular Components") +
     ylab(label = "") +
     xlab(label = "Gene Ratio") +
     labs(color = expression("-log"[10] * "FDR"), size = "Gene Counts")
   ggsave(filename = paste0("cc_dot_", fc[i], ".svg"), plot = cc_dot[[x]] + pub, path = here::here("2_plots/go/"), 
-         width = 170, height = 130, units = "mm")
+         width = 200, height = 120, units = "mm")
   
   upset[[x]] <- upsetplot(x = enrichGO[[x]], 10)
   ggsave(filename = paste0("upset_", fc[i], ".svg"), plot = upset[[x]], path = here::here("2_plots/go/"), width = 250, height = 166, units = "mm")

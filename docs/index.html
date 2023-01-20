@@ -11,7 +11,7 @@
 
 
 
-<title>Introduction</title>
+<title>The endometrial transcriptome transition preceding receptivity to embryo implantation in mice</title>
 
 <script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -384,7 +384,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Introduction</h1>
+<h1 class="title toc-ignore">The endometrial transcriptome transition
+preceding receptivity to embryo implantation in mice</h1>
 
 </div>
 
@@ -392,7 +393,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -403,8 +404,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -417,9 +418,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>SRB_2022/1_analysis/</code> <span
@@ -442,33 +443,36 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree7f6bab239f8f9682dab208d1c314dd72dbbd21bctargetblank7f6bab2a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree6e0f643b841eefbc817c4063fa0a5d4a16982782targetblank6e0f643a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tranmanhha135/SRB_2022/tree/7f6bab239f8f9682dab208d1c314dd72dbbd21bc" target="_blank">7f6bab2</a>
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/6e0f643b841eefbc817c4063fa0a5d4a16982782" target="_blank">6e0f643</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree7f6bab239f8f9682dab208d1c314dd72dbbd21bctargetblank7f6bab2a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree6e0f643b841eefbc817c4063fa0a5d4a16982782targetblank6e0f643a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -478,7 +482,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tranmanhha135/SRB_2022/tree/7f6bab239f8f9682dab208d1c314dd72dbbd21bc" target="_blank">7f6bab2</a>.
+<a href="https://github.com/tranmanhha135/SRB_2022/tree/6e0f643b841eefbc817c4063fa0a5d4a16982782" target="_blank">6e0f643</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -498,23 +502,21 @@ Ignored files:
 
 Untracked files:
     Untracked:  .gitignore
+    Untracked:  test plz delete me.Rmd
+    Untracked:  test-plz-delete-me.html
 
 Unstaged changes:
     Modified:   0_data/RDS_objects/enrichGO_sig.rds
-    Modified:   0_data/RDS_objects/pub.rds
-    Deleted:    1_analysis/figure/kegg.Rmd/kegg_dot-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/unnamed-chunk-10-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/unnamed-chunk-11-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/unnamed-chunk-6-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/unnamed-chunk-7-1.png
-    Deleted:    1_analysis/figure/kegg.Rmd/upset-1.png
+    Modified:   1_analysis/_site.yml
+    Modified:   1_analysis/deAnalysis.Rmd
+    Modified:   1_analysis/go.Rmd
+    Modified:   1_analysis/index.Rmd
+    Modified:   1_analysis/kegg.Rmd
+    Modified:   1_analysis/reactome.Rmd
+    Modified:   1_analysis/setUp.Rmd
     Modified:   2_plots/de/ma_1.05.png
     Modified:   2_plots/de/ma_1.1.png
     Modified:   2_plots/de/ma_1.5.png
-    Modified:   2_plots/de/pval_1.05.svg
-    Modified:   2_plots/de/vol_1.05.png
-    Modified:   2_plots/de/vol_1.1.png
-    Modified:   2_plots/de/vol_1.5.png
     Modified:   2_plots/go/bp_dot_1.05.svg
     Modified:   2_plots/go/bp_dot_1.1.svg
     Modified:   2_plots/go/bp_dot_1.5.svg
@@ -524,49 +526,33 @@ Unstaged changes:
     Modified:   2_plots/go/mf_dot_1.05.svg
     Modified:   2_plots/go/mf_dot_1.1.svg
     Modified:   2_plots/go/mf_dot_1.5.svg
-    Modified:   2_plots/ipa/Cardiovascular System.svg
-    Modified:   2_plots/ipa/Cell-To-Cell Signaling.svg
-    Modified:   2_plots/ipa/Cellular Movement.svg
-    Modified:   2_plots/ipa/pathways.svg
-    Modified:   2_plots/kegg/heat_1.05_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.05_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.05_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.05_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.05_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.05_Vascular smooth muscle contraction.svg
-    Modified:   2_plots/kegg/heat_1.1_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.1_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.1_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.1_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.1_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.1_Vascular smooth muscle contraction.svg
-    Modified:   2_plots/kegg/heat_1.5_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.5_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.5_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.5_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.5_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.5_Vascular smooth muscle contraction.svg
+    Deleted:    2_plots/ipa/funct_cat_alluvial.svg
+    Deleted:    2_plots/ipa/up_cat_alluvial.svg
+    Deleted:    2_plots/ipa/upstream_funct_alluvial.svg
     Modified:   2_plots/kegg/kegg_dot_1.05.svg
     Modified:   2_plots/kegg/kegg_dot_1.1.svg
     Modified:   2_plots/kegg/kegg_dot_1.5.svg
-    Modified:   2_plots/kegg/upset_kegg_1.05.svg
-    Modified:   2_plots/kegg/upset_kegg_1.1.svg
-    Modified:   2_plots/kegg/upset_kegg_1.5.svg
-    Modified:   2_plots/qc/PCA_IntvsCont.svg
+    Deleted:    2_plots/reactome/combine_GO.svg
     Modified:   2_plots/reactome/react_dot_1.05.svg
     Modified:   2_plots/reactome/react_dot_1.1.svg
     Modified:   2_plots/reactome/react_dot_1.5.svg
+    Deleted:    2_plots/reactome/react_dot_INT vs CONT.svg
+    Deleted:    2_plots/reactome/react_dot_INT vs SVX_VAS.svg
+    Deleted:    2_plots/reactome/react_dot_SVX vs SVX_VAS.svg
+    Deleted:    2_plots/reactome/react_dot_VAS vs SVX_VAS.svg
     Modified:   2_plots/reactome/upset_react_1.05.svg
     Modified:   2_plots/reactome/upset_react_1.1.svg
     Modified:   2_plots/reactome/upset_react_1.5.svg
+    Deleted:    2_plots/reactome/upset_react_INT vs CONT.svg
+    Deleted:    2_plots/reactome/upset_react_INT vs SVX_VAS.svg
+    Deleted:    2_plots/reactome/upset_react_SVX vs SVX_VAS.svg
+    Deleted:    2_plots/reactome/upset_react_VAS vs SVX_VAS.svg
     Modified:   3_output/enrichGO_sig.xlsx
     Modified:   3_output/enrichKEGG_all.xlsx
     Modified:   3_output/enrichKEGG_sig.xlsx
     Modified:   3_output/lmTreat_all.xlsx
     Modified:   3_output/lmTreat_fc1.5_voom2_all_fdr.xlsx
     Modified:   3_output/lmTreat_sig.xlsx
-    Modified:   3_output/reactome_all.xlsx
-    Modified:   3_output/reactome_sig.xlsx
 
 </code></pre>
 <p>
@@ -611,6 +597,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/691cf3499cc98849bde703fde17b25047c072b71/docs/index.html" target="_blank">691cf34</a>
+</td>
+<td>
+Ha Manh Tran
+</td>
+<td>
+2023-01-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -668,6 +671,31 @@ build website
 <hr>
 </div>
 </div>
+</div>
+<div
+id="hon-yeung-chan1-ha-m.-tran1-jimmy-breen1-john-e.-schjenken123-and-sarah-a.-robertson1"
+class="section level3">
+<h3>Hon Yeung Chan<sup>1</sup>, Ha M. Tran<sup>1</sup>, Jimmy
+Breen<sup>1</sup>, John E. Schjenken<sup>1,2,3</sup> and Sarah A.
+Robertson<sup>1*</sup></h3>
+<p><strong>Keywords: RNA sequencing, uterus, embryo implantation,
+endometrial receptivity, mouse</strong></p>
+<p><strong>Author affiliations:</strong></p>
+<p><sup>1</sup> The Robinson Research Institute and Adelaide Medical
+School, University of Adelaide, Adelaide, SA 5000, Australia.
+<sup>2</sup> Hunter Medical Research Institute, Infertility and
+Reproduction Research Program, New Lambton Heights, NSW 2305, Australia.
+<sup>3</sup> Priority Research Centre for Reproductive Science, School
+of Environmental and Life Sciences, Discipline of Biological Sciences,
+The University of Newcastle, University Drive, Callaghan, NSW 2308,
+Australia</p>
+<p><sup>*</sup> <strong>Corresponding author:</strong> Sarah A.
+Robertson, The Robinson Research Institute, Adelaide Medical School,
+University of Adelaide, Adelaide, SA 5005, Australia.</p>
+<p>E-mail: <a href="mailto:sarah.robertson@adelaide.edu.au"
+class="email">sarah.robertson@adelaide.edu.au</a></p>
+<p><strong>Conflict of Interest Statement:</strong> The authors have
+declared that no conflict of interest exists</p>
 </div>
 <div id="abstract" class="section level1">
 <h1>Abstract</h1>
