@@ -2,7 +2,6 @@
 title: "Ingenuity Pathway Analysis"
 author: "Ha Tran"
 date: "24/12/2021"
-output: html_document
 editor_options: 
   chunk_output_type: console
 ---
@@ -49,9 +48,9 @@ palette <- readRDS(here::here("0_data/RDS_objects/palette.rds"))
 ```
 
 
-# IPA analysis {.tabset}
+## IPA analysis {.tabset}
 
-## Regulated Pathways
+### Regulated Pathways
 
 ```{r}
 pathways <- read_csv(file = here::here("0_data/raw_data/IPA_pathways.csv"), col_names = T) %>% slice(1:14) %>% as.data.frame()
@@ -87,11 +86,11 @@ pathways <- ggplot(data = pathways) +
   scale_x_continuous(expand = c(0,0.007))
   # theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
   
-ggsave(filename = "pathways.svg", plot = pathways + pub, path = here::here("2_plots/ipa"), width = 250, height = 166, units = "mm")
+ggsave(filename = "pathways.svg", plot = pathways, path = here::here("2_plots/ipa"), width = 250, height = 166, units = "mm")
 pathways
 ```
 
-## Upstream Regulators
+### Upstream Regulators
 
 ```{r, results='hide'}
 upstream <-
@@ -161,7 +160,7 @@ ggsave(filename = "upstream_2.svg", plot = upstream, path = here::here("2_plots/
 upstream
 ```
 
-## Disease and Function
+### Disease and Function
 
 ```{r}
 categories <- c("Cellular Movement", "Cardiovascular System", "Cell-To-Cell Signaling")
@@ -206,7 +205,7 @@ for (i in 1:length(categories)) {
        size = expression("-log"[10] * "P-value")) +
   scale_x_continuous(expand = c(0,5)) 
   
-ggsave(filename = paste0(x, ".svg"), plot = funct_bar[[i]] + pub, path = here::here("2_plots/ipa"), width = 250, height = 166, units = "mm")
+ggsave(filename = paste0(x, ".svg"), plot = funct_bar[[i]], path = here::here("2_plots/ipa"), width = 250, height = 166, units = "mm")
   
 }
 
@@ -396,6 +395,11 @@ ggsave(filename = "up_cat_alluvial.svg",path = here::here("2_plots/ipa/"), width
 ```
 
 
+## Network plot
+
+![DE genes regulated by predicted upstream regulators and pathways](figure/extraFigures.Rmd/network.png)
+
+## Alluvial plot
 
 
-
+![Proportion of DE genes regulated by predicted upstream regulators & functional terms](figure/extraFigures.Rmd/alluvial.png)
