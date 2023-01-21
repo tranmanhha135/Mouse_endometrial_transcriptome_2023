@@ -1,7 +1,7 @@
 name: "Mouse endometial transcriptome 2023"
 output_dir: ../docs
 navbar:
-  title: "SRB_2022"
+  title: "Mouse endometial transcriptome 2023"
   left:
   - text: "Home"
     href: index.html

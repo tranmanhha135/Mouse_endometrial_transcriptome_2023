@@ -1,5 +1,5 @@
 ---
-title: "Additional Figures"
+title: "Ingenuity Pathway Analysis"
 author: "Ha Tran"
 date: "24/12/2021"
 output: html_document
@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   fig.width = 7
 )
 ```
+
 # Data Setup
 
 ```{r load libraries}
@@ -48,7 +49,7 @@ palette <- readRDS(here::here("0_data/RDS_objects/palette.rds"))
 ```
 
 
-# Dexter's IPA analysis {.tabset}
+# IPA analysis {.tabset}
 
 ## Regulated Pathways
 
@@ -92,7 +93,7 @@ pathways
 
 ## Upstream Regulators
 
-```{r}
+```{r, results='hide'}
 upstream <-
   read_csv(file = here::here("0_data/raw_data/IPA_upstreamRegulators.csv"),
     col_names = T,
@@ -154,6 +155,9 @@ upstream <- pheatmap(
 
 # upstream <- upstream + theme(legend.box.margin = margin(0,0,-150,0))
 ggsave(filename = "upstream_2.svg", plot = upstream, path = here::here("2_plots/ipa"), width = 200, height = 133, units = "mm")
+```
+
+```{r}
 upstream
 ```
 

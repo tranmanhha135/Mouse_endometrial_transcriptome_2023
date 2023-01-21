@@ -13,7 +13,7 @@
 
 <title>The endometrial transcriptome transition preceding receptivity to embryo implantation in mice</title>
 
-<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -330,7 +330,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">SRB_2022</a>
+      <a class="navbar-brand" href="index.html">Mouse endometial transcriptome 2023</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -423,7 +423,8 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 aria-hidden="true"></span> 1
 </p>
 <p>
-<strong>Knit directory:</strong> <code>SRB_2022/1_analysis/</code> <span
+<strong>Knit directory:</strong>
+<code>Mouse_endometrial_transcriptome_2023/1_analysis/</code> <span
 class="glyphicon glyphicon-question-sign" aria-hidden="true"
 title="This is the local directory in which the code in this file was executed.">
 </span>
@@ -464,15 +465,15 @@ HTML.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree6e0f643b841eefbc817c4063fa0a5d4a16982782targetblank6e0f643a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135Mouseendometrialtranscriptome2023tree4d51a4ed437ceeb2919e7688538d43b96bd8ab4ctargetblank4d51a4ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tranmanhha135/SRB_2022/tree/6e0f643b841eefbc817c4063fa0a5d4a16982782" target="_blank">6e0f643</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/tree/4d51a4ed437ceeb2919e7688538d43b96bd8ab4c" target="_blank">4d51a4e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022tree6e0f643b841eefbc817c4063fa0a5d4a16982782targetblank6e0f643a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135Mouseendometrialtranscriptome2023tree4d51a4ed437ceeb2919e7688538d43b96bd8ab4ctargetblank4d51a4ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -482,7 +483,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tranmanhha135/SRB_2022/tree/6e0f643b841eefbc817c4063fa0a5d4a16982782" target="_blank">6e0f643</a>.
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/tree/4d51a4ed437ceeb2919e7688538d43b96bd8ab4c" target="_blank">4d51a4e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -497,26 +498,37 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
-    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
 Untracked files:
     Untracked:  .gitignore
-    Untracked:  test plz delete me.Rmd
-    Untracked:  test-plz-delete-me.html
 
 Unstaged changes:
+    Modified:   0_data/RDS_objects/enrichGO.rds
     Modified:   0_data/RDS_objects/enrichGO_sig.rds
+    Modified:   0_data/RDS_objects/fc.rds
+    Modified:   0_data/RDS_objects/lfc.rds
+    Modified:   0_data/RDS_objects/lmTreat.rds
+    Modified:   0_data/RDS_objects/lmTreat_all.rds
+    Modified:   0_data/RDS_objects/lmTreat_sig.rds
     Modified:   1_analysis/_site.yml
-    Modified:   1_analysis/deAnalysis.Rmd
-    Modified:   1_analysis/go.Rmd
     Modified:   1_analysis/index.Rmd
     Modified:   1_analysis/kegg.Rmd
-    Modified:   1_analysis/reactome.Rmd
-    Modified:   1_analysis/setUp.Rmd
+    Modified:   2_plots/de/heat_down_1.05.svg
+    Modified:   2_plots/de/heat_down_1.1.svg
+    Modified:   2_plots/de/heat_down_1.5.svg
+    Modified:   2_plots/de/heat_up_1.05.svg
+    Modified:   2_plots/de/heat_up_1.1.svg
+    Modified:   2_plots/de/heat_up_1.5.svg
     Modified:   2_plots/de/ma_1.05.png
     Modified:   2_plots/de/ma_1.1.png
     Modified:   2_plots/de/ma_1.5.png
+    Modified:   2_plots/de/pval_1.05.svg
+    Modified:   2_plots/de/pval_1.1.svg
+    Modified:   2_plots/de/pval_1.5.svg
+    Modified:   2_plots/de/vol_1.05.png
+    Modified:   2_plots/de/vol_1.1.png
+    Modified:   2_plots/de/vol_1.5.png
     Modified:   2_plots/go/bp_dot_1.05.svg
     Modified:   2_plots/go/bp_dot_1.1.svg
     Modified:   2_plots/go/bp_dot_1.5.svg
@@ -526,33 +538,20 @@ Unstaged changes:
     Modified:   2_plots/go/mf_dot_1.05.svg
     Modified:   2_plots/go/mf_dot_1.1.svg
     Modified:   2_plots/go/mf_dot_1.5.svg
-    Deleted:    2_plots/ipa/funct_cat_alluvial.svg
-    Deleted:    2_plots/ipa/up_cat_alluvial.svg
-    Deleted:    2_plots/ipa/upstream_funct_alluvial.svg
-    Modified:   2_plots/kegg/kegg_dot_1.05.svg
-    Modified:   2_plots/kegg/kegg_dot_1.1.svg
-    Modified:   2_plots/kegg/kegg_dot_1.5.svg
-    Deleted:    2_plots/reactome/combine_GO.svg
-    Modified:   2_plots/reactome/react_dot_1.05.svg
-    Modified:   2_plots/reactome/react_dot_1.1.svg
-    Modified:   2_plots/reactome/react_dot_1.5.svg
-    Deleted:    2_plots/reactome/react_dot_INT vs CONT.svg
-    Deleted:    2_plots/reactome/react_dot_INT vs SVX_VAS.svg
-    Deleted:    2_plots/reactome/react_dot_SVX vs SVX_VAS.svg
-    Deleted:    2_plots/reactome/react_dot_VAS vs SVX_VAS.svg
-    Modified:   2_plots/reactome/upset_react_1.05.svg
-    Modified:   2_plots/reactome/upset_react_1.1.svg
-    Modified:   2_plots/reactome/upset_react_1.5.svg
-    Deleted:    2_plots/reactome/upset_react_INT vs CONT.svg
-    Deleted:    2_plots/reactome/upset_react_INT vs SVX_VAS.svg
-    Deleted:    2_plots/reactome/upset_react_SVX vs SVX_VAS.svg
-    Deleted:    2_plots/reactome/upset_react_VAS vs SVX_VAS.svg
+    Modified:   2_plots/go/upset_1.05.svg
+    Modified:   2_plots/go/upset_1.1.svg
+    Modified:   2_plots/go/upset_1.5.svg
+    Modified:   2_plots/ipa/Cardiovascular System.svg
+    Modified:   2_plots/ipa/Cell-To-Cell Signaling.svg
+    Modified:   2_plots/ipa/Cellular Movement.svg
+    Modified:   2_plots/ipa/diseaseAndFunction.svg
+    Modified:   2_plots/ipa/pathways.svg
+    Modified:   2_plots/ipa/upstream_2.svg
     Modified:   3_output/enrichGO_sig.xlsx
-    Modified:   3_output/enrichKEGG_all.xlsx
-    Modified:   3_output/enrichKEGG_sig.xlsx
     Modified:   3_output/lmTreat_all.xlsx
     Modified:   3_output/lmTreat_fc1.5_voom2_all_fdr.xlsx
     Modified:   3_output/lmTreat_sig.xlsx
+    Modified:   SRB_2022.Rproj
 
 </code></pre>
 <p>
@@ -599,10 +598,44 @@ Message
 <tbody>
 <tr>
 <td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/4d51a4ed437ceeb2919e7688538d43b96bd8ab4c/1_analysis/index.Rmd" target="_blank">4d51a4e</a>
+</td>
+<td>
+tranmanhha135
+</td>
+<td>
+2023-01-20
+</td>
+<td>
+test png
+</td>
+</tr>
+<tr>
+<td>
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/691cf3499cc98849bde703fde17b25047c072b71/docs/index.html" target="_blank">691cf34</a>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/4d51a4ed437ceeb2919e7688538d43b96bd8ab4c/docs/index.html" target="_blank">4d51a4e</a>
+</td>
+<td>
+tranmanhha135
+</td>
+<td>
+2023-01-20
+</td>
+<td>
+test png
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/691cf3499cc98849bde703fde17b25047c072b71/docs/index.html" target="_blank">691cf34</a>
 </td>
 <td>
 Ha Manh Tran
@@ -619,7 +652,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/tranmanhha135/SRB_2022/blob/b6cf1906d2fd775f953bd1dd6b835234e260209c/1_analysis/index.Rmd" target="_blank">b6cf190</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/b6cf1906d2fd775f953bd1dd6b835234e260209c/1_analysis/index.Rmd" target="_blank">b6cf190</a>
 </td>
 <td>
 tranmanhha135
@@ -636,7 +669,7 @@ quick commit
 Rmd
 </td>
 <td>
-<a href="https://github.com/tranmanhha135/SRB_2022/blob/3119fadcedcb2bd928908d12f40b0b10f64961e0/1_analysis/index.Rmd" target="_blank">3119fad</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/3119fadcedcb2bd928908d12f40b0b10f64961e0/1_analysis/index.Rmd" target="_blank">3119fad</a>
 </td>
 <td>
 tranmanhha135
@@ -653,7 +686,7 @@ build website
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/3119fadcedcb2bd928908d12f40b0b10f64961e0/docs/index.html" target="_blank">3119fad</a>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/3119fadcedcb2bd928908d12f40b0b10f64961e0/docs/index.html" target="_blank">3119fad</a>
 </td>
 <td>
 tranmanhha135
@@ -699,36 +732,33 @@ declared that no conflict of interest exists</p>
 </div>
 <div id="abstract" class="section level1">
 <h1>Abstract</h1>
-<p>A key determinant of successful embryo implantation is uterine
-receptivity. From a non-receptive state during ovulation, this
-acquisition of receptivity to implantation involves significant
+<p>Receptivity of the uterus is essential for embryo implantation and
+progression of pregnancy. Acquisition of receptivity involves major
 molecular and cellular changes in the endometrial lining of the uterus
-in preparation for the implanting embryo. However, the exact molecular
-mechanisms underlying this transition remain to be fully characterised.
-Here, we aimed to generate a comprehensive transcriptome profile of the
-mouse uterus in the peri-ovulatory and peri-implantation states and
-characterise transcriptome changes between the two states. Tissue was
-collected from non-receptive endometrium of estrous C57Bl/6 female mice
-and C57Bl/6 females mated to BALB/c males at day 3.5 post-coitum, the
-day before embryo implantation in mice. High-throughput RNA-sequencing
-was used to identify the genes and pathways regulated in the endometrium
-(n=3-4 biological replicates per group). Differential gene expression
-analysis revealed 546 upregulated and 30 downregulated genes (logFC&gt;1
-and adjusted p- value&lt;0.05) in the endometrium of mated mice compared
-to estrous mice. With the suite of analytical tools from Ingenuity
-Pathway Analysis, these differentially expressed genes were predicted to
-activate pathways and upstream regulators involved in implantation, such
-as the estrogen signalling pathway and vascular endothelial growth
-factor A. Furthermore, significant molecular changes in the maternal
-immune and vascular systems occur in the uterus during the
-pre-implantation phase, as demonstrated by increased functional terms,
-including leukocyte migration and angiogenesis. Together, our findings
-confirm that the uterine transcriptome before achieving receptivity is
-vastly different from the non-receptive estrous uterus, and the changes
-observed are in line with substantial cellular alterations occurring
-before embryo implantation. This dataset will serve as a valuable tool
-and resource for utilisation in future research on the molecular
-mechanisms of uterine receptivity.</p>
+from its non-receptive state at ovulation, to its receptive state four
+days later. The precise molecular mechanisms underlying this transition
+remain to be fully characterized. Here, we aimed to generate a
+comprehensive profile of the uterine transcriptome in the peri-ovulatory
+and peri-implantation states, and to define the differences between
+them, in the mouse. High throughput RNA-sequencing was utilized to
+identify genes and pathways expressed in the endometrium of unmated
+estrous female C57Bl/6 mice, and in female mice on day 3.5 post-coitum
+(pc) after mating with BALB/c males (n=3-4 biological replicates).
+Compared to the endometrium at estrus, 388 genes were differentially
+expressed in the endometrium on day 3.5 post-coitum (FDR ≤ 0.05). The
+transcriptional changes indicated substantial modulation of uterine
+immune and vascular systems during the pre-implantation phase, with the
+functional terms Angiogenesis, Chemotaxis, and Lymphangiogenesis
+predominating. Ingenuity Pathway Analysis software revealed several
+upstream regulators implicated in the transition to receptivity
+including various cytokines, steroid hormones, prostaglandin E2, and
+vascular endothelial growth factor A. This study confirms that the
+transcriptome of a receptive uterus is vastly different to the
+non-receptive uterus and identifies several genes, regulatory pathways,
+and upstream drivers in addition to those previously associated with
+implantation. This dataset will serve as a valuable tool and resource
+for future research on the molecular mechanisms of uterine
+receptivity.</p>
 </div>
 
 

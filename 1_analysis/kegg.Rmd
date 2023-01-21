@@ -404,14 +404,12 @@ for (i in 1:length(fc)) {
   # move the result file to the plot directory
   file.rename(
     from = paste0("mmu", adj.keggID, ".pv.png"),
-    to = here::here(paste0("2_plots/kegg/pv_", x, "_", kegg_id, ".png"))
+    to = here::here(paste0("docs/figure/kegg.Rmd/pv_", x, "_", kegg_id, ".png"))
   )
 }
-
-# display the pathview graph. doesnt work when knitting!!!!
-knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
 ```
-![please work](C:\Users\tranm\Documents\SRB_2022\2_plots\kegg\pv_1.5_mmu04060.png)
+
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[2]]$PATHWAY_MAP`{.tabset}
 
@@ -436,10 +434,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-# display the pathview graph. doesnt work when knitting!!!!
-knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[3]]$PATHWAY_MAP`{.tabset}
 
@@ -464,10 +459,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-# display the pathview graph. doesnt work when knitting!!!!
-knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[4]]$PATHWAY_MAP`{.tabset}
 
@@ -492,10 +484,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-# display the pathview graph. doesnt work when knitting!!!!
-knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[5]]$PATHWAY_MAP`{.tabset}
 
@@ -520,10 +509,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-# display the pathview graph. doesnt work when knitting!!!!
-knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[6]]$PATHWAY_MAP`{.tabset}
 
@@ -548,12 +534,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-# display the pathview graph. doesnt work when knitting!!!!
-knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
-```
-
-
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ## FC=`r fc[2]` {.tabset}
 
@@ -585,11 +566,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-# display the pathview graph. doesnt work when knitting!!!!
-knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
-```
-
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[2]]$PATHWAY_MAP`{.tabset}
 
@@ -614,10 +591,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-# display the pathview graph. doesnt work when knitting!!!!
-knitr::include_graphics(here::here(paste0("2_plots/kegg/pv_", fc[p], "_", kegg_id[q], ".png")))
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[3]]$PATHWAY_MAP`{.tabset}
 
@@ -642,9 +616,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[4]]$PATHWAY_MAP`{.tabset}
 
@@ -669,9 +641,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[5]]$PATHWAY_MAP`{.tabset}
 
@@ -696,9 +666,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[6]]$PATHWAY_MAP`{.tabset}
 
@@ -723,10 +691,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
-
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ## FC=`r fc[3]` {.tabset}
 
@@ -758,10 +723,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
-
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[2]]$PATHWAY_MAP`{.tabset}
 
@@ -786,9 +748,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[3]]$PATHWAY_MAP`{.tabset}
 
@@ -813,9 +773,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[4]]$PATHWAY_MAP`{.tabset}
 
@@ -840,9 +798,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[5]]$PATHWAY_MAP`{.tabset}
 
@@ -867,9 +823,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 ### `r kegg_pathway[[6]]$PATHWAY_MAP`{.tabset}
 
@@ -894,11 +848,7 @@ display_matrix[[p]][[q]] %>%
 
 #### Pathview
 
-```{r}
-
-```
-
-
+![Pathview](figure/kegg.Rmd/`r paste0("pv_", x[p], "_", kegg_id[q], ".png")`)
 
 # Export Data
 
