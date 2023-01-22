@@ -1,6 +1,6 @@
 ---
-title: "DE Analysis (Robertson Lab)"
-author: "Ha Tran"
+title: "Reactome Analysis"
+author: "Ha M. Tran"
 date: "22/08/2021"
 editor_options: 
   chunk_output_type: console
@@ -102,10 +102,11 @@ reactome_sig[[x]] <- reactome_all[[x]] %>% dplyr::filter(p.adjust <= 0.05) %>%
                                        replacement = "", 
                                        x = reactome_sig[[x]]$Description)
 }
- 
-kable(x = reactome_sig[[p]]) %>%
-kable_styling(bootstrap_options = c("striped", "hover")) %>% 
-scroll_box(height = "600px")
+reactome_sig[[p]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(., 3)))) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
 ```
 
 ### Dot plot
@@ -148,9 +149,11 @@ p=p+1
 ### Enriched pathways
 
 ```{r}
-kable(x = reactome_sig[[p]]) %>%
-kable_styling(bootstrap_options = c("striped", "hover")) %>% 
-scroll_box(height = "600px")
+reactome_sig[[p]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(., 3)))) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
 ```
 
 ### Dot plot
@@ -176,9 +179,11 @@ p=p+1
 ### Enriched pathways
 
 ```{r}
-kable(x = reactome_sig[[p]]) %>%
-kable_styling(bootstrap_options = c("striped", "hover")) %>% 
-scroll_box(height = "600px")
+reactome_sig[[p]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(., 3)))) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(height = "600px")
 ```
 
 ### Dot plot

@@ -1,6 +1,6 @@
 ---
 title: "DGE Analysis"
-author: "Ha Tran"
+author: "Ha M. Tran"
 date: "22/08/2021"
 output: html_document
 editor_options: 
@@ -324,7 +324,7 @@ for (i in 1:length(fc)) {
     geom_point(aes(colour = Expression),
 
       ### PUBLISH
-      size = .8,
+      size = 1.5,
       # alpha = 0.7,
       show.legend = T
     ) +
@@ -411,7 +411,7 @@ for (i in 1:length(fc)) {
     geom_point(aes(colour = Expression),
 
       ### PUBLISH
-      size = 0.3,
+      size = 1.5,
       # alpha = 0.8,
       show.legend = T
     ) +

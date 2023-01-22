@@ -1,6 +1,6 @@
 ---
 title: "Ingenuity Pathway Analysis"
-author: "Ha Tran"
+author: "Ha M. Tran"
 date: "24/12/2021"
 editor_options: 
   chunk_output_type: console
@@ -92,7 +92,7 @@ pathways
 
 ### Upstream Regulators
 
-```{r, results='hide'}
+```{r, results='hide', fig.show='hide'}
 upstream <-
   read_csv(file = here::here("0_data/raw_data/IPA_upstreamRegulators.csv"),
     col_names = T,

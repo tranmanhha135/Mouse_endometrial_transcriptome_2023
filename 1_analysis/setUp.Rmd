@@ -1,6 +1,6 @@
 ---
 title: "Setting up for DGE analysis"
-author: "Ha Tran"
+author: "Ha M. Tran"
 date: "02/09/2021"
 ---
 
@@ -379,9 +379,7 @@ abline(h=0, col="red", lty=2, lwd=2)
 
 Ideally, the bulk of gene expression following the TMM normalisation should be centred around `expression log-ratio` of 0, which indicates that library size bias between samples have been successfully removed. This should be repeated with all the samples in the dge object.
 
-## Quality Control
-
-### Pinciple Component Analysis (PCA)
+## Pinciple Component Analysis (PCA)
 
 ```{r pca, fig.cap="PCA plot of all samples."}
 samples <- dge$samples %>% rownames_to_column("sampleName")

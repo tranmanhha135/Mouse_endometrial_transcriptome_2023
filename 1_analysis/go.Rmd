@@ -1,6 +1,6 @@
 ---
 title: "GO Analysis"
-author: "Ha Tran"
+author: "Ha M. Tran"
 date: "22/08/2021"
 editor_options: 
   chunk_output_type: console

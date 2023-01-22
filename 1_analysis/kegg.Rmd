@@ -1,6 +1,6 @@
 ---
-title: "KEGG"
-author: "Ha Tran"
+title: "KEGG Analysis"
+author: "Ha M. Tran"
 date: "22/08/2021"
 editor_options: 
   chunk_output_type: console
@@ -132,12 +132,13 @@ p=1
 
 ```{r}
 enrichKEGG_sig[[p]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable(caption = "Significantly enriched KEGG pathways") %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
 ```
 
-### Dot Plot
+### Dot plot
 
 ```{r kegg_dot}
 kegg_dot <- list()
@@ -182,6 +183,7 @@ p=p+1
 
 ```{r}
 enrichKEGG_sig[[p]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable(caption = "Significantly enriched KEGG pathways") %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -213,6 +215,7 @@ p=p+1
 
 ```{r}
 enrichKEGG_sig[[p]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable(caption = "Significantly enriched KEGG pathways") %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -229,9 +232,6 @@ kegg_dot[[p]]
 ```{r}
 upset[[p]]
 ```
-
-
-
 
 
 
@@ -316,7 +316,7 @@ for (i in 1:length(fc)) {
     matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")] <- as.numeric(as.character(unlist(matrix[[x]][[y]][, c("Control 1", "Control 2", "Control 4", "Intact 1", "Intact 2", "Intact 3", "Intact 4")])))
 
     # display matrix
-    match2 <- lmTreat_sig[[x]][, "entrezid"] %in% partial$entrezid
+    match2 <- lmTreat_sig[[x]][, "gene_name"] %in% partial$entrezid
     display_matrix[[x]][[y]] <- lmTreat_sig[[x]][match2, c("gene_name", "logFC", "P.Value", "adj.P.Val", "description")] %>%
       as.data.frame()
     colnames(display_matrix[[x]][[y]]) <- c("Gene Name", "logFC", "P Value", "Adjusted P Value", "Description")
@@ -329,10 +329,10 @@ for (i in 1:length(fc)) {
       main = paste0(y, "\n"),
       legend = F,
       annotation_legend = F,
-      fontsize = 8,
-      fontsize_col = 9,
+      fontsize = 10,
+      fontsize_col = 11,
       fontsize_number = 7,
-      fontsize_row = 8,
+      fontsize_row = 10,
       treeheight_row = 25,
       treeheight_col = 10,
       cluster_cols = T,
@@ -373,6 +373,7 @@ kegg_heat[[p]][[q]]
 
 ```{r displayPathway1}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -427,6 +428,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -452,6 +454,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -477,6 +480,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -502,6 +506,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -527,6 +532,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -559,6 +565,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -584,6 +591,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -609,6 +617,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -634,6 +643,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -659,6 +669,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -684,6 +695,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -716,6 +728,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -741,6 +754,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -766,6 +780,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -791,6 +806,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -816,6 +832,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
@@ -841,6 +858,7 @@ kegg_heat[[p]][[q]]
 
 ```{r}
 display_matrix[[p]][[q]] %>%
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   scroll_box(height = "600px")
