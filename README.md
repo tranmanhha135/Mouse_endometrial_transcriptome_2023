@@ -1,14 +1,16 @@
-### Hon Yeung Chan^1^, Ha M. Tran^1^, Jimmy Breen^1^, John E. Schjenken^1,2,3^ and Sarah A. Robertson^1\*^
+# The endometrial transcriptome transition preceding receptivity to embryo implantation in mice
+
+### Hon Yeung Chan<sup>1</sup>, Ha M. Tran<sup>1</sup>, Jimmy Breen<sup>1</sup>, John E. Schjenken<sup>1,2,3</sup> and Sarah A. Robertson<sup>1\*</sup>
 
 **Keywords: RNA sequencing, uterus, embryo implantation, endometrial receptivity, mouse**
 
 **Author affiliations:**
 
-^1^ The Robinson Research Institute and Adelaide Medical School, University of Adelaide, Adelaide, SA 5000, Australia.
-^2^ Hunter Medical Research Institute, Infertility and Reproduction Research Program, New Lambton Heights, NSW 2305, Australia.
-^3^ Priority Research Centre for Reproductive Science, School of Environmental and Life Sciences, Discipline of Biological Sciences, The University of Newcastle, University Drive, Callaghan, NSW 2308, Australia
+<sup>1</sup> The Robinson Research Institute and Adelaide Medical School, University of Adelaide, Adelaide, SA 5000, Australia.
+<sup>2</sup> Hunter Medical Research Institute, Infertility and Reproduction Research Program, New Lambton Heights, NSW 2305, Australia.
+<sup>3</sup> Priority Research Centre for Reproductive Science, School of Environmental and Life Sciences, Discipline of Biological Sciences, The University of Newcastle, University Drive, Callaghan, NSW 2308, Australia
 
-^\*^ **Corresponding author:** Sarah A. Robertson, The Robinson Research Institute, Adelaide Medical School, University of Adelaide, Adelaide, SA 5005, Australia. 
+<sup>\*</sup> **Corresponding author:** Sarah A. Robertson, The Robinson Research Institute, Adelaide Medical School, University of Adelaide, Adelaide, SA 5005, Australia. 
 
 E-mail: sarah.robertson@adelaide.edu.au
 
