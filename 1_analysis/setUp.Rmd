@@ -39,6 +39,7 @@ library(ggrepel)
 library(grid)
 library(cowplot)
 library(corrplot)
+library(DT)
 
 # Set ggplot theme
 theme_set(theme_light())
@@ -94,6 +95,18 @@ rawCount <- read_tsv(here::here("0_data/raw_data/allSamples_mergedOnly.featureCo
   
 # Removing the non-numerical metadata column. SVX_VAS1 may also be an outlier, it is number 18 (BTW)
 rawCount<- rawCount[, c(6,7,9:25)]
+
+
+DT <- function(x, caption){
+  DT::datatable(x,caption = caption,
+                extensions = 'Buttons',
+                options = list(dom = 'Blfrtip', scrollX=T,
+                               buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                               lengthMenu = list(c(10,25,50,-1),
+                                                 c(10,25,50,"All"))))
+}
+
+saveRDS(DT, here::here("0_data/RDS_objects/DT.rds"))
 ```
 
 ## Import Metadata
@@ -159,7 +172,8 @@ genes <- geneMetadata$gene_biotype %>% table %>% as.data.frame()
 
 colnames(genes) <- c("Gene Biotype", "Frequency")
   
-kable(genes) %>% kable_styling(bootstrap_options = c("striped", "hover")) %>% scroll_box(height = "600px")
+# kable(genes) %>% kable_styling(bootstrap_options = c("striped", "hover")) %>% scroll_box(height = "600px")
+genes %>% DT(.,caption = "Table: Gene biotype")
 ```
 
 ## Create DGEList object
@@ -363,9 +377,12 @@ Using the TMM (trimmed mean of M value) method of normalisation through the `edg
 #after normalisation
 dge <- edgeR::calcNormFactors(object = dge, 
                               method = "TMM")
-knitr::kable(dge$samples, caption = "Normalised samples") %>% 
-  kable_styling(bootstrap_options = c("striped", "hover")) %>% 
-  scroll_box(height = "600px")
+
+# knitr::kable(dge$samples, caption = "Normalised samples") %>% 
+#   kable_styling(bootstrap_options = c("striped", "hover")) %>% 
+#   scroll_box(height = "600px")
+
+dge$samples %>% DT(.,caption = "Table: Normalised samples")
 ```
 
 ### Visualisation of TMM Normalisation

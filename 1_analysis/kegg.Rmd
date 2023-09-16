@@ -37,6 +37,7 @@ library(pander)
 library(viridis)
 library(cowplot)
 library(pheatmap)
+library(DT)
 
 # Custom ggplot
 library(ggplotify)
@@ -55,6 +56,7 @@ library(pathview)
 
 theme_set(theme_minimal())
 pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
+DT <- readRDS(here::here("0_data/RDS_objects/DT.rds"))
 ```
 
 ### Import DGElist Data
@@ -72,7 +74,9 @@ lmTreat_sig <- readRDS(here::here("0_data/RDS_objects/lmTreat_sig.rds"))
 ```
 
 # KEGG Analysis {.tabset}
-KEGG enrichment analysis is performed with the significant DE genes that have absolute FC > 1.5 (`r nrow(lmTreat_sig)` genes from Limma). Top 30 most significant KEGG are displayed. All enriched KEGG pathways are exported
+KEGG enrichment analysis is performed with the significant DE genes that have absolute FC > 1.5 (`r nrow(lmTreat_sig)` genes from Limma). Top 30 most significant KEGG are displayed. All enriched KEGG pathways are exported.
+
+*KEGG pathway images reproduced by permission from Kanehisa Laboratories, September 2023*
 
 ```{r}
 # chosing the pathways of interest
@@ -133,9 +137,10 @@ p=1
 ```{r}
 enrichKEGG_sig[[p]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable(caption = "Significantly enriched KEGG pathways") %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "Significantly enriched KEGG pathways")
+  # kable(caption = "Significantly enriched KEGG pathways") %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Dot plot
@@ -184,9 +189,10 @@ p=p+1
 ```{r}
 enrichKEGG_sig[[p]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable(caption = "Significantly enriched KEGG pathways") %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "Significantly enriched KEGG pathways")
+  # kable(caption = "Significantly enriched KEGG pathways") %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Dot plot
@@ -216,9 +222,10 @@ p=p+1
 ```{r}
 enrichKEGG_sig[[p]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable(caption = "Significantly enriched KEGG pathways") %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "Significantly enriched KEGG pathways")
+  # kable(caption = "Significantly enriched KEGG pathways") %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Dot plot
@@ -374,9 +381,10 @@ kegg_heat[[p]][[q]]
 ```{r displayPathway1}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -429,9 +437,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -455,9 +464,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -481,9 +491,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -507,9 +518,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -533,9 +545,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -566,9 +579,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -592,9 +606,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -618,9 +633,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -644,9 +660,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -670,9 +687,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -696,9 +714,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -729,9 +748,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -755,9 +775,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -781,9 +802,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -807,9 +829,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -833,9 +856,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview
@@ -859,9 +883,10 @@ kegg_heat[[p]][[q]]
 ```{r}
 display_matrix[[p]][[q]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,caption = "DE genes")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 #### Pathview

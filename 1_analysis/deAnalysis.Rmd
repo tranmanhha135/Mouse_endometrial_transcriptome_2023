@@ -36,6 +36,7 @@ library(grid)
 library(pander)
 library(cowplot)
 library(pheatmap)
+library(DT)
 
 # Custom ggplot
 library(ggplotify)
@@ -50,6 +51,7 @@ library(Glimma)
 
 theme_set(theme_minimal())
 pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
+DT <- readRDS(here::here("0_data/RDS_objects/DT.rds"))
 ```
 
 ### Import DGElist Data
@@ -88,9 +90,11 @@ colnames(full_design) <- gsub(
   colnames(full_design))
 
 # display the full_design matrix
-kable(full_design %>% as.data.frame(), caption = "Design matrix") %>% 
-  kable_styling(bootstrap_options = c("striped", "hover")) %>% 
-  scroll_box(height = "600px")
+# kable(full_design %>% as.data.frame(), caption = "Design matrix") %>% 
+#   kable_styling(bootstrap_options = c("striped", "hover")) %>% 
+#   scroll_box(height = "600px")
+
+full_design %>% as.data.frame() %>% DT(., "Table: Design matrix")
 
 ```
 
@@ -105,9 +109,10 @@ contrast <- limma::makeContrasts(
 
 colnames(contrast) <- c("INT vs CONT")
 
-kable(contrast %>% as.data.frame(), caption = "Contrast matrix") %>% 
-  kable_styling(bootstrap_options = c("striped", "hover"))
+# kable(contrast %>% as.data.frame(), caption = "Contrast matrix") %>% 
+#   kable_styling(bootstrap_options = c("striped", "hover"))
 
+contrast %>% DT(., "Table: Contrast matrix")
 ```
 
 # Limma-Voom

@@ -35,6 +35,7 @@ library(grid)
 library(pander)
 library(cowplot)
 library(pheatmap)
+library(DT)
 
 # Custom ggplot
 library(ggbiplot)
@@ -42,6 +43,8 @@ library(ggrepel)
 theme_set(theme_light())
 
 pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
+DT <- readRDS(here::here("0_data/RDS_objects/DT.rds"))
+
 
 # Bioconductor packages:
 library(edgeR)
@@ -104,9 +107,10 @@ reactome_sig[[x]] <- reactome_all[[x]] %>% dplyr::filter(p.adjust <= 0.05) %>%
 }
 reactome_sig[[p]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(., 3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,"Enriched pathways")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Dot plot
@@ -151,9 +155,10 @@ p=p+1
 ```{r}
 reactome_sig[[p]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(., 3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,"Enriched pathways")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Dot plot
@@ -181,9 +186,10 @@ p=p+1
 ```{r}
 reactome_sig[[p]] %>%
   dplyr::mutate_if(is.numeric, funs(as.character(signif(., 3)))) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(.,"Enriched pathways")
+  # kable() %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Dot plot

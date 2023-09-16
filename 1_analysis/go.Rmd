@@ -31,6 +31,7 @@ library(tidyverse)
 library(kableExtra)
 library(ggplot2)
 library(grid)
+library(DT)
 
 # Custom ggplot
 library(gridExtra)
@@ -48,6 +49,7 @@ library(enrichplot)
 
 theme_set(theme_minimal())
 pub <- readRDS(here::here("0_data/RDS_objects/pub.rds"))
+DT <- readRDS(here::here("0_data/RDS_objects/DT.rds"))
 ```
 
 
@@ -132,9 +134,10 @@ for (i in 1:length(fc)) {
 # display the top 30 most sig
 enrichGO_sig[[1]] %>% 
   dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>% 
-  kable(caption = "Significantly enriched GO terms") %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  DT(., caption = "Significantly enriched GO terms")
+  # kable(caption = "Significantly enriched GO terms") %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Visualisation {.tabset}
@@ -221,10 +224,11 @@ upset[[1]]
 ```{r}
 # display the top 30 most sig
 enrichGO_sig[[2]] %>% 
-  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>% 
-  kable(caption = "Significantly enriched GO terms") %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
+  DT(.,caption = "Significantly enriched GO terms")
+  # kable(caption = "Significantly enriched GO terms") %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Visualisation {.tabset}
@@ -258,10 +262,11 @@ upset[[2]]
 ```{r}
 # display the top 30 most sig
 enrichGO_sig[[3]] %>% 
-  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>% 
-  kable(caption = "Significantly enriched GO terms") %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  scroll_box(height = "600px")
+  dplyr::mutate_if(is.numeric, funs(as.character(signif(.,3)))) %>%
+  DT(.,caption = "Significantly enriched GO terms") 
+  # kable(caption = "Significantly enriched GO terms") %>%
+  # kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  # scroll_box(height = "600px")
 ```
 
 ### Visualisation {.tabset}
