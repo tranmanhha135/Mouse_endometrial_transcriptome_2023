@@ -14,7 +14,7 @@
 
 <title>Ingenuity Pathway Analysis</title>
 
-<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -30,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -416,7 +416,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-01-22
+<strong>Last updated:</strong> 2023-09-16
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -425,7 +425,8 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 aria-hidden="true"></span> 0
 </p>
 <p>
-<strong>Knit directory:</strong> <code>SRB_2022/1_analysis/</code> <span
+<strong>Knit directory:</strong>
+<code>Mouse_endometrial_transcriptome_2023/1_analysis/</code> <span
 class="glyphicon glyphicon-question-sign" aria-hidden="true"
 title="This is the local directory in which the code in this file was executed.">
 </span>
@@ -434,7 +435,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -547,15 +548,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treeeb10bef914f0d0b9b1743ea9b235859ce87feba4targetblankeb10befa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135Mouseendometrialtranscriptome2023tree18c64635cc1b08f42233ef4416cc5f1869e6e3e6targetblank18c6463a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tranmanhha135/SRB_2022/tree/eb10bef914f0d0b9b1743ea9b235859ce87feba4" target="_blank">eb10bef</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/tree/18c64635cc1b08f42233ef4416cc5f1869e6e3e6" target="_blank">18c6463</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135SRB2022treeeb10bef914f0d0b9b1743ea9b235859ce87feba4targetblankeb10befa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtranmanhha135Mouseendometrialtranscriptome2023tree18c64635cc1b08f42233ef4416cc5f1869e6e3e6targetblank18c6463a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -565,7 +566,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tranmanhha135/SRB_2022/tree/eb10bef914f0d0b9b1743ea9b235859ce87feba4" target="_blank">eb10bef</a>.
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/tree/18c64635cc1b08f42233ef4416cc5f1869e6e3e6" target="_blank">18c6463</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -580,43 +581,53 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
-    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
 Untracked files:
     Untracked:  .gitignore
+    Untracked:  0_data/RDS_objects/DT.rds
 
 Unstaged changes:
-    Deleted:    1_analysis/mmu04060.pv.png
-    Deleted:    1_analysis/mmu04151.pv.png
-    Deleted:    1_analysis/mmu04270.pv.png
-    Deleted:    1_analysis/mmu04510.pv.png
-    Deleted:    1_analysis/mmu04640.pv.png
-    Deleted:    1_analysis/mmu04670.pv.png
-    Modified:   2_plots/de/ma_1.05.png
-    Modified:   2_plots/de/ma_1.1.png
-    Modified:   2_plots/de/ma_1.5.png
-    Modified:   2_plots/de/vol_1.05.png
-    Modified:   2_plots/de/vol_1.1.png
-    Modified:   2_plots/de/vol_1.5.png
-    Modified:   2_plots/kegg/heat_1.05_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.05_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.05_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.05_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.05_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.05_Vascular smooth muscle contraction.svg
-    Modified:   2_plots/kegg/heat_1.1_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.1_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.1_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.1_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.1_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.1_Vascular smooth muscle contraction.svg
-    Modified:   2_plots/kegg/heat_1.5_Cytokine-cytokine receptor interaction.svg
-    Modified:   2_plots/kegg/heat_1.5_Focal adhesion.svg
-    Modified:   2_plots/kegg/heat_1.5_Hematopoietic cell lineage.svg
-    Modified:   2_plots/kegg/heat_1.5_Leukocyte transendothelial migration.svg
-    Modified:   2_plots/kegg/heat_1.5_PI3K-Akt signaling pathway.svg
-    Modified:   2_plots/kegg/heat_1.5_Vascular smooth muscle contraction.svg
+    Modified:   0_data/RDS_objects/dge.rds
+    Modified:   0_data/RDS_objects/enrichGO.rds
+    Modified:   0_data/RDS_objects/enrichGO_sig.rds
+    Modified:   0_data/RDS_objects/fc.rds
+    Modified:   0_data/RDS_objects/lfc.rds
+    Modified:   0_data/RDS_objects/lmTreat.rds
+    Modified:   0_data/RDS_objects/lmTreat_all.rds
+    Modified:   0_data/RDS_objects/lmTreat_sig.rds
+    Modified:   0_data/RDS_objects/pub.rds
+    Modified:   2_plots/de/pval_1.05.svg
+    Modified:   2_plots/de/pval_1.1.svg
+    Modified:   2_plots/de/pval_1.5.svg
+    Modified:   2_plots/go/bp_dot_1.05.svg
+    Modified:   2_plots/go/bp_dot_1.5.svg
+    Modified:   2_plots/go/cc_dot_1.05.svg
+    Modified:   2_plots/go/cc_dot_1.5.svg
+    Modified:   2_plots/go/mf_dot_1.5.svg
+    Modified:   2_plots/go/upset_1.05.svg
+    Modified:   2_plots/go/upset_1.1.svg
+    Modified:   2_plots/go/upset_1.5.svg
+    Modified:   2_plots/ipa/Cell-To-Cell Signaling.svg
+    Modified:   2_plots/ipa/diseaseAndFunction.svg
+    Modified:   2_plots/ipa/pathways.svg
+    Modified:   2_plots/kegg/kegg_dot_1.05.svg
+    Modified:   2_plots/kegg/kegg_dot_1.1.svg
+    Modified:   2_plots/kegg/kegg_dot_1.5.svg
+    Modified:   2_plots/kegg/upset_kegg_1.05.svg
+    Modified:   2_plots/kegg/upset_kegg_1.1.svg
+    Modified:   2_plots/kegg/upset_kegg_1.5.svg
+    Modified:   2_plots/qc/PCA_IntvsCont.svg
+    Modified:   2_plots/qc/counts_after_filtering_3_3.svg
+    Modified:   2_plots/qc/counts_before_after_filtering_3_3.svg
+    Modified:   2_plots/qc/counts_before_filtering.svg
+    Modified:   2_plots/qc/library_size.svg
+    Modified:   2_plots/reactome/react_dot_1.05.svg
+    Modified:   2_plots/reactome/react_dot_1.1.svg
+    Modified:   2_plots/reactome/react_dot_1.5.svg
+    Modified:   2_plots/reactome/upset_react_1.05.svg
+    Modified:   2_plots/reactome/upset_react_1.1.svg
+    Modified:   2_plots/reactome/upset_react_1.5.svg
     Modified:   3_output/enrichGO_sig.xlsx
     Modified:   3_output/enrichKEGG_all.xlsx
     Modified:   3_output/enrichKEGG_sig.xlsx
@@ -625,9 +636,6 @@ Unstaged changes:
     Modified:   3_output/lmTreat_sig.xlsx
     Modified:   3_output/reactome_all.xlsx
     Modified:   3_output/reactome_sig.xlsx
-    Modified:   README.md
-    Deleted:    test plz delete me.Rmd
-    Deleted:    test-plz-delete-me.html
 
 </code></pre>
 <p>
@@ -675,10 +683,27 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/b44640abac9ec4e34694489147942349d93fa0c2/docs/extraFigures.html" target="_blank">b44640a</a>
+</td>
+<td>
+Ha Manh Tran
+</td>
+<td>
+2023-01-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
-<a href="https://github.com/tranmanhha135/SRB_2022/blob/eb10bef914f0d0b9b1743ea9b235859ce87feba4/1_analysis/extraFigures.Rmd" target="_blank">eb10bef</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/eb10bef914f0d0b9b1743ea9b235859ce87feba4/1_analysis/extraFigures.Rmd" target="_blank">eb10bef</a>
 </td>
 <td>
 Ha Manh Tran
@@ -695,7 +720,7 @@ workflowr::wflow_publish(here::here("1_analysis/*.Rmd"))
 Rmd
 </td>
 <td>
-<a href="https://github.com/tranmanhha135/SRB_2022/blob/8c9178d0ddead7d974f55328edb95ebe40c0a3dd/1_analysis/extraFigures.Rmd" target="_blank">8c9178d</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/8c9178d0ddead7d974f55328edb95ebe40c0a3dd/1_analysis/extraFigures.Rmd" target="_blank">8c9178d</a>
 </td>
 <td>
 tranmanhha135
@@ -712,7 +737,7 @@ added png
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/8c9178d0ddead7d974f55328edb95ebe40c0a3dd/docs/extraFigures.html" target="_blank">8c9178d</a>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/8c9178d0ddead7d974f55328edb95ebe40c0a3dd/docs/extraFigures.html" target="_blank">8c9178d</a>
 </td>
 <td>
 tranmanhha135
@@ -729,7 +754,7 @@ added png
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/d578f46c648558988d8eac977c170c39e29213ab/docs/extraFigures.html" target="_blank">d578f46</a>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/d578f46c648558988d8eac977c170c39e29213ab/docs/extraFigures.html" target="_blank">d578f46</a>
 </td>
 <td>
 Ha Manh Tran
@@ -746,7 +771,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/tranmanhha135/SRB_2022/blob/01a61cbf537cd052d7810928d8a67dba6481da8b/1_analysis/extraFigures.Rmd" target="_blank">01a61cb</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/01a61cbf537cd052d7810928d8a67dba6481da8b/1_analysis/extraFigures.Rmd" target="_blank">01a61cb</a>
 </td>
 <td>
 Ha Manh Tran
@@ -763,7 +788,7 @@ workflowr::wflow_publish(here::here("1_analysis/*.Rmd"))
 Rmd
 </td>
 <td>
-<a href="https://github.com/tranmanhha135/SRB_2022/blob/159f3529790db3ae75472a460696c82121d932a3/1_analysis/extraFigures.Rmd" target="_blank">159f352</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/159f3529790db3ae75472a460696c82121d932a3/1_analysis/extraFigures.Rmd" target="_blank">159f352</a>
 </td>
 <td>
 tranmanhha135
@@ -780,7 +805,7 @@ adding for pathview
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/159f3529790db3ae75472a460696c82121d932a3/docs/extraFigures.html" target="_blank">159f352</a>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/159f3529790db3ae75472a460696c82121d932a3/docs/extraFigures.html" target="_blank">159f352</a>
 </td>
 <td>
 tranmanhha135
@@ -797,7 +822,7 @@ adding for pathview
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/4d51a4ed437ceeb2919e7688538d43b96bd8ab4c/docs/extraFigures.html" target="_blank">4d51a4e</a>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/4d51a4ed437ceeb2919e7688538d43b96bd8ab4c/docs/extraFigures.html" target="_blank">4d51a4e</a>
 </td>
 <td>
 tranmanhha135
@@ -814,7 +839,7 @@ test png
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/691cf3499cc98849bde703fde17b25047c072b71/docs/extraFigures.html" target="_blank">691cf34</a>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/691cf3499cc98849bde703fde17b25047c072b71/docs/extraFigures.html" target="_blank">691cf34</a>
 </td>
 <td>
 Ha Manh Tran
@@ -831,7 +856,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/tranmanhha135/SRB_2022/blob/3119fadcedcb2bd928908d12f40b0b10f64961e0/1_analysis/extraFigures.Rmd" target="_blank">3119fad</a>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/3119fadcedcb2bd928908d12f40b0b10f64961e0/1_analysis/extraFigures.Rmd" target="_blank">3119fad</a>
 </td>
 <td>
 tranmanhha135
@@ -848,7 +873,7 @@ build website
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tranmanhha135/SRB_2022/3119fadcedcb2bd928908d12f40b0b10f64961e0/docs/extraFigures.html" target="_blank">3119fad</a>
+<a href="https://rawcdn.githack.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/3119fadcedcb2bd928908d12f40b0b10f64961e0/docs/extraFigures.html" target="_blank">3119fad</a>
 </td>
 <td>
 tranmanhha135
@@ -936,6 +961,65 @@ pathways &lt;- ggplot(data = pathways) +
 ggsave(filename = &quot;pathways.svg&quot;, plot = pathways, path = here::here(&quot;2_plots/ipa&quot;), width = 250, height = 166, units = &quot;mm&quot;)
 pathways</code></pre>
 <p><img src="figure/extraFigures.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/d578f46c648558988d8eac977c170c39e29213ab/docs/figure/extraFigures.Rmd/unnamed-chunk-1-1.png" target="_blank">d578f46</a>
+</td>
+<td>
+Ha Manh Tran
+</td>
+<td>
+2023-01-21
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/159f3529790db3ae75472a460696c82121d932a3/docs/figure/extraFigures.Rmd/unnamed-chunk-1-1.png" target="_blank">159f352</a>
+</td>
+<td>
+tranmanhha135
+</td>
+<td>
+2023-01-21
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/3119fadcedcb2bd928908d12f40b0b10f64961e0/docs/figure/extraFigures.Rmd/unnamed-chunk-1-1.png" target="_blank">3119fad</a>
+</td>
+<td>
+tranmanhha135
+</td>
+<td>
+2022-11-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="upstream-regulators" class="section level3">
 <h3>Upstream Regulators</h3>
@@ -1000,6 +1084,65 @@ upstream &lt;- pheatmap(
 ggsave(filename = &quot;upstream_2.svg&quot;, plot = upstream, path = here::here(&quot;2_plots/ipa&quot;), width = 200, height = 133, units = &quot;mm&quot;)</code></pre>
 <pre class="r"><code>upstream</code></pre>
 <p><img src="figure/extraFigures.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/d578f46c648558988d8eac977c170c39e29213ab/docs/figure/extraFigures.Rmd/unnamed-chunk-3-1.png" target="_blank">d578f46</a>
+</td>
+<td>
+Ha Manh Tran
+</td>
+<td>
+2023-01-21
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/159f3529790db3ae75472a460696c82121d932a3/docs/figure/extraFigures.Rmd/unnamed-chunk-3-1.png" target="_blank">159f352</a>
+</td>
+<td>
+tranmanhha135
+</td>
+<td>
+2023-01-21
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/3119fadcedcb2bd928908d12f40b0b10f64961e0/docs/figure/extraFigures.Rmd/unnamed-chunk-3-1.png" target="_blank">3119fad</a>
+</td>
+<td>
+tranmanhha135
+</td>
+<td>
+2022-11-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="disease-and-function" class="section level3">
 <h3>Disease and Function</h3>
@@ -1078,6 +1221,43 @@ funct_dot &lt;- ggplot(funct) +
 #   )
 funct_dot</code></pre>
 <p><img src="figure/extraFigures.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tranmanhha135/Mouse_endometrial_transcriptome_2023/blob/d578f46c648558988d8eac977c170c39e29213ab/docs/figure/extraFigures.Rmd/unnamed-chunk-4-1.png" target="_blank">d578f46</a>
+</td>
+<td>
+Ha Manh Tran
+</td>
+<td>
+2023-01-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggsave(filename = &quot;diseaseAndFunction.svg&quot;, plot = funct_dot + theme_bw(), path = here::here(&quot;2_plots/ipa&quot;), width = 200, height = 300, units = &quot;mm&quot;)</code></pre>
 <pre class="r"><code>upstream_filtered &lt;- subset(upstream[c(1,3,19,21,2,18,10,13,11),]) 
 upstream_filtered &lt;- upstream_filtered[order(upstream_filtered$`Molecule Type`),]
@@ -1233,18 +1413,20 @@ ggsave(filename = &quot;up_cat_alluvial.svg&quot;,path = here::here(&quot;2_plot
 </div>
 <div id="network-plot" class="section level2">
 <h2>Network plot</h2>
-<div class="figure">
-<img src="figure/extraFigures.Rmd/network.png" alt="" />
-<p class="caption">DE genes regulated by predicted upstream regulators
-and pathways</p>
+<div class="float">
+<img src="figure/extraFigures.Rmd/network.png"
+alt="DE genes regulated by predicted upstream regulators and pathways" />
+<div class="figcaption">DE genes regulated by predicted upstream
+regulators and pathways</div>
 </div>
 </div>
 <div id="alluvial-plot" class="section level2">
 <h2>Alluvial plot</h2>
-<div class="figure">
-<img src="figure/extraFigures.Rmd/alluvial.png" alt="" />
-<p class="caption">Proportion of DE genes regulated by predicted
-upstream regulators &amp; functional terms</p>
+<div class="float">
+<img src="figure/extraFigures.Rmd/alluvial.png"
+alt="Proportion of DE genes regulated by predicted upstream regulators &amp; functional terms" />
+<div class="figcaption">Proportion of DE genes regulated by predicted
+upstream regulators &amp; functional terms</div>
 </div>
 <br>
 <p>
@@ -1255,57 +1437,52 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.2.1 (2022-06-23 ucrt)
+<pre><code>R version 4.3.1 (2023-06-16 ucrt)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19045)
 
 Matrix products: default
+
 
 locale:
 [1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8   
 [3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C                      
 [5] LC_TIME=English_Australia.utf8    
 
+time zone: Australia/Adelaide
+tzcode source: internal
+
 attached base packages:
 [1] grid      stats     graphics  grDevices utils     datasets  methods  
 [8] base     
 
 other attached packages:
- [1] ggrepel_0.9.1     ggbiplot_0.55     scales_1.2.1      plyr_1.8.7       
- [5] ggplotify_0.1.0   ggalluvial_0.12.3 igraph_1.3.5      viridis_0.6.2    
- [9] viridisLite_0.4.1 pheatmap_1.0.12   cowplot_1.1.1     pander_0.6.5     
-[13] kableExtra_1.3.4  forcats_0.5.2     stringr_1.4.1     purrr_0.3.5      
-[17] tidyr_1.2.1       ggplot2_3.3.6     tidyverse_1.3.2   reshape2_1.4.4   
-[21] tibble_3.1.8      readr_2.1.3       magrittr_2.0.3    dplyr_1.0.10     
+ [1] ggrepel_0.9.3     ggbiplot_0.55     scales_1.2.1      plyr_1.8.8       
+ [5] ggplotify_0.1.2   ggalluvial_0.12.5 igraph_1.5.1      viridis_0.6.4    
+ [9] viridisLite_0.4.2 pheatmap_1.0.12   cowplot_1.1.1     pander_0.6.5     
+[13] kableExtra_1.3.4  lubridate_1.9.2   forcats_1.0.0     stringr_1.5.0    
+[17] purrr_1.0.1       tidyr_1.3.0       ggplot2_3.4.3     tidyverse_2.0.0  
+[21] reshape2_1.4.4    tibble_3.2.1      readr_2.1.4       magrittr_2.0.3   
+[25] dplyr_1.1.2      
 
 loaded via a namespace (and not attached):
- [1] fs_1.5.2            bit64_4.0.5         lubridate_1.8.0    
- [4] webshot_0.5.4       RColorBrewer_1.1-3  httr_1.4.4         
- [7] rprojroot_2.0.3     tools_4.2.1         backports_1.4.1    
-[10] bslib_0.4.0         utf8_1.2.2          R6_2.5.1           
-[13] DBI_1.1.3           colorspace_2.0-3    withr_2.5.0        
-[16] tidyselect_1.2.0    gridExtra_2.3       bit_4.0.4          
-[19] compiler_4.2.1      git2r_0.30.1        textshaping_0.3.6  
-[22] cli_3.4.1           rvest_1.0.3         xml2_1.3.3         
-[25] labeling_0.4.2      sass_0.4.2          yulab.utils_0.0.5  
-[28] systemfonts_1.0.4   digest_0.6.29       rmarkdown_2.17     
-[31] svglite_2.1.0       pkgconfig_2.0.3     htmltools_0.5.3    
-[34] highr_0.9           dbplyr_2.2.1        fastmap_1.1.0      
-[37] rlang_1.0.6         readxl_1.4.1        rstudioapi_0.14    
-[40] farver_2.1.1        gridGraphics_0.5-1  jquerylib_0.1.4    
-[43] generics_0.1.3      jsonlite_1.8.2      vroom_1.6.0        
-[46] googlesheets4_1.0.1 Rcpp_1.0.9          munsell_0.5.0      
-[49] fansi_1.0.3         lifecycle_1.0.3     stringi_1.7.8      
-[52] whisker_0.4         yaml_2.3.5          parallel_4.2.1     
-[55] promises_1.2.0.1    crayon_1.5.2        haven_2.5.1        
-[58] hms_1.1.2           knitr_1.40          pillar_1.8.1       
-[61] reprex_2.0.2        glue_1.6.2          evaluate_0.17      
-[64] modelr_0.1.9        vctrs_0.4.2         tzdb_0.3.0         
-[67] httpuv_1.6.6        cellranger_1.1.0    gtable_0.3.1       
-[70] assertthat_0.2.1    cachem_1.0.6        xfun_0.33          
-[73] broom_1.0.1         later_1.3.0         ragg_1.2.3         
-[76] googledrive_2.0.0   gargle_1.2.1        workflowr_1.7.0    
-[79] ellipsis_0.3.2      here_1.0.1         </code></pre>
+ [1] gtable_0.3.4       xfun_0.39          bslib_0.5.1        tzdb_0.4.0        
+ [5] yulab.utils_0.0.9  vctrs_0.6.3        tools_4.3.1        generics_0.1.3    
+ [9] parallel_4.3.1     fansi_1.0.4        pkgconfig_2.0.3    RColorBrewer_1.1-3
+[13] webshot_0.5.5      lifecycle_1.0.3    farver_2.1.1       compiler_4.3.1    
+[17] git2r_0.32.0       textshaping_0.3.6  munsell_0.5.0      httpuv_1.6.11     
+[21] htmltools_0.5.5    sass_0.4.7         yaml_2.3.7         crayon_1.5.2      
+[25] later_1.3.1        pillar_1.9.0       jquerylib_0.1.4    whisker_0.4.1     
+[29] cachem_1.0.8       tidyselect_1.2.0   rvest_1.0.3        digest_0.6.33     
+[33] stringi_1.7.12     labeling_0.4.3     rprojroot_2.0.3    fastmap_1.1.1     
+[37] here_1.0.1         colorspace_2.1-0   cli_3.6.1          utf8_1.2.3        
+[41] withr_2.5.0        promises_1.2.0.1   bit64_4.0.5        timechange_0.2.0  
+[45] rmarkdown_2.24     httr_1.4.7         bit_4.0.5          gridExtra_2.3     
+[49] workflowr_1.7.1    ragg_1.2.5         hms_1.1.3          memoise_2.0.1     
+[53] evaluate_0.21      knitr_1.44         gridGraphics_0.5-1 rlang_1.1.1       
+[57] Rcpp_1.0.11        glue_1.6.2         xml2_1.3.5         vroom_1.6.3       
+[61] svglite_2.1.1      rstudioapi_0.15.0  jsonlite_1.8.7     R6_2.5.1          
+[65] systemfonts_1.0.4  fs_1.6.3          </code></pre>
 </div>
 </div>
 </div>
